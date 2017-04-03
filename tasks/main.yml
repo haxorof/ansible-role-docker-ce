@@ -1,0 +1,8 @@
+---
+# tasks file for ansible-role-docker-ce
+
+- include: main-CentOS.yml
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version > '6'
+
+- include: main-Fedora.yml
+  when: ansible_distribution == "Fedora" and ansible_distribution_major_version > '23'

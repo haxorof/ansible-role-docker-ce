@@ -1,0 +1,4 @@
+---
+- hosts: test-host
+  roles:
+    - ansible-role-docker-ce

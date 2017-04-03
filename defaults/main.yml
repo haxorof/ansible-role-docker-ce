@@ -1,0 +1,4 @@
+---
+# defaults file for ansible-role-docker-ce
+
+docker_remove_pre_ce: false

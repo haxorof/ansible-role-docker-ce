@@ -1,0 +1,22 @@
+---
+# tasks file for ansible-role-docker-ce
+
+- name: Ensure yum-utils is installed
+  package:
+    name: yum-utils
+    state: present
+  become: true
+
+- name: Add Docker CE repository
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+  become: true
+  register: yum_repo
+
+- name: Update yum cache
+  shell: yum makecache fast
+  become: true
+  when: yum_repo.changed
+
+- include: main-Generic.yml
