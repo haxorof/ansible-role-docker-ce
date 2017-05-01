@@ -1,4 +1,5 @@
 ---
 # defaults file for ansible-role-docker-ce
 
+# If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false

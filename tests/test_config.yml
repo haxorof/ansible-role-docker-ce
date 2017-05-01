@@ -1,0 +1,8 @@
+---
+- hosts: test-host
+  vars:
+    docker_daemon_config:
+      experimental: true
+      metrics-addr: "{{ ansible_default_ipv4.address }}:9323"
+  roles:
+    - ansible-role-docker-ce

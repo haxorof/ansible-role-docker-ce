@@ -13,9 +13,15 @@ Requirements
 Role Variables
 --------------
 
-If below variable is set to true it will remove older Docker installation before Docker CE.
+Variables for this role:
 
 ```yaml
+# Define below variable to configure Docker daemon: https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file 
+# Example:
+# docker_daemon_config:
+#   experimental: true
+
+# If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
 ```
 
