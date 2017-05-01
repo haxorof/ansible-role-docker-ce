@@ -1,19 +1,15 @@
-ansible-role-docker-ce
-=========
+# ansible-role-docker-ce
 
 Installs Docker CE (Community Edition) on CentOS/Fedora.
 
-Requirements
-------------
+## Requirements
 
-* Ansible 2.x or later.
-* CentOS / Fedora
+No additional requirements.
 
 
-Role Variables
---------------
+## Role Variables
 
-Variables for this role:
+Variables related to this role are listed below:
 
 ```yaml
 # Define below variable to configure Docker daemon: https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file 
@@ -25,22 +21,19 @@ Variables for this role:
 docker_remove_pre_ce: false
 ```
 
-Dependencies
-------------
+## Dependencies
 
 None.
 
-Example Playbook
-----------------
+## Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: localhost
       roles:
-         - role: ansible-role-docker-ce
+         - role: haxorof.docker-ce
 
-License
--------
+## License
 
 This is an open source project under the [MIT](LICENSE) license.
 
