@@ -1,30 +1,21 @@
----
 language: python
-python: "2.7"
-
-# Use the new container infrastructure
+python: '2.7'
 sudo: false
-
-# Install ansible
 addons:
   apt:
     packages:
     - python-pip
-
 install:
-  # Install ansible
-  - pip install ansible
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
-
+- pip install ansible
+- ansible --version
+- printf '[defaults]\nroles_path=../' >ansible.cfg
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-
+- ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
   email: false
+  pushover:
+    api_key:
+      secure: Cs1ESVK05exBjbP/0kZy0YI9My6qRH8EpB5XTZHBhn0Kel7B2E5uZ6y2kmVOfT+esATbQCQkpXxH2+YBsoyYKIz0OvnnO72FU1+/FgC+i1lLyxK8g7pJgZDfSfBQW0VBLRmjNlwB0pHcshxbgdP8ormKOW5ImbtTA6hVQiYeR8E5gURFy6G1Y3S4xkyxJia6gh+XMJDdICPkB1qwc8CNio1zd0yQQQYsftyPwPruK+prfsv3GIEwCzliMwUdGLRvuT1qhN2bdCO5w+MiIubpEv7stAFfp4dK8vGBrzE/PPJlScRQgN5c92zYLR0hfvwedyc6KExtpqg4Btd68iqtEIw92subgkixadJBnDWiVKR+AGjmi9jPsUW5ObwB00IiOMqlBbIavRw0Tl89WrnQA+gRdQnc8Y1qTxXmPTRv0rwXTAs2RzVCR64pHNcUf+lXwEI5NEs32Xf3GPCdUSTKdp0STZEUsUhjLCGDLA0BhE6/9RGH4/Nv3OCtkSnpGNqAt/6u0OJrX5Ej3e3ZaU0JmlTKxmmGsHIbPCyBrA5u7lWp59eivAZWRD56nf+ukYqxktgfb2Id465wneLCyLZ5qNWz5ery0B3NClnO4dPreQn+ux0Pjom3ebso7jDEhVSDLgMEZwwG/SpHwzP2eMuiBsp+pMcyZuB3xSrx0lYSdkY=
+    users:
+    - secure: BUEmX6CADEBTsEQVU4eQSYb7rCDeEZQPJt6T5SHcoId9BslADT5aZxHr0qFRlIVReqC4KDw8ihyqOsmTwIn8T8b0nnQEniHX2XPbxFeqxkwrgxvOTQZefSiAhaqS8FKWlH7Q0eWYhgHE5wwHQ5ode7unUbLtCsx18WVudtvqrtDRggAFqyp1M3gBPcVdfz+kloDPltk95lYJT6UiD3QbrgNWkV1GsX2gQ/MqIwrpLhq/t0dHwMoG3TWUxFPpYPG7o6twr59R/uqQeOOQDHKjI7QKp/I4vF7mL1sVTZVsKB5l+fqKv1Akzy5xfX2rLqUJCtuqOqXHfuX+JzkppmndOxIHNFvYVia5hdh4waGHblaqVARIcLC3CyO7Ur0ZaohhI5mK5ZZYPq6MI3HmeBeE5KMRuwl96kLXO0zJbbcwoTTUi1vlhULUP2ggVzBnrdXDcXyacmJphd98ASXnFc4umRCLNUVJ18an20G7H91vW07Pj7alRTtA1HC2pTssvTLszWHs9nWPbjstPzZuQUMptqRsNs2Q+lfb/QiyvP3jU+iOwEH60lKZT0vfKP2CzozdkNkw23PCRl5+wmFnyQSMcdaIzDEL7XLf93MbyyKee3P1u7Lb0tuB5J/1aeWTGpHYvcVH7geRdthTiwYqlb1JfLY9zYn+iwVQ59ovkIqOfWQ=
