@@ -1,5 +1,8 @@
 # ansible-role-docker-ce
 
+[![Ansible Role](https://img.shields.io/ansible/role/17533.svg)](https://galaxy.ansible.com/haxorof/docker-ce/)
+[![GitHub version](https://badge.fury.io/gh/haxorof%2Fansible-role-docker-ce.svg)](https://badge.fury.io/gh/haxorof%2Fansible-role-docker-ce)
+
 Installs Docker CE (Community Edition) on CentOS/Fedora.
 
 ## Requirements
