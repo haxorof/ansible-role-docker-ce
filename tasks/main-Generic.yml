@@ -46,6 +46,13 @@
   become: true
   notify: restart docker
 
+- name: Ensure /etc/docker directory exists
+  file:
+    path: /etc/docker
+    state: directory
+    mode: 0755
+  become: true
+
 - name: Configure Docker daemon
   copy:
     content: "{{docker_daemon_config | to_nice_json}}"
