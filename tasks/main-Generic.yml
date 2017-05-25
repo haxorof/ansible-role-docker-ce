@@ -10,7 +10,7 @@
 - name: Set fact if old Docker installation shall be removed
   set_fact:
     remove_old_docker: "{{docker_remove_pre_ce | bool }} == true and {{ cmd_docker_version.stdout_lines[0] | search('-ce') }} == false"
-  when: cmd_docker_version.stdout_lines[0] is defined
+  when: cmd_docker_version.stdout_lines is defined and cmd_docker_version.stdout_lines[0] is defined
 
 - name: Check if Docker is running
   command: systemctl status docker
@@ -53,13 +53,22 @@
     mode: 0755
   become: true
 
-- name: Configure Docker daemon
+- name: Configure Docker daemon (file)
   copy:
-    content: "{{docker_daemon_config | to_nice_json}}"
+    src: "{{ docker_daemon_config_file }}"
     dest: /etc/docker/daemon.json
   become: true
   notify: restart docker
-  when: docker_daemon_config is defined
+  when: docker_daemon_config_file is defined
+
+- name: Configure Docker daemon (variables)
+  copy:
+    content: "{{ docker_daemon_config | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+  become: true
+  notify: restart docker
+  when: docker_daemon_config_file is not defined and 
+        docker_daemon_config is defined
 
 - name: Enable and start Docker service
   service:
