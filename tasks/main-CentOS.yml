@@ -19,4 +19,7 @@
   become: true
   when: yum_repo.changed
 
+- include: main-Storage.yml
+  when: docker_setup_devicemapper == true
+
 - include: main-Generic.yml

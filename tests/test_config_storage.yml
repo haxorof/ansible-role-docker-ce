@@ -1,0 +1,8 @@
+---
+- hosts: test-host
+  vars:
+    docker_setup_devicemapper: true
+    docker_daemon_config:
+      init: true
+  roles:
+    - ansible-role-docker-ce
