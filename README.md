@@ -16,11 +16,14 @@ No additional requirements.
 Variables related to this role are listed below:
 
 ```yaml
-# Define below variable to configure Docker daemon: https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file 
+# Daemon configuration (https://docs.docker.com/engine/reference/commandline/dockerd/)
 # Example:
 # docker_daemon_config:
 #   experimental: true
-
+docker_daemon_config:
+# Setup Docker to devicemapper as storage driver. Require space to be available on LVM partition for new logical partition.
+# Uses https://github.com/projectatomic/container-storage-setup
+docker_setup_devicemapper: false
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
 ```
