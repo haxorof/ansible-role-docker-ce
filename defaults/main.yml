@@ -2,7 +2,12 @@
 # defaults file for ansible-role-docker-ce
 
 # Daemon configuration (https://docs.docker.com/engine/reference/commandline/dockerd/)
+# Example:
+# docker_daemon_config:
+#   experimental: true
 docker_daemon_config:
+# Enable Docker CE Edge
+docker_enable_ce_edge: false
 # Setup Docker to devicemapper as storage driver. Require space to be available on LVM partition for new logical partition.
 # Uses https://github.com/projectatomic/container-storage-setup
 docker_setup_devicemapper: false

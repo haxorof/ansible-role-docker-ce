@@ -2,11 +2,27 @@
 # tasks file for ansible-role-docker-ce
 
 - name: Add Docker CE repository
-  shell: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-  args:
-    creates: /etc/yum.repos.d/docker-ce.repo
+  get_url:
+    url: https://download.docker.com/linux/fedora/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: 0644
   become: true
   register: dnf_repo
+
+- name: Determine Docker CE Edge repo status
+  shell: dnf config-manager --dump docker-ce-edge | grep enabled
+  ignore_errors: yes
+  changed_when: false
+  register: cmd_docker_ce_edge_enabled
+
+- name: Set current Docker CE Edge repo status fact
+  set_fact:
+    fact_docker_ce_edge_enabled: "{{ cmd_docker_ce_edge_enabled.stdout == 'enabled = True' }}"
+
+- name: Enable/Disable Docker CE Edge Repository
+  shell: dnf config-manager --set-{{ (docker_enable_ce_edge == true) | ternary('enabled','disabled') }} docker-ce-edge
+  become: true
+  when: fact_docker_ce_edge_enabled != docker_enable_ce_edge
 
 - name: Update dnf cache
   shell: dnf makecache fast

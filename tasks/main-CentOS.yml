@@ -8,11 +8,27 @@
   become: true
 
 - name: Add Docker CE repository
-  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-  args:
-    creates: /etc/yum.repos.d/docker-ce.repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: 0644
   become: true
   register: yum_repo
+
+- name: Determine Docker CE Edge repo status
+  shell: yum-config-manager docker-ce-edge | grep enabled
+  ignore_errors: yes
+  changed_when: false
+  register: cmd_docker_ce_edge_enabled
+
+- name: Set current Docker CE Edge repo status fact
+  set_fact:
+    fact_docker_ce_edge_enabled: "{{ cmd_docker_ce_edge_enabled.stdout == 'enabled = True' }}"
+
+- name: Enable/Disable Docker CE Edge Repository
+  shell: yum-config-manager --{{ (docker_enable_ce_edge == true) | ternary('enable','disable') }} docker-ce-edge
+  become: true
+  when: fact_docker_ce_edge_enabled != docker_enable_ce_edge
 
 - name: Update yum cache
   shell: yum makecache fast
