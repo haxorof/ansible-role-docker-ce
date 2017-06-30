@@ -6,6 +6,8 @@
 # docker_daemon_config:
 #   experimental: true
 docker_daemon_config:
+# Enable auditing of Docker related files and directories
+docker_enable_audit: false
 # Enable Docker CE Edge
 docker_enable_ce_edge: false
 # Setup Docker to devicemapper as storage driver. Require space to be available on LVM partition for new logical partition.

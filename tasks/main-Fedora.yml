@@ -11,6 +11,8 @@
 
 - name: Determine Docker CE Edge repo status
   shell: dnf config-manager --dump docker-ce-edge | grep enabled
+  args:
+    warn: false
   ignore_errors: yes
   changed_when: false
   register: cmd_docker_ce_edge_enabled

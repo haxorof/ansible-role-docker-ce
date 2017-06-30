@@ -1,6 +1,22 @@
 ---
 # tasks file for ansible-role-docker-ce
 
+- name: Copy Docker audit rules
+  copy:
+    src: files/etc/audit/rules.d/docker.rules
+    dest: /etc/audit/rules.d/docker.rules
+  become: yes
+  notify: restart auditd
+  when: docker_enable_audit == true
+
+- name: Ensure Docker audit rules are removed
+  file:
+    path: /etc/audit/rules.d/docker.rules
+    state: absent
+  become: yes
+  notify: restart auditd
+  when: docker_enable_audit == false
+
 - name: Determine Docker version
   command: bash -c "docker version | grep Version | awk '{print $2}'"
   ignore_errors: yes

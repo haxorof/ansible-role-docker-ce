@@ -6,3 +6,10 @@
     name: docker
     state: restarted
   become: true
+
+# Workaround because systemd cannot be used: https://github.com/ansible/ansible/issues/22171
+- name: restart auditd
+  shell: service auditd restart
+  args:
+    warn: false
+  become: true
