@@ -32,6 +32,8 @@
 
 - name: Update yum cache
   shell: yum makecache fast
+  args:
+    warn: false  
   become: true
   when: yum_repo.changed
 
