@@ -49,6 +49,13 @@
     - /etc/subuid
     - /etc/subgid
 
+- name: Ensure /etc/systemd/system/docker.service.d directory exists
+  file: 
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    mode: 0755
+  become: yes
+
 - name: Copy systemd drop-in for Docker storage configuration
   copy:
     src: files/etc/systemd/system/docker.service.d/docker-storage.conf
