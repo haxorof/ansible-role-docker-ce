@@ -86,6 +86,20 @@
   when: docker_daemon_config_file is not defined and 
         docker_daemon_config is defined
 
+- name: Ensure Docker default user namespace is defined in subuid and subgid
+  lineinfile:
+    path: "{{ item }}"
+    regexp: '^dockremap'
+    line: 'dockremap:500000:65536'
+  become: yes
+  with_items:
+    - /etc/subuid
+    - /etc/subgid
+  when: (docker_daemon_config is defined and
+        docker_daemon_config['userns-remap'] is defined and
+        docker_daemon_config['userns-remap'] == 'default') or
+        docker_bug_usermod|bool == true
+
 - name: Enable and start Docker service
   service:
     name: docker

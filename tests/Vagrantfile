@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "geerlingguy/centos7"
+  config.ssh.insert_key = false
+  config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+    file_to_disk = 'extra_disk/docker_disk.vdi'
+    unless File.exist?(file_to_disk)
+      vb.customize ['createhd', '--filename', file_to_disk, '--size', 5 * 1024]
+    end
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+  end  
+  config.vm.provision "shell",
+    inline: "parted -a opt /dev/sdb mklabel msdos mkpart primary 2048 100%"
+  # config.vm.provision "shell",
+  #   inline: "pvcreate /dev/sdb1"
+  # config.vm.provision "shell",
+  #   inline: "vgextend cl /dev/sdb1"
+end

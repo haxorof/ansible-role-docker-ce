@@ -30,6 +30,10 @@ docker_enable_ce_edge: false
 docker_setup_devicemapper: false
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
+# To compensate for situation where Docker daemon fails because of usermod incompatibility.
+# Ensures that 'dockremap:500000:65536' is present in /etc/subuid and /etc/subgid.
+# Note! If userns-remap is set to 'default' in docker_daemon_config this config will be unnecessary.
+docker_bug_usermod: false
 ```
 
 ## Dependencies
@@ -64,6 +68,24 @@ However this configuration setup devicemapper in a certain way which will create
              live-restore: true
              userland-proxy: false
              log-driver: journald
+
+Since Docker v17.06 it is now possible to achive the same as above like this example below:
+
+    - hosts: localhost
+      roles:
+         - role: haxorof.docker-ce
+           docker_enable_audit: true
+           docker_daemon_config:
+             icc: false
+             init: true
+             userns-remap: default
+             disable-legacy-registry: true
+             live-restore: true
+             userland-proxy: false
+             log-driver: journald
+             storage-driver: devicemapper
+             storage-opts:
+               - "dm.directlvm_device=/dev/sdb1"
 
 ## License
 

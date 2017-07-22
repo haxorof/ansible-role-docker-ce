@@ -13,7 +13,7 @@
 - name: Clone project Atomic container-storage-setup
   git:
     repo: https://github.com/projectatomic/container-storage-setup.git
-    version: 9b77bcb2cba8e272799fa21e2d484e9f6e7c34d0
+    version: v0.6.0
     dest: "/tmp/container-storage-setup"
   become: yes
   when: docker_stat_storage.stat.exists == false
@@ -38,16 +38,6 @@
     state: started
   become: true
   when: docker_stat_storage.stat.exists == false
-
-- name: Ensure Docker default user namespace is defined in subuid and subgid
-  lineinfile:
-    path: "{{ item }}"
-    regexp: '^dockremap'
-    line: 'dockremap:500000:65536'
-  become: yes
-  with_items:
-    - /etc/subuid
-    - /etc/subgid
 
 - name: Ensure /etc/systemd/system/docker.service.d directory exists
   file: 
