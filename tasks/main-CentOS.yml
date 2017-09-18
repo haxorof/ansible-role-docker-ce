@@ -40,4 +40,7 @@
 - include: main-Storage.yml
   when: docker_setup_devicemapper == true
 
+- include: main-Mountflags.yml
+  when: docker_setup_mountslaveflag == true
+
 - include: main-Generic.yml
