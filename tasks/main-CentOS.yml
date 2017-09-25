@@ -41,6 +41,6 @@
   when: docker_setup_devicemapper == true
 
 - include: main-Mountflags.yml
-  when: docker_setup_mountslaveflag == true
+  when: "{{ ansible_kernel | version_compare('4', '<') }}"
 
 - include: main-Generic.yml
