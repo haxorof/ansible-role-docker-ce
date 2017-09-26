@@ -8,7 +8,7 @@ Installs Docker CE (Community Edition) on CentOS/Fedora.
 
 ## Changelog
 
-See changelog [here](CHANGELOG.md)
+See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/master/CHANGELOG.md)
 
 ## Requirements
 
