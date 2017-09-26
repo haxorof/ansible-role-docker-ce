@@ -40,4 +40,7 @@
 - include: main-Storage.yml
   when: docker_setup_devicemapper == true
 
+- include: main-Mountflags.yml
+  when: "{{ ansible_kernel | version_compare('4', '<') }}"
+
 - include: main-Generic.yml
