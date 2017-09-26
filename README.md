@@ -6,6 +6,10 @@
 
 Installs Docker CE (Community Edition) on CentOS/Fedora.
 
+## Changelog
+
+See changelog [here](CHANGELOG.md)
+
 ## Requirements
 
 No additional requirements.
