@@ -2,6 +2,7 @@
 
 [![Ansible Role](https://img.shields.io/ansible/role/17533.svg)](https://galaxy.ansible.com/haxorof/docker-ce/)
 [![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce.svg)](https://github.com/haxorof/ansible-role-docker-ce)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/haxorof/ansible-role-docker-ce.svg?branch=master)](https://travis-ci.org/haxorof/ansible-role-docker-ce)
 
 Installs Docker CE (Community Edition) on CentOS/Fedora.
@@ -93,5 +94,5 @@ Since Docker v17.06 it is now possible to achive the same as above like this exa
 
 ## License
 
-This is an open source project under the [MIT](LICENSE) license.
+This is an open source project under the [MIT](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE) license.
 
