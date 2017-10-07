@@ -36,7 +36,4 @@
   become: true
   changed_when: false
 
-- include: main-Storage.yml
-  when: docker_setup_devicemapper == true
-
 - include: main-Generic.yml
