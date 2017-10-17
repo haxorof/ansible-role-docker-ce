@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.0.0](../../releases/tag/1.0.0) - 2017-10-17
+
 ### Removed
 
 - Removed support to setup devicemapper using container-storage-setup ([#10](../../issues/10))
