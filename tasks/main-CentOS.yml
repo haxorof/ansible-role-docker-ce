@@ -37,7 +37,16 @@
   become: true
   when: yum_repo.changed
 
+- name: Ensure fs.may_detach_mounts is set to avoid 'Device or resource busy'
+  sysctl:
+    name: fs.may_detach_mounts
+    value: 1
+    sysctl_file: /etc/sysctl.d/99-docker.conf
+    reload: yes
+  become: true
+  when: ansible_kernel | version_compare('4', '<')
+
 - include: main-Mountflags.yml
-  when: "{{ ansible_kernel | version_compare('4', '<') }}"
+  when: ansible_kernel | version_compare('4', '<')
 
 - include: main-Generic.yml

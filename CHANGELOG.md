@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.0.1](../../releases/tag/1.0.1) - 2017-10-22
+
+### Fixed
+
+- Kernel parameter fs.may_detach_mounts is necessary even if mount flag is set to slave ([#13](../../issues/13))
+
 ## [1.0.0](../../releases/tag/1.0.0) - 2017-10-17
 
 ### Removed
