@@ -1,0 +1,43 @@
+---
+- hosts: test-host
+  tasks:
+    - package:
+        name: git
+        state: present
+      become: true
+    - name: Ensure Docker Bench Security is cloned
+      git:
+        repo: 'https://github.com/docker/docker-bench-security.git'
+        dest: /home/vagrant/docker-bench-security
+    - name: Create partition sdb1
+      parted:
+        device: /dev/sdb
+        number: 1
+        flags: [ lvm ]
+        state: present
+      become: true
+    - name: Ensure file system is XFS for /dev/sdb1
+      filesystem:
+        fstype: xfs
+        dev: /dev/sdb1
+      become: true
+    - name: Ensure /var/lib/docker directory exists
+      file:
+        path: /var/lib/docker
+        state: directory
+      become: true
+    - name: Ensure /var/lib/docker is mounted
+      mount:
+        path: /var/lib/docker
+        src: /dev/sdb1
+        fstype: xfs
+        state: mounted    
+      become: true
+    - name: Create partition sdc1
+      parted:
+        device: /dev/sdc
+        number: 1
+        flags: [ lvm ]
+        state: present
+      become: true
+    

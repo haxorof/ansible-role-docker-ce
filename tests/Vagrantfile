@@ -1,22 +1,41 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Plugins:
+#   vagrant plugin install vagrant-vbguest
 Vagrant.configure("2") do |config|
   config.vm.box = "geerlingguy/centos7"
   config.ssh.insert_key = false
+  config.vbguest.auto_update = false
+  config.vbguest.no_remote = true
+  config.vm.synced_folder "../", "/mnt/ansible-role-docker-ce", :mount_options => ["ro"]
   config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
-    file_to_disk = 'extra_disk/docker_disk.vdi'
-    unless File.exist?(file_to_disk)
-      vb.customize ['createhd', '--filename', file_to_disk, '--size', 5 * 1024]
+    file_to_disk1 = 'extra_disk/docker_disk1.vdi'
+    file_to_disk2 = 'extra_disk/docker_disk2.vdi'
+    unless File.exist?(file_to_disk1)
+      vb.customize ['createhd', '--filename', file_to_disk1, '--size', 1 * 1024]
     end
-    vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+    unless File.exist?(file_to_disk2)
+      vb.customize ['createhd', '--filename', file_to_disk2, '--size', 5 * 1024]
+      vb.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata', '--portcount', 2]
+    end
+    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk1]
+    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', file_to_disk2]
+  end
+  # Prepare box
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.verbose        = false
+    ansible.playbook       = "test_config_storage_prepare.yml"
+    ansible.limit          = "test-host"
+    ansible.inventory_path = "inventory"
+  end
+  # Test storage config
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.verbose        = false
+    ansible.playbook       = "test_config_storage.yml"
+    ansible.limit          = "test-host"
+    ansible.inventory_path = "inventory"
   end  
-  config.vm.provision "shell",
-    inline: "parted -a opt /dev/sdb mklabel msdos mkpart primary 2048 100%"
-  # config.vm.provision "shell",
-  #   inline: "pvcreate /dev/sdb1"
-  # config.vm.provision "shell",
-  #   inline: "vgextend cl /dev/sdb1"
 end

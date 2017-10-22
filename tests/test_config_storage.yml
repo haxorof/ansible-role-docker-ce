@@ -1,6 +1,7 @@
 ---
 - hosts: test-host
   vars:
+    docker_enable_audit: true
     docker_daemon_config:
       icc: false
       init: true
@@ -11,6 +12,6 @@
       log-driver: journald
       storage-driver: devicemapper
       storage-opts:
-        - "dm.directlvm_device=/dev/sdb1"      
+        - "dm.directlvm_device=/dev/sdc1"      
   roles:
     - ansible-role-docker-ce
