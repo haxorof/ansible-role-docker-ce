@@ -12,17 +12,11 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
-    file_to_disk1 = 'extra_disk/docker_disk1.vdi'
-    file_to_disk2 = 'extra_disk/docker_disk2.vdi'
-    unless File.exist?(file_to_disk1)
-      vb.customize ['createhd', '--filename', file_to_disk1, '--size', 1 * 1024]
+    docker_disk = 'extra_disk/docker_disk.vdi'
+    unless File.exist?(docker_disk)
+      vb.customize ['createhd', '--filename', docker_disk, '--size', 5 * 1024]
     end
-    unless File.exist?(file_to_disk2)
-      vb.customize ['createhd', '--filename', file_to_disk2, '--size', 5 * 1024]
-      vb.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata', '--portcount', 2]
-    end
-    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk1]
-    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', file_to_disk2]
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', docker_disk]
   end
   # Prepare box
   config.vm.provision "ansible_local" do |ansible|
