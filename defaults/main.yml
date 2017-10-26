@@ -6,13 +6,15 @@
 # docker_daemon_config:
 #   experimental: true
 docker_daemon_config:
-# Enable auditing of Docker related files and directories
-docker_enable_audit: false
-# Enable Docker CE Edge
-docker_enable_ce_edge: false
-# If below variable is set to true it will remove older Docker installation before Docker CE.
-docker_remove_pre_ce: false
 # To compensate for situation where Docker daemon fails because of usermod incompatibility.
 # Ensures that 'dockremap:500000:65536' is present in /etc/subuid and /etc/subgid.
 # Note! If userns-remap is set to 'default' in docker_daemon_config this config will be unnecessary.
 docker_bug_usermod: false
+# Enable auditing of Docker related files and directories
+docker_enable_audit: false
+# Enable Docker CE Edge
+docker_enable_ce_edge: false
+# Always ensure latest version of Docker CE
+docker_latest_version: true
+# If below variable is set to true it will remove older Docker installation before Docker CE.
+docker_remove_pre_ce: false
