@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Add support to ensure Docker is not upgraded ([#17](../../issues/17))
 
+### Fixed
+
+- /proc/sys/fs/may_detach_mounts does not exists in all kernel 3.10 versions ([#18](../../issues/18))
+
 ## [1.0.1](../../releases/tag/1.0.1) - 2017-10-22
 
 ### Fixed
