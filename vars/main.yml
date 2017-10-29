@@ -1,2 +1,19 @@
 ---
 # vars file for ansible-role-docker-ce
+
+docker_repository_url:
+  CentOS: https://download.docker.com/linux/centos/docker-ce.repo
+  Fedora: https://download.docker.com/linux/fedora/docker-ce.repo
+
+docker_cmd_check_edge_repo_status:
+  CentOS: yum-config-manager docker-ce-edge | grep enabled
+  Fedora: dnf config-manager --dump docker-ce-edge | grep enabled
+
+docker_cmd_enable_disable_edge_repo:
+  CentOS: yum-config-manager --{{ (docker_enable_ce_edge == true) | ternary('enable','disable') }} docker-ce-edge
+  Fedora: dnf config-manager --set-{{ (docker_enable_ce_edge == true) | ternary('enabled','disabled') }} docker-ce-edge
+
+docker_cmd_update_repo_cache:
+  CentOS: yum makecache fast
+  Fedora: dnf makecache fast
+  

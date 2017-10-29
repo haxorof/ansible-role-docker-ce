@@ -1,0 +1,27 @@
+- name: Stat /proc/sys/fs/may_detach_mounts
+  stat:
+    path: /proc/sys/fs/may_detach_mounts
+  register: may_detach_mounts
+
+- name: Ensure fs.may_detach_mounts is set to avoid 'Device or resource busy'
+  sysctl:
+    name: fs.may_detach_mounts
+    value: 1
+    sysctl_file: /etc/sysctl.d/99-docker.conf
+    reload: yes
+  become: yes
+  when: may_detach_mounts.stat.exists
+
+- name: Ensure /etc/systemd/system/docker.service.d directory exists
+  file: 
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    mode: 0755
+  become: yes
+
+- name: Copy systemd drop-in for Docker Mount Flags slave configuration to avoid 'Device or resource busy'
+  copy:
+    src: files/etc/systemd/system/docker.service.d/mountflags-slave.conf
+    dest: /etc/systemd/system/docker.service.d/mountflags-slave.conf
+  become: yes
+

@@ -1,8 +1,29 @@
 ---
-# tasks file for ansible-role-docker-ce
+- name: Fail if unsupported CentOS version
+  fail:
+    msg: "CentOS 7 or later is required!"
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version < '7'
 
-- include: main-CentOS.yml
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version > '6'
+- name: Fail if unsupported Fedora version
+  fail:
+    msg: "Fedora 24 or later is required!"
+  when: ansible_distribution == "Fedora" and ansible_distribution_major_version < '24'
 
-- include: main-Fedora.yml
-  when: ansible_distribution == "Fedora" and ansible_distribution_major_version > '23'
+- name: Fail if this roles does not support the distribution
+  fail:
+    msg: "Distribution you are running is not supported by this role!"
+  when: ansible_distribution != "Fedora" and ansible_distribution != "CentOS"
+
+- include: setup-repository.yml
+
+- include: kernel-3-mount-fixes.yml
+  when: ansible_kernel | version_compare('4', '<')
+
+- include: setup-audit.yml
+
+- include: remove-pre-docker-ce.yml
+  when: docker_remove_pre_ce | bool
+
+- include: install-docker.yml
+
+- include: configure-docker.yml

@@ -1,0 +1,45 @@
+---
+- name: Ensure python and deps for Ansible modules
+  raw: dnf install -y python2 python2-dnf libselinux-python
+  become: true
+  changed_when: false
+  when: ansible_distribution == "Fedora"
+
+- name: Ensure yum-utils is installed
+  package:
+    name: yum-utils
+    state: present
+  become: true
+  when: ansible_distribution == "CentOS"
+
+- name: Add Docker CE repository
+  get_url:
+    url: "{{ docker_repository_url[ansible_distribution] }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: 0644
+  become: true
+  register: docker_repo
+
+- name: Determine Docker CE Edge repo status
+  shell: "{{ docker_cmd_check_edge_repo_status[ansible_distribution] }}"
+  args:
+    warn: false  
+  ignore_errors: yes
+  changed_when: false
+  register: cmd_docker_ce_edge_enabled
+
+- name: Set current Docker CE Edge repo status fact
+  set_fact:
+    fact_docker_ce_edge_enabled: "{{ cmd_docker_ce_edge_enabled.stdout == 'enabled = True' }}"
+
+- name: Enable/Disable Docker CE Edge Repository
+  shell: "{{ docker_cmd_enable_disable_edge_repo[ansible_distribution] }}"
+  become: true
+  when: fact_docker_ce_edge_enabled != docker_enable_ce_edge
+
+- name: Update repository cache
+  shell: "{{ docker_cmd_update_repo_cache[ansible_distribution] }}"
+  args:
+    warn: false  
+  become: true
+  when: docker_repo.changed

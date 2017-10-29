@@ -1,0 +1,53 @@
+---
+- name: Ensure /etc/docker directory exists
+  file:
+    path: /etc/docker
+    state: directory
+    mode: 0755
+  become: true
+
+- name: Configure Docker daemon (file)
+  copy:
+    src: "{{ docker_daemon_config_file }}"
+    dest: /etc/docker/daemon.json
+  become: true
+  notify: restart docker
+  when: docker_daemon_config_file is defined
+
+- name: Configure Docker daemon (variables)
+  copy:
+    content: "{{ docker_daemon_config | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+  become: true
+  notify: restart docker
+  when: docker_daemon_config_file is not defined and 
+        docker_daemon_config is defined
+
+- name: Ensure Docker default user namespace is defined in subuid and subgid
+  lineinfile:
+    path: "{{ item }}"
+    regexp: '^dockremap'
+    line: 'dockremap:500000:65536'
+  become: yes
+  with_items:
+    - /etc/subuid
+    - /etc/subgid
+  when: (docker_daemon_config is defined and
+        docker_daemon_config['userns-remap'] is defined and
+        docker_daemon_config['userns-remap'] == 'default') or
+        docker_bug_usermod|bool == true
+
+- name: Enable Docker service
+  service:
+    name: docker
+    enabled: yes
+  notify: restart docker
+  register: docker_service
+  become: yes
+
+- name: Trigger start/restart of Docker
+  service:
+    name: docker
+  notify: restart docker
+  changed_when: docker_service.status.SubState != "running"
+  

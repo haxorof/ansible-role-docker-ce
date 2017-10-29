@@ -5,7 +5,8 @@
     docker_daemon_config:
       icc: false
       init: true
-      userns-remap: default
+      #User namespaces not enabled in kernel
+      #userns-remap: default
       disable-legacy-registry: true
       live-restore: true
       userland-proxy: false
