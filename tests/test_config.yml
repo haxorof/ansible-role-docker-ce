@@ -1,8 +1,12 @@
 ---
 - hosts: test-host
   vars:
+    docker_enable_audit: true
     docker_daemon_config:
-      experimental: true
+      icc: false
       init: true
+      disable-legacy-registry: true
+      live-restore: true
+      userland-proxy: false
   roles:
     - ansible-role-docker-ce

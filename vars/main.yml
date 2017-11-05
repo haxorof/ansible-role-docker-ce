@@ -1,6 +1,21 @@
 ---
 # vars file for ansible-role-docker-ce
 
+docker_repository_related_packages:
+  CentOS:
+    - yum-utils
+  Ubuntu:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+  Debian:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+
 docker_repository_url:
   CentOS: https://download.docker.com/linux/centos/docker-ce.repo
   Fedora: https://download.docker.com/linux/fedora/docker-ce.repo
@@ -8,6 +23,7 @@ docker_repository_url:
 docker_cmd_check_edge_repo_status:
   CentOS: yum-config-manager docker-ce-edge | grep enabled
   Fedora: dnf config-manager --dump docker-ce-edge | grep enabled
+  Ubuntu: cat /etc/apt/sources.list.d/docker-ce.list | grep edge
 
 docker_cmd_enable_disable_edge_repo:
   CentOS: yum-config-manager --{{ (docker_enable_ce_edge == true) | ternary('enable','disable') }} docker-ce-edge
@@ -16,4 +32,27 @@ docker_cmd_enable_disable_edge_repo:
 docker_cmd_update_repo_cache:
   CentOS: yum makecache fast
   Fedora: dnf makecache fast
-  
+  Ubuntu: apt-get update
+  Debian: apt-get update
+
+docker_old_packages:
+  CentOS:
+    - docker
+    - docker-common
+    - container-selinux
+    - docker-selinux
+    - docker-engine
+  Fedora:
+    - docker
+    - docker-common
+    - container-selinux
+    - docker-selinux
+    - docker-engine
+  Ubuntu:
+    - docker
+    - docker-engine
+    - docker.io
+  Debian:
+    - docker
+    - docker-engine
+    - docker.io

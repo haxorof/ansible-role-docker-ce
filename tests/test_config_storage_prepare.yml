@@ -2,9 +2,13 @@
 - hosts: test-host
   tasks:
     - package:
-        name: git
+        name: "{{ item }}"
         state: present
       become: true
+      with_items:
+        - git
+        - parted
+
     - name: Ensure Docker Bench Security is cloned
       git:
         repo: 'https://github.com/docker/docker-bench-security.git'
@@ -26,9 +30,9 @@
         part_start: 1GiB
         state: present
       become: true
-    - name: Ensure file system is XFS for /dev/sdb1
+    - name: Ensure file system is EXT4 for /dev/sdb1
       filesystem:
-        fstype: xfs
+        fstype: ext4
         dev: /dev/sdb1
       become: true
     - name: Ensure /var/lib/docker directory exists
@@ -40,7 +44,7 @@
       mount:
         path: /var/lib/docker
         src: /dev/sdb1
-        fstype: xfs
+        fstype: ext4
         state: mounted    
       become: true
    

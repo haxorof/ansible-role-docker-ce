@@ -1,0 +1,22 @@
+configs:
+  use: 'centos'
+  centos:
+    box: 'geerlingguy/centos7'
+    prep_yml: test_config_storage_prepare.yml
+    test_yml: test_config_storage.yml
+  ubuntu_trusty:
+    box: 'geerlingguy/ubuntu1404'
+    prep_yml: test_config_prepare.yml
+    test_yml: test_config.yml
+  ubuntu_xenial:
+    box: 'geerlingguy/ubuntu1604'
+    prep_yml: test_config_storage_prepare.yml
+    test_yml: test_config_storage.yml
+  debian_jessie:
+    box: 'geerlingguy/debian8'
+    prep_yml: test_config_prepare.yml
+    test_yml: test_config.yml
+  debian_stretch:
+    box: 'geerlingguy/debian9'
+    prep_yml: test_config_storage_prepare.yml
+    test_yml: test_config_storage.yml

@@ -1,18 +1,5 @@
 ---
-- name: Fail if unsupported CentOS version
-  fail:
-    msg: "CentOS 7 or later is required!"
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version < '7'
-
-- name: Fail if unsupported Fedora version
-  fail:
-    msg: "Fedora 24 or later is required!"
-  when: ansible_distribution == "Fedora" and ansible_distribution_major_version < '24'
-
-- name: Fail if this roles does not support the distribution
-  fail:
-    msg: "Distribution you are running is not supported by this role!"
-  when: ansible_distribution != "Fedora" and ansible_distribution != "CentOS"
+- include: distribution-check.yml
 
 - include: setup-repository.yml
 

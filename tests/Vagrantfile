@@ -1,10 +1,16 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'yaml'
+
+current_dir    = File.dirname(File.expand_path(__FILE__))
+configs        = YAML.load_file("#{current_dir}/vagrant_config.yml")
+vagrant_config = configs['configs'][configs['configs']['use']]
+
 # Plugins:
 #   vagrant plugin install vagrant-vbguest
 Vagrant.configure("2") do |config|
-  config.vm.box = "geerlingguy/centos7"
+  config.vm.box = vagrant_config['box']
   config.ssh.insert_key = false
   config.vbguest.auto_update = false
   config.vbguest.no_remote = true
@@ -21,14 +27,14 @@ Vagrant.configure("2") do |config|
   # Prepare box
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose        = false
-    ansible.playbook       = "test_config_storage_prepare.yml"
+    ansible.playbook       = vagrant_config['prep_yml']
     ansible.limit          = "test-host"
     ansible.inventory_path = "inventory"
   end
   # Test storage config
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose        = false
-    ansible.playbook       = "test_config_storage.yml"
+    ansible.playbook       = vagrant_config['test_yml']
     ansible.limit          = "test-host"
     ansible.inventory_path = "inventory"
   end  

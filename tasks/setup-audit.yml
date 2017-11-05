@@ -1,4 +1,12 @@
 ---
+- name: Ensure auditd is installed
+  package:
+    name: auditd
+    state: present
+  become: true
+  when: ansible_distribution == "Ubuntu" or 
+        ansible_distribution == "Debian"
+
 - name: Copy Docker audit rules
   copy:
     src: files/etc/audit/rules.d/docker.rules

@@ -20,7 +20,7 @@
     dest: /etc/docker/daemon.json
   become: true
   notify: restart docker
-  when: docker_daemon_config_file is not defined and 
+  when: docker_daemon_config_file is not defined and
         docker_daemon_config is defined
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
@@ -37,6 +37,16 @@
         docker_daemon_config['userns-remap'] == 'default') or
         docker_bug_usermod|bool == true
 
+
+- name: Ensure thin-provisioning-tools is installed when devicemapper is used (Ubuntu)
+  package:
+    name: thin-provisioning-tools
+    state: present
+  become: yes
+  when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian") and 
+        docker_daemon_config['storage-driver'] is defined and 
+        docker_daemon_config['storage-driver'] == 'devicemapper'
+
 - name: Enable Docker service
   service:
     name: docker
@@ -50,4 +60,5 @@
     name: docker
   notify: restart docker
   changed_when: docker_service.status.SubState != "running"
-  
+  when: docker_service.status is defined
+

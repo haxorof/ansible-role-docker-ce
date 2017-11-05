@@ -30,9 +30,5 @@
     state: absent
   become: true
   when: remove_old_docker|default(false) | bool == true
-  with_items:
-    - docker
-    - docker-common
-    - container-selinux
-    - docker-selinux
-    - docker-engine
+  with_items: 
+    - "{{ docker_old_packages[ansible_distribution] }}"

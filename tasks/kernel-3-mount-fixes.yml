@@ -13,7 +13,7 @@
   when: may_detach_mounts.stat.exists
 
 - name: Ensure /etc/systemd/system/docker.service.d directory exists
-  file: 
+  file:
     path: /etc/systemd/system/docker.service.d
     state: directory
     mode: 0755

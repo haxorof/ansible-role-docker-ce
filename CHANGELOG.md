@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add support to ensure Docker is not upgraded ([#17](../../issues/17))
+- Support for Ubuntu and Debian ([#20](../../issues/20))
 
 ### Changed
 

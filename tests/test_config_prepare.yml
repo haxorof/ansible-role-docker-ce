@@ -1,0 +1,11 @@
+---
+- hosts: test-host
+  tasks:
+    - package:
+        name: git
+        state: present
+      become: true
+    - name: Ensure Docker Bench Security is cloned
+      git:
+        repo: 'https://github.com/docker/docker-bench-security.git'
+        dest: /home/vagrant/docker-bench-security
