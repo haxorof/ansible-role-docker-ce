@@ -1,3 +1,4 @@
+-c
 -w /usr/bin/docker -k docker
 -w /var/lib/docker -k docker
 -w /etc/docker -k docker

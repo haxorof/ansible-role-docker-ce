@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/haxorof/ansible-role-docker-ce.svg?branch=master)](https://travis-ci.org/haxorof/ansible-role-docker-ce)
 
-Installs Docker CE (Community Edition) on CentOS/Fedora.
+Installs Docker CE (Community Edition) on CentOS/Fedora/Ubuntu/Debian.
 
 ## Changelog
 
@@ -78,4 +78,3 @@ However this configuration setup devicemapper in a certain way which will create
 ## License
 
 This is an open source project under the [MIT](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE) license.
-

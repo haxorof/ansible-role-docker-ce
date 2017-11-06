@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.1.0](../../releases/tag/1.0.1) - 2017-11-06
+
 ### Added
 
 - Add support to ensure Docker is not upgraded ([#17](../../issues/17))
@@ -19,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - /proc/sys/fs/may_detach_mounts does not exists in all kernel 3.10 versions ([#18](../../issues/18))
+- auditd does not apply all rules after reboot because of rule errors ([#16](../../issues/16))
 
 ## [1.0.1](../../releases/tag/1.0.1) - 2017-10-22
 
