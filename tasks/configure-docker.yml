@@ -32,10 +32,12 @@
   with_items:
     - /etc/subuid
     - /etc/subgid
-  when: (docker_daemon_config is defined and
+  when: ansible_distribution == "CentOS" and
+        ((docker_daemon_config is defined and
         docker_daemon_config['userns-remap'] is defined and
         docker_daemon_config['userns-remap'] == 'default') or
-        docker_bug_usermod|bool == true
+        docker_bug_usermod|bool == true)
+
 
 
 - name: Ensure thin-provisioning-tools is installed when devicemapper is used (Ubuntu)

@@ -6,7 +6,7 @@
 
 - name: Ensure docker-ce is installed
   package:
-    name: docker-ce
+    name: "{{ docker_pkg_name }}"
     state: "{{ docker_pkg_state|default('present') }}"
   become: true
   notify: restart docker

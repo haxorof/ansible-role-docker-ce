@@ -15,7 +15,6 @@ See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/mast
 
 No additional requirements.
 
-
 ## Role Variables
 
 Variables related to this role are listed below:
@@ -36,6 +35,8 @@ docker_enable_audit: false
 docker_enable_ce_edge: false
 # Always ensure latest version of Docker CE
 docker_latest_version: true
+# Docker package to install. Change this if you want a specific version of Docker
+docker_pkg_name: docker-ce
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
 ```
