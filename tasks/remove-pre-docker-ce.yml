@@ -30,5 +30,5 @@
     state: absent
   become: true
   when: remove_old_docker|default(false) | bool == true
-  with_items: 
-    - "{{ docker_old_packages[ansible_distribution] }}"
+  with_items:
+    - "{{ docker_old_packages[docker_os_dist] }}"

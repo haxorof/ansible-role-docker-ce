@@ -32,21 +32,19 @@
   with_items:
     - /etc/subuid
     - /etc/subgid
-  when: ansible_distribution == "CentOS" and
+  when: docker_os_dist == "CentOS" and
         ((docker_daemon_config is defined and
         docker_daemon_config['userns-remap'] is defined and
         docker_daemon_config['userns-remap'] == 'default') or
         docker_bug_usermod|bool == true)
-
-
 
 - name: Ensure thin-provisioning-tools is installed when devicemapper is used (Ubuntu)
   package:
     name: thin-provisioning-tools
     state: present
   become: yes
-  when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian") and 
-        docker_daemon_config['storage-driver'] is defined and 
+  when: (docker_os_dist == "Ubuntu" or docker_os_dist == "Debian") and
+        docker_daemon_config['storage-driver'] is defined and
         docker_daemon_config['storage-driver'] == 'devicemapper'
 
 - name: Enable Docker service

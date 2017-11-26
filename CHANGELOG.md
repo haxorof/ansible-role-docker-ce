@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add support to specify specific Docker version ([#21](../../issues/21))
+- Support for Linux Mint ([#24](../../issues/24))
 
 ## [1.1.0](../../releases/tag/1.0.1) - 2017-11-06
 

@@ -3,85 +3,85 @@
   raw: dnf install -y python2 python2-dnf libselinux-python
   become: true
   changed_when: false
-  when: ansible_distribution == "Fedora"
+  when: docker_os_dist == "Fedora"
 
 - name: Update APT cache
   apt:
     update_cache: yes
   become: true
-  when: ansible_distribution == "Ubuntu" or
-        ansible_distribution == "Debian"
+  when: docker_os_dist == "Ubuntu" or
+        docker_os_dist == "Debian"
 
 - name: Ensure packages are installed for repository setup
   package:
     name: "{{ item }}"
     state: present
-  with_items: 
-    - "{{ docker_repository_related_packages[ansible_distribution] }}"
+  with_items:
+    - "{{ docker_repository_related_packages[docker_os_dist] }}"
   become: true
-  when: ansible_distribution == "Ubuntu" or
-        ansible_distribution == "Debian" or
-        ansible_distribution == "CentOS"
+  when: docker_os_dist == "Ubuntu" or
+        docker_os_dist == "Debian" or
+        docker_os_dist == "CentOS"
 
 - name: Add Docker’s official GPG key
   apt_key:
-    url: https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg
+    url: https://download.docker.com/linux/{{ docker_os_dist|lower }}/gpg
     state: present
   become: true
-  when: (ansible_distribution == "Ubuntu" and ansible_distribution_major_version > '14')
-        or ansible_distribution == "Debian"
+  when: (docker_os_dist == "Ubuntu" and docker_os_dist_major_version > '14')
+        or docker_os_dist == "Debian"
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
   shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
   args:
     warn: false
   become: true
-  when: ansible_distribution == "Ubuntu" and
-        ansible_distribution_major_version == '14'
+  when: docker_os_dist == "Ubuntu" and
+        docker_os_dist_major_version == '14'
 
 - name: Add Docker CE repository (Ubuntu/Debian)
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable {{ (docker_enable_ce_edge == true) | ternary('edge','') }}
+    repo: deb [arch=amd64] https://download.docker.com/linux/{{ docker_os_dist|lower }} {{ docker_os_dist_release }} stable {{ (docker_enable_ce_edge == true) | ternary('edge','') }}
     state: present
     filename: 'docker-ce'
   become: true
-  when: ansible_distribution == "Ubuntu" or
-        ansible_distribution == "Debian"
+  when: docker_os_dist == "Ubuntu" or
+        docker_os_dist == "Debian"
 
 - name: Add Docker CE repository (Fedora/CentOS)
   get_url:
-    url: "{{ docker_repository_url[ansible_distribution] }}"
+    url: "{{ docker_repository_url[docker_os_dist] }}"
     dest: /etc/yum.repos.d/docker-ce.repo
     mode: 0644
   become: true
   register: docker_repo
-  when: ansible_distribution == "CentOS" or
-        ansible_distribution == "Fedora"
+  when: docker_os_dist == "CentOS" or
+        docker_os_dist == "Fedora"
 
 - name: Determine Docker CE Edge repo status (Fedora/CentOS)
-  shell: "{{ docker_cmd_check_edge_repo_status[ansible_distribution] }}"
+  shell: "{{ docker_cmd_check_edge_repo_status[docker_os_dist] }}"
   args:
     warn: false
   ignore_errors: yes
   changed_when: false
   register: cmd_docker_ce_edge_enabled
-  when: ansible_distribution == "CentOS" or
-        ansible_distribution == "Fedora"
+  when: docker_os_dist == "CentOS" or
+        docker_os_dist == "Fedora"
 
 - name: Set current Docker CE Edge repo status fact (Fedora/CentOS)
   set_fact:
     fact_docker_ce_edge_enabled: "{{ cmd_docker_ce_edge_enabled.stdout == 'enabled = True' }}"
-  when: ansible_distribution == "CentOS" or
-        ansible_distribution == "Fedora"
+  when: docker_os_dist == "CentOS" or
+        docker_os_dist == "Fedora"
 
 - name: Enable/Disable Docker CE Edge Repository (Fedora/CentOS)
-  shell: "{{ docker_cmd_enable_disable_edge_repo[ansible_distribution] }}"
+  shell: "{{ docker_cmd_enable_disable_edge_repo[docker_os_dist] }}"
   become: true
-  when: (ansible_distribution == "CentOS" or ansible_distribution == "Fedora") and
+  when: (docker_os_dist == "CentOS" or docker_os_dist == "Fedora") and
         fact_docker_ce_edge_enabled != docker_enable_ce_edge
 
 - name: Update repository cache
-  shell: "{{ docker_cmd_update_repo_cache[ansible_distribution] }}"
+  shell: "{{ docker_cmd_update_repo_cache[docker_os_dist] }}"
   args:
     warn: false
   become: true
