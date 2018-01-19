@@ -32,7 +32,7 @@
   with_items:
     - /etc/subuid
     - /etc/subgid
-  when: docker_os_dist == "CentOS" and
+  when: (docker_os_dist == "CentOS" or docker_os_dist == "RedHat") and
         ((docker_daemon_config is defined and
         docker_daemon_config['userns-remap'] is defined and
         docker_daemon_config['userns-remap'] == 'default') or
