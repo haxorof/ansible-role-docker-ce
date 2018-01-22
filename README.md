@@ -5,7 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/haxorof/ansible-role-docker-ce.svg?branch=master)](https://travis-ci.org/haxorof/ansible-role-docker-ce)
 
-Installs Docker CE (Community Edition) on CentOS/Fedora/Ubuntu/Debian.
+Installs Docker CE (Community Edition) on CentOS, Fedora, Ubuntu, Debian, RHEL<sup>†</sup>, and Linux Mint<sup>††</sup>.
+
+<sup>† ††</sup> NB: While this role can install Docker CE on RHEL and Linux Mint, Docker does _not_ officially support Docker CE on these distributions.
 
 ## Changelog
 

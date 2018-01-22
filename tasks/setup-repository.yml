@@ -21,7 +21,8 @@
   become: true
   when: docker_os_dist == "Ubuntu" or
         docker_os_dist == "Debian" or
-        docker_os_dist == "CentOS"
+        docker_os_dist == "CentOS" or
+        docker_os_dist == "RedHat"
 
 - name: Add Docker’s official GPG key
   apt_key:
@@ -48,7 +49,7 @@
   when: docker_os_dist == "Ubuntu" or
         docker_os_dist == "Debian"
 
-- name: Add Docker CE repository (Fedora/CentOS)
+- name: Add Docker CE repository (Fedora/CentOS/RedHat)
   get_url:
     url: "{{ docker_repository_url[docker_os_dist] }}"
     dest: /etc/yum.repos.d/docker-ce.repo
@@ -56,9 +57,10 @@
   become: true
   register: docker_repo
   when: docker_os_dist == "CentOS" or
-        docker_os_dist == "Fedora"
+        docker_os_dist == "Fedora" or
+        docker_os_dist == "RedHat"
 
-- name: Determine Docker CE Edge repo status (Fedora/CentOS)
+- name: Determine Docker CE Edge repo status (Fedora/CentOS/RedHat)
   shell: "{{ docker_cmd_check_edge_repo_status[docker_os_dist] }}"
   args:
     warn: false
@@ -66,19 +68,49 @@
   changed_when: false
   register: cmd_docker_ce_edge_enabled
   when: docker_os_dist == "CentOS" or
-        docker_os_dist == "Fedora"
+        docker_os_dist == "Fedora" or
+        docker_os_dist == "RedHat"
 
-- name: Set current Docker CE Edge repo status fact (Fedora/CentOS)
+- name: Set current Docker CE Edge repo status fact (Fedora/CentOS/RedHat)
   set_fact:
     fact_docker_ce_edge_enabled: "{{ cmd_docker_ce_edge_enabled.stdout == 'enabled = True' }}"
   when: docker_os_dist == "CentOS" or
-        docker_os_dist == "Fedora"
+        docker_os_dist == "Fedora" or
+        docker_os_dist == "RedHat"
 
-- name: Enable/Disable Docker CE Edge Repository (Fedora/CentOS)
+- name: Enable/Disable Docker CE Edge Repository (Fedora/CentOS/RedHat)
   shell: "{{ docker_cmd_enable_disable_edge_repo[docker_os_dist] }}"
   become: true
-  when: (docker_os_dist == "CentOS" or docker_os_dist == "Fedora") and
+  when: (docker_os_dist == "CentOS" or docker_os_dist == "Fedora" or docker_os_dist == "RedHat") and
         fact_docker_ce_edge_enabled != docker_enable_ce_edge
+        
+# disable rt-beta so we don't get a 403 error retrieving repomd.xml
+- name: Check if rt-beta Repository is disabled (RedHat) # 
+  shell: "subscription-manager repos --list-disabled | grep rhel-7-server-rt-beta-rpms"
+  become: true
+  register: cmd_rhel_rt_beta_repo_disabled
+  when: docker_os_dist == "RedHat"
+  changed_when: false
+  failed_when: cmd_rhel_rt_beta_repo_disabled.rc not in [ 0, 1 ]
+
+- name: Disable rt-beta Repository (RedHat)
+  shell: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
+  become: true
+  when: cmd_rhel_rt_beta_repo_disabled.rc == 1 and docker_os_dist == "RedHat"
+
+# container-selinux package wants this
+- name: Check if extras Repository is enabled (RedHat)
+  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-extras-rpms"
+  become: true
+  register: cmd_rhel_extras_repo_enabled
+  when: docker_os_dist == "RedHat"
+  changed_when: false
+  failed_when: cmd_rhel_extras_repo_enabled.rc not in [ 0, 1 ]
+
+- name: Disable rt-beta Repository (RedHat)
+  shell: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
+  become: true
+  when: cmd_rhel_extras_repo_enabled.rc == 1 and docker_os_dist == "RedHat"
 
 - name: Update repository cache
   shell: "{{ docker_cmd_update_repo_cache[docker_os_dist] }}"
