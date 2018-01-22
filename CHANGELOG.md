@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Support for RedHat [@jamiejackson]([#26](../../issues/21))
+- Support for RedHat [@jamiejackson] ([#26](../../issues/26))
 
 ## [1.2.0](../../releases/tag/1.2.0) - 2017-12-08
 
