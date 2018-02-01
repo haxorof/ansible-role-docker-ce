@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.3.1](../../releases/tag/1.3.1)
+
 ### Fixed
 
 - Install failed on CentOS because of newly added RedHat support ([#28](../../issues/28))
