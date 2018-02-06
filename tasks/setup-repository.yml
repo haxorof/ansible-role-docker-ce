@@ -84,19 +84,19 @@
   when: (docker_os_dist == "CentOS" or docker_os_dist == "Fedora" or docker_os_dist == "RedHat") and
         fact_docker_ce_edge_enabled != docker_enable_ce_edge
         
-# disable rt-beta so we don't get a 403 error retrieving repond.xml
-- name: Check if rhel-7-server-rt-beta-rpms Repository is disabled (RedHat)
-  shell: "subscription-manager repos --list-disabled | grep rhel-7-server-rt-beta-rpms"
+# disable rt-beta so we don't get a 403 error retrieving repomd.xml
+- name: Check if rhel-7-server-rt-beta-rpms Repository is enabled (RedHat)
+  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-rt-beta-rpms"
   become: true
-  register: cmd_rhel_rt_beta_repo_disabled
+  register: cmd_rhel_rt_beta_repo_enabled
   when: docker_os_dist == "RedHat"
   changed_when: false
-  failed_when: cmd_rhel_rt_beta_repo_disabled.rc not in [ 0, 1 ]
+  failed_when: cmd_rhel_rt_beta_repo_enabled.rc not in [ 0, 1 ]
 
 - name: Disable rhel-7-server-rt-beta-rpms Repository (RedHat)
   shell: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
   become: true
-  when: docker_os_dist == "RedHat" and cmd_rhel_rt_beta_repo_disabled.rc == 1
+  when: docker_os_dist == "RedHat" and cmd_rhel_rt_beta_repo_enabled.rc == 0
 
 # container-selinux package wants this
 - name: Check if rhel-7-server-extras-rpms Repository is enabled (RedHat)
@@ -107,7 +107,7 @@
   changed_when: false
   failed_when: cmd_rhel_extras_repo_enabled.rc not in [ 0, 1 ]
 
-- name: Disable rhel-7-server-extras-rpms Repository (RedHat)
+- name: Enable rhel-7-server-extras-rpms Repository (RedHat)
   shell: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
   become: true
   when: docker_os_dist == "RedHat" and cmd_rhel_extras_repo_enabled.rc == 1
