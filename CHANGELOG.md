@@ -7,19 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
-## [1.3.2](../../releases/tag/1.3.2)
+## [1.3.2](../../releases/tag/1.3.2) - 2018-02-07
 
 ### Fixed
 
 - RedHat: breaks when rhel-7-server-rt-beta-rpms isn't listed; check ([#29](../../issues/29))
 
-## [1.3.1](../../releases/tag/1.3.1)
+## [1.3.1](../../releases/tag/1.3.1) - 2018-02-01
 
 ### Fixed
 
 - Install failed on CentOS because of newly added RedHat support ([#28](../../issues/28))
 
-## [1.3.0](../../releases/tag/1.3.0)
+## [1.3.0](../../releases/tag/1.3.0) - 2018-01-28
 
 ### Added
 
