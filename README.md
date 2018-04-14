@@ -65,21 +65,47 @@ Following sub sections show different kind of examples to illustrate what this r
 This minimal example below show what kind of role configuration that is required to pass the [Docker bench](https://github.com/docker/docker-bench-security) checks.
 However this configuration setup devicemapper in a certain way which will create logical volumes for the containers. Simplest is to have at least 3 GB of free space available in the partition. Since Docker v17.06 it is possible to just set the storage option `dm.directlvm_device` to make Docker create the necessary volumes:
 
-    - hosts: localhost
-      roles:
-        - role: haxorof.docker-ce
-          docker_enable_audit: true
-          docker_daemon_config:
-            icc: false
-            init: true
-            userns-remap: default
-            disable-legacy-registry: true
-            live-restore: true
-            userland-proxy: false
-            log-driver: journald
-            storage-driver: devicemapper
-            storage-opts:
-              - "dm.directlvm_device=/dev/sdb1"
+```yaml
+- hosts: docker
+  roles:
+    - role: haxorof.docker-ce
+      docker_enable_audit: true
+      docker_daemon_config:
+        icc: false
+        init: true
+        userns-remap: default
+        disable-legacy-registry: true
+        live-restore: true
+        userland-proxy: false
+        log-driver: journald
+        storage-driver: devicemapper
+        storage-opts:
+          - "dm.directlvm_device=/dev/sdb1"
+```
+
+Because the configuration above requires Linux user namespaces to be enabled then additional GRUB arguments might be needed. Example below show one example what changes that might be needed and reboot of the host is required for the changes to take full affect.
+
+```yaml
+# https://success.docker.com/article/user-namespace-runtime-error
+
+- hosts: docker
+  roles:
+    - role: jtyr.grub_cmdline
+      vars:
+        grub_cmdline_add_args:
+          - namespace.unpriv_enable=1
+          - user_namespace.enable=1
+      become: yes
+  tasks:
+    - name: set user.max_user_namespaces
+      sysctl:
+        name: user.max_user_namespaces
+        value: 15000
+        sysctl_set: yes
+        state: present
+        reload: yes
+      become: yes
+```
 
 ## License
 
