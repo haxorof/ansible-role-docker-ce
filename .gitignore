@@ -2,3 +2,4 @@
 *.retry
 .vscode/
 *.vdi
+/.project

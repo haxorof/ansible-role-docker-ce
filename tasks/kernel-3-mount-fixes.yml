@@ -24,4 +24,11 @@
     src: files/etc/systemd/system/docker.service.d/mountflags-slave.conf
     dest: /etc/systemd/system/docker.service.d/mountflags-slave.conf
   become: yes
-
+  when: docker_enable_mount_flag_fix
+  
+- name: Remove systemd drop-in for Docker Mount Flags slave configuration
+  file:
+    path: /etc/systemd/system/docker.service.d/mountflags-slave.conf
+    state: absent
+  become: yes
+  when: not docker_enable_mount_flag_fix

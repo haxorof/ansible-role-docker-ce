@@ -14,6 +14,9 @@ docker_bug_usermod: false
 docker_enable_audit: false
 # Enable Docker CE Edge
 docker_enable_ce_edge: false
+# Set `MountFlags=slave`
+#  https://github.com/haxorof/ansible-role-docker-ce/issues/34
+docker_enable_mount_flag_fix: yes
 # Always ensure latest version of Docker CE
 docker_latest_version: true
 # Docker package to install. Change this if you want a specific version of Docker
