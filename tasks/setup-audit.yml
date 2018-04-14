@@ -4,8 +4,8 @@
     name: auditd
     state: present
   become: true
-  when: docker_os_dist == "Ubuntu" or
-        docker_os_dist == "Debian"
+  when: _docker_os_dist == "Ubuntu" or
+        _docker_os_dist == "Debian"
 
 - name: Copy Docker audit rules
   copy:

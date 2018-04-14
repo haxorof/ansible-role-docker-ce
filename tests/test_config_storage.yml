@@ -8,7 +8,6 @@
       #User namespaces not enabled in kernel
       #userns-remap: default
       disable-legacy-registry: true
-      live-restore: true
       userland-proxy: false
       log-driver: journald
       storage-driver: devicemapper

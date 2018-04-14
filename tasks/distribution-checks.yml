@@ -1,0 +1,33 @@
+---
+- name: Fail if unsupported CentOS/RedHat version
+  fail:
+    msg: "CentOS/RedHat 7 or later is required!"
+  when: (_docker_os_dist == "CentOS" or _docker_os_dist == "RedHat") and
+        _docker_os_dist_major_version < '7'
+
+- name: Fail if unsupported Fedora version
+  fail:
+    msg: "Fedora 24 or later is required!"
+  when: _docker_os_dist == "Fedora" and
+        _docker_os_dist_major_version < '24'
+
+- name: Fail if unsupported Ubuntu version
+  fail:
+    msg: "Ubuntu 14 or later is required!"
+  when: _docker_os_dist == "Ubuntu" and
+        _docker_os_dist_major_version < '14'
+
+- name: Fail if unsupported Debian version
+  fail:
+    msg: "Debian 8 (jessie) or later is required!"
+  when: _docker_os_dist == "Debian" and
+        _docker_os_dist_major_version < '8'
+
+- name: Fail if this roles does not support the distribution
+  fail:
+    msg: "Distribution {{ _docker_os_dist }} is not supported by this role!"
+  when: _docker_os_dist != "Fedora" and
+        _docker_os_dist != "CentOS" and
+        _docker_os_dist != "RedHat" and
+        _docker_os_dist != "Ubuntu" and
+        _docker_os_dist != "Debian"

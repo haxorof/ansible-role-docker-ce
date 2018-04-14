@@ -5,7 +5,8 @@ require 'yaml'
 
 current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/vagrant_config.yml")
-vagrant_config = configs['configs'][configs['configs']['use']]
+config_key     = ENV['CONFIG_KEY'] || configs['configs']['use']
+vagrant_config = configs['configs'][config_key]
 
 # Plugins:
 #   vagrant plugin install vagrant-vbguest

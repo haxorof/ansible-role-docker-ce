@@ -1,0 +1,7 @@
+---
+- include: distribution-checks.yml
+  when:
+    _docker_os_dist_check | bool
+    
+- include: compatibility-checks.yml
+

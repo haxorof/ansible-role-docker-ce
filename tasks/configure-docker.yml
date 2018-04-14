@@ -32,7 +32,7 @@
   with_items:
     - /etc/subuid
     - /etc/subgid
-  when: (docker_os_dist == "CentOS" or docker_os_dist == "RedHat") and
+  when: (_docker_os_dist == "CentOS" or _docker_os_dist == "RedHat") and
         ((docker_daemon_config is defined and
         docker_daemon_config['userns-remap'] is defined and
         docker_daemon_config['userns-remap'] == 'default') or
@@ -43,7 +43,7 @@
     name: thin-provisioning-tools
     state: present
   become: yes
-  when: (docker_os_dist == "Ubuntu" or docker_os_dist == "Debian") and
+  when: (_docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian") and
         docker_daemon_config['storage-driver'] is defined and
         docker_daemon_config['storage-driver'] == 'devicemapper'
 
