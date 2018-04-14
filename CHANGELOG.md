@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.4.0](../../releases/tag/1.4.0) - 2018-04-14
+
 ### Added
 
-- Introduce flag to disable mount flag fix and related incompatibility check [@jamiejackson] ([#35](../../issues/35))
+- Introduce flag to disable mount flag fix and addition of compatibility check [@jamiejackson] ([#35](../../issues/35))
 
 ## [1.3.2](../../releases/tag/1.3.2) - 2018-02-07
 
