@@ -1,5 +1,9 @@
 configs:
-  use: 'centos'
+  use: 'centos_no_docker'
+  centos_no_docker:
+    box: 'geerlingguy/centos7'
+    prep_yml: test_config_prepare.yml
+    test_yml: test_nothing.yml
   centos:
     box: 'geerlingguy/centos7'
     prep_yml: test_config_storage_prepare.yml
