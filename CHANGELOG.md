@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Add tags to either install or just configure Docker ([#37](../../issues/37))
+
 ## [1.4.0](../../releases/tag/1.4.0) - 2018-04-14
 
 ### Added
