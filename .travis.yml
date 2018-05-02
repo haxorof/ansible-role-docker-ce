@@ -4,16 +4,23 @@ sudo: false
 addons:
   apt:
     packages:
-    - python-pip
+      - python-pip
 install:
-- pip install ansible
-- ansible --version
-- printf '[defaults]\nroles_path=../' >ansible.cfg
+  - pip install ansible
+  - ansible --version
+  - printf '[defaults]\nroles_path=../' >ansible.cfg
 script:
-- ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
   email: false
+  webhooks:
+    urls:
+      - https://galaxy.ansible.com/api/v1/notifications/
+    on_success: always
+    on_failure: never
+    on_start: never
+    on_cancel: never
+    on_error: never
   pushover:
     api_key:
       secure: Cs1ESVK05exBjbP/0kZy0YI9My6qRH8EpB5XTZHBhn0Kel7B2E5uZ6y2kmVOfT+esATbQCQkpXxH2+YBsoyYKIz0OvnnO72FU1+/FgC+i1lLyxK8g7pJgZDfSfBQW0VBLRmjNlwB0pHcshxbgdP8ormKOW5ImbtTA6hVQiYeR8E5gURFy6G1Y3S4xkyxJia6gh+XMJDdICPkB1qwc8CNio1zd0yQQQYsftyPwPruK+prfsv3GIEwCzliMwUdGLRvuT1qhN2bdCO5w+MiIubpEv7stAFfp4dK8vGBrzE/PPJlScRQgN5c92zYLR0hfvwedyc6KExtpqg4Btd68iqtEIw92subgkixadJBnDWiVKR+AGjmi9jPsUW5ObwB00IiOMqlBbIavRw0Tl89WrnQA+gRdQnc8Y1qTxXmPTRv0rwXTAs2RzVCR64pHNcUf+lXwEI5NEs32Xf3GPCdUSTKdp0STZEUsUhjLCGDLA0BhE6/9RGH4/Nv3OCtkSnpGNqAt/6u0OJrX5Ej3e3ZaU0JmlTKxmmGsHIbPCyBrA5u7lWp59eivAZWRD56nf+ukYqxktgfb2Id465wneLCyLZ5qNWz5ery0B3NClnO4dPreQn+ux0Pjom3ebso7jDEhVSDLgMEZwwG/SpHwzP2eMuiBsp+pMcyZuB3xSrx0lYSdkY=
