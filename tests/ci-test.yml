@@ -1,4 +1,4 @@
 ---
 - hosts: test-host
   roles:
-    - haxorof.docker-ce
+    - ansible-role-docker-ce
