@@ -29,20 +29,21 @@ Vagrant.configure("2") do |config|
   # Prepare Ansible roles directory
   config.vm.provision "shell",
     inline: "test -d /etc/ansible/roles/haxorof.docker-ce || \
-      ln -s /mnt/ansible-role-docker-ce /etc/ansible/roles/haxorof.docker-ce"
+      (mkdir -p /etc/ansible/roles && \
+      ln -s /mnt/ansible-role-docker-ce /etc/ansible/roles/haxorof.docker-ce)"
 
   # Prepare box
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose        = false
     ansible.playbook       = vagrant_config['prep_yml']
     ansible.limit          = "test-host"
-    ansible.inventory_path = "inventory"
+    ansible.inventory_path = "hosts"
   end
   # Test storage config
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose        = false
     ansible.playbook       = vagrant_config['test_yml']
     ansible.limit          = "test-host"
-    ansible.inventory_path = "inventory"
+    ansible.inventory_path = "hosts"
   end  
 end

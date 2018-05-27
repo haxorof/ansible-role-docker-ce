@@ -1,30 +1,38 @@
 configs:
-  use: 'centos_no_docker'
+  use: 'centos'
   centos_no_docker:
     box: 'geerlingguy/centos7'
-    prep_yml: test_config_prepare.yml
+    prep_yml: prepare.yml
     test_yml: test_nothing.yml
   centos:
     box: 'geerlingguy/centos7'
-    prep_yml: test_config_storage_prepare.yml
+    prep_yml: prepare.yml
+    test_yml: test_defaults.yml
+  centos_config:
+    box: 'geerlingguy/centos7'
+    prep_yml: prepare.yml
+    test_yml: test_config.yml
+  centos_storage:
+    box: 'geerlingguy/centos7'
+    prep_yml: prepare_storage.yml
     test_yml: test_config_storage.yml
   centos_old_docker:
     box: 'geerlingguy/centos7'
-    prep_yml: test_config_prepare.yml
+    prep_yml: prepare.yml
     test_yml: test_old_version.yml
   ubuntu_trusty:
     box: 'geerlingguy/ubuntu1404'
-    prep_yml: test_config_prepare.yml
+    prep_yml: prepare.yml
     test_yml: test_config.yml
   ubuntu_xenial:
     box: 'geerlingguy/ubuntu1604'
-    prep_yml: test_config_storage_prepare.yml
+    prep_yml: prepare_storage.yml
     test_yml: test_config_storage.yml
   debian_jessie:
     box: 'geerlingguy/debian8'
-    prep_yml: test_config_prepare.yml
+    prep_yml: prepare.yml
     test_yml: test_config.yml
   debian_stretch:
     box: 'geerlingguy/debian9'
-    prep_yml: test_config_storage_prepare.yml
+    prep_yml: prepare_storage.yml
     test_yml: test_config_storage.yml
