@@ -3,4 +3,4 @@
   vars:
     docker_pkg_name: docker-ce-17.06.0.ce-1.el7.centos
   roles:
-    - ansible-role-docker-ce
+    - haxorof.docker-ce

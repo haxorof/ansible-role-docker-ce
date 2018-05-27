@@ -9,4 +9,4 @@
       live-restore: true
       userland-proxy: false
   roles:
-    - ansible-role-docker-ce
+    - haxorof.docker-ce

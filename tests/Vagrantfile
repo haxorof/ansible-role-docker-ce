@@ -25,6 +25,12 @@ Vagrant.configure("2") do |config|
     end
     vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', docker_disk]
   end
+
+  # Prepare Ansible roles directory
+  config.vm.provision "shell",
+    inline: "test -d /etc/ansible/roles/haxorof.docker-ce || \
+      ln -s /mnt/ansible-role-docker-ce /etc/ansible/roles/haxorof.docker-ce"
+
   # Prepare box
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose        = false

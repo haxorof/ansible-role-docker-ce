@@ -13,6 +13,7 @@
       git:
         repo: 'https://github.com/docker/docker-bench-security.git'
         dest: /home/vagrant/docker-bench-security
+      when: docker_bench_security | bool
 
     - name: Create partition sdb1
       parted:
@@ -47,4 +48,4 @@
         fstype: ext4
         state: mounted    
       become: true
-   
+

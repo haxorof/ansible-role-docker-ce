@@ -14,4 +14,4 @@
       storage-opts:
         - "dm.directlvm_device=/dev/sdb2"      
   roles:
-    - ansible-role-docker-ce
+    - haxorof.docker-ce
