@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.6.0](../../releases/tag/1.6.0) - 2018-06-07
+
 ### Changed
 
 - Deprecation warning about include in Ansible 2.4 ([#12](../../issues/12))
