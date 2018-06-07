@@ -17,25 +17,25 @@
     _docker_os_dist_major_version == "18"
   tags: ["install", "configure"]
 
-- include: checks.yml
+- include_tasks: checks.yml
   tags: ["install", "configure"]
 
-- include: setup-repository.yml
+- include_tasks: setup-repository.yml
   tags: ["install"]
 
-- include: remove-pre-docker-ce.yml
+- include_tasks: remove-pre-docker-ce.yml
   when: docker_remove_pre_ce | bool
   tags: ["install"]
 
-- include: install-docker.yml
+- include_tasks: install-docker.yml
   tags: ["install"]
 
-- include: setup-audit.yml
+- include_tasks: setup-audit.yml
   tags: ["configure"]
 
-- include: kernel-3-mount-fixes.yml
+- include_tasks: kernel-3-mount-fixes.yml
   when: ansible_kernel | version_compare('4', '<')
   tags: ["configure"]
 
-- include: configure-docker.yml
+- include_tasks: configure-docker.yml
   tags: ["configure"]

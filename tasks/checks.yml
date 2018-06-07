@@ -1,7 +1,7 @@
 ---
-- include: distribution-checks.yml
+- include_tasks: distribution-checks.yml
   when:
     _docker_os_dist_check | bool
     
-- include: compatibility-checks.yml
+- include_tasks: compatibility-checks.yml
 
