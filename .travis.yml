@@ -10,7 +10,7 @@ install:
 - ansible --version
 - printf '[defaults]\nroles_path=../' >ansible.cfg
 script:
-- ansible-playbook tests/ci-test.yml -i tests/inventory --syntax-check
+- ansible-playbook tests/ci-test.yml -i tests/hosts --syntax-check
 notifications:
   email: false
   webhooks:
