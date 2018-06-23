@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Role is not idempotent for Ubuntu and Debian distributions ([#41](../../issues/41))
+
 ## [1.6.0](../../releases/tag/1.6.0) - 2018-06-07
 
 ### Changed

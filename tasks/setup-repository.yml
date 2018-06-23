@@ -8,6 +8,7 @@
 - name: Update APT cache
   apt:
     update_cache: yes
+  changed_when: false
   become: true
   when: _docker_os_dist == "Ubuntu" or
         _docker_os_dist == "Debian"
