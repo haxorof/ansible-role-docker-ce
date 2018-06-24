@@ -1,0 +1,11 @@
+---
+- hosts: test-host
+  vars:
+    docker_daemon_config:
+      hosts:
+        # fd:// does not work in CentOS
+        - unix:///var/run/docker.sock
+        - tcp://0.0.0.0:2376
+      init: true
+  roles:
+    - haxorof.docker-ce

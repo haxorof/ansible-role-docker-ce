@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Role is not idempotent for Ubuntu and Debian distributions ([#41](../../issues/41))
+- Cannot set hosts in daemon.json because of arguments to dockerd in Ubuntu/Debian ([#42](../../issues/42))
 
 ## [1.6.0](../../releases/tag/1.6.0) - 2018-06-07
 

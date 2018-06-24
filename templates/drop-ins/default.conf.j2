@@ -1,0 +1,4 @@
+[Service]
+EnvironmentFile=-{{ systemd_envs_dir }}/docker-envs
+ExecStart= 
+ExecStart=/usr/bin/dockerd $DOCKER_OPTS

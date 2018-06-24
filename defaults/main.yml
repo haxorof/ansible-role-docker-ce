@@ -6,6 +6,10 @@
 # docker_daemon_config:
 #   experimental: true
 docker_daemon_config:
+# Docker daemon options
+#  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
+#  https://github.com/moby/moby/issues/25471
+docker_daemon_opts: ''
 # To compensate for situation where Docker daemon fails because of usermod incompatibility.
 # Ensures that 'dockremap:500000:65536' is present in /etc/subuid and /etc/subgid.
 # Note! If userns-remap is set to 'default' in docker_daemon_config this config will be unnecessary.

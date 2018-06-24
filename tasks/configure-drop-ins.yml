@@ -1,0 +1,30 @@
+- name: Ensure /etc/systemd/system/docker.service.d directory exists
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    mode: 0755
+  become: yes
+
+- name: Setup default Docker drop-in to enable use of environment file
+  template:
+    src: drop-ins/default.conf.j2
+    dest: /etc/systemd/system/docker.service.d/default.conf
+  become: yes
+  register: systemd_docker_dropin
+  vars:
+    systemd_envs_dir: "{{ docker_systemd_envs_dir[_docker_os_dist] }}"
+
+- name: Setup Docker environment file {{ docker_systemd_envs_dir[_docker_os_dist] }}/docker-envs
+  template:
+    src: docker-envs.j2
+    dest: "{{ docker_systemd_envs_dir[_docker_os_dist] }}/docker-envs"
+  become: yes
+  register: systemd_docker_env
+  vars:
+    docker_opts: "{{ docker_daemon_opts }}"
+
+- name: Force daemon reload of systemd
+  systemd: 
+    daemon_reload: yes
+  become: yes
+  when: systemd_docker_dropin|changed or systemd_docker_env|changed

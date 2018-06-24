@@ -25,7 +25,7 @@
         _docker_os_dist == "CentOS" or
         _docker_os_dist == "RedHat"
 
-- name: Add Docker’s official GPG key
+- name: Add Docker official GPG key
   apt_key:
     url: https://download.docker.com/linux/{{ _docker_os_dist|lower }}/gpg
     state: present
