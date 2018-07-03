@@ -14,7 +14,7 @@ pass () {
   printf "%b\n" "${BLDGRN}[PASS]${TXTRST} $1"
 }
 
-warn () {
+fail () {
   printf "%b\n" "${BLDRED}[FAIL]${TXTRST} $1"
 }
 
@@ -23,6 +23,7 @@ configs=$(parse_yaml vagrant_config.yml | grep _box | awk '{split($0,a,"_box"); 
 exitCode=0
 for config in $configs; do
   CONFIG_KEY=$config
+  echo "Testing [$CONFIG_KEY]..."
   vagrant up
   exitCode=$?
   vagrant destroy -f
