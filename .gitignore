@@ -3,3 +3,4 @@
 .vscode/
 *.vdi
 /.project
+tests/yaml.sh

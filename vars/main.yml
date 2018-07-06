@@ -1,5 +1,6 @@
 ---
 # vars file for ansible-role-docker-ce
+docker_systemd_service_config_tweaks: []
 
 docker_repository_related_packages:
   CentOS:

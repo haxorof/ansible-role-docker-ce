@@ -1,5 +1,6 @@
 configs:
   use: 'defaults_centos'
+
   # CentOS 7
   # No Docker installed
   # no_docker_centos:
@@ -16,6 +17,10 @@ configs:
     box: 'geerlingguy/centos7'
     prep_yml: prepare.yml
     test_yml: test_config.yml
+  config_adv_centos:
+    box: 'geerlingguy/centos7'
+    prep_yml: prepare.yml
+    test_yml: test_config_adv.yml
   # Older Docker test
   old_docker_centos:
     box: 'geerlingguy/centos7'
@@ -31,18 +36,30 @@ configs:
     box: 'geerlingguy/centos7'
     prep_yml: prepare.yml
     test_yml: test_issue_42.yml
+
   # Ubuntu 14.04
   # Role default tests
   defaults_ubuntu_trusty:
     box: 'geerlingguy/ubuntu1404'
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
+  # Config tests
+  config_adv_ubuntu_trusty:
+    box: 'geerlingguy/ubuntu1404'
+    prep_yml: prepare.yml
+    test_yml: test_config_adv.yml    
+
   # Ubuntu 16.04
   # Role default tests
-  defaults_ubuntu_trusty:
+  defaults_ubuntu_xenial:
     box: 'geerlingguy/ubuntu1604'
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
+  # Config tests
+  config_adv_ubuntu_xenial:
+    box: 'geerlingguy/ubuntu1604'
+    prep_yml: prepare.yml
+    test_yml: test_config_adv.yml    
   # Storage testing
   config_storage_ubuntu_xenial:
     box: 'geerlingguy/ubuntu1604'
@@ -53,18 +70,30 @@ configs:
     box: 'geerlingguy/ubuntu1604'
     prep_yml: prepare.yml
     test_yml: test_issue_42.yml
+
   # Debian 8
   # Role default tests
   defaults_debian_jessie:
     box: 'geerlingguy/debian8'
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
+  # Config tests
+  config_adv_debian_jessie:
+    box: 'geerlingguy/debian8'
+    prep_yml: prepare.yml
+    test_yml: test_config_adv.yml    
+
   # Debian 9
   # Role default tests
-  defaults_debian_jessie:
+  defaults_debian_stretch:
     box: 'geerlingguy/debian9'
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
+  # Config tests
+  config_adv_debian_stretch:
+    box: 'geerlingguy/debian9'
+    prep_yml: prepare.yml
+    test_yml: test_config_adv.yml      
   # Storage testing
   config_storage_debian_stretch:
     box: 'geerlingguy/debian9'

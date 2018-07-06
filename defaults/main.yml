@@ -10,6 +10,9 @@ docker_daemon_config:
 #  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
 #  https://github.com/moby/moby/issues/25471
 docker_daemon_opts: ''
+# List of additional service configuration options for systemd
+# Important! Configuring this can cause Docker to not start at all.
+docker_systemd_service_config: []
 # To compensate for situation where Docker daemon fails because of usermod incompatibility.
 # Ensures that 'dockremap:500000:65536' is present in /etc/subuid and /etc/subgid.
 # Note! If userns-remap is set to 'default' in docker_daemon_config this config will be unnecessary.

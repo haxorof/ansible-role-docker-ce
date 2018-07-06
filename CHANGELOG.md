@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Add support to add systemd configuration options to Docker service ([#44](../../issues/44))
+
 ### Fixed
 
 - Role is not idempotent for Ubuntu and Debian distributions ([#41](../../issues/41))

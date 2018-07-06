@@ -18,15 +18,54 @@ fail () {
   printf "%b\n" "${BLDRED}[FAIL]${TXTRST} $1"
 }
 
+vagrantExists() {
+  which vagrant
+  echo "$?"
+}
+
+vagrantUp() {
+  if [[ $(vagrantExists) == "0" ]]; then
+    vagrant up
+    return $?
+  fi
+}
+
+vagrantDestroy() {
+  if [[ $(vagrantExists) == "0" ]]; then
+    vagrant destroy -f
+    return $?
+  fi
+}
+
+vagrantBoxAdd() {
+  echo "Download Vagrant box $1"
+  if [[ $(vagrantExists) == "0" ]]; then
+    vagrant box add $1
+    return $?
+  fi
+  return 0
+}
+
+LIMIT="$1"
+
 echo "Starting tests..."
+boxes=$(parse_yaml vagrant_config.yml | grep _box | cut -d= -f2 | sed 's/[\(\"\)]//g' | sort | uniq)
+for box in $boxes; do
+  vagrantBoxAdd $box
+  exitCode=$?
+  if [[ $exitCode != "0" ]]; then
+    exit $exitCode
+  fi
+done
+
 configs=$(parse_yaml vagrant_config.yml | grep _box | awk '{split($0,a,"_box"); $1=a[1]; split($1,b,"configs_"); $2=b[2];  print $2}')
 exitCode=0
 for config in $configs; do
   CONFIG_KEY=$config
-  echo "Testing [$CONFIG_KEY]..."
-  vagrant up
+  echo "###### $CONFIG_KEY..."
+  vagrantUp
   exitCode=$?
-  vagrant destroy -f
+  vagrantDestroy
   if [[ $exitCode == "0" ]]; then
     pass "$CONFIG_KEY"
   else

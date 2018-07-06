@@ -2,3 +2,6 @@
 EnvironmentFile=-{{ systemd_envs_dir }}/docker-envs
 ExecStart= 
 ExecStart=/usr/bin/dockerd $DOCKER_OPTS
+{% for option in systemd_service_conf %}
+{{ option }}
+{% endfor %}

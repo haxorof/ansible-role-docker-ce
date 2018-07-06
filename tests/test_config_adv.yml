@@ -1,0 +1,10 @@
+---
+- hosts: test-host
+  vars:
+    # Setting proxy environment variables to Docker daemon
+    docker_systemd_service_config:
+      - 'Environment="HTTP_PROXY=http://localhost:3128/" "NO_PROXY=localhost,127.0.0.1,docker-registry.somecorporation.com"'
+    # Adding debug flag to Docker daemon
+    docker_daemon_opts: '-D'
+  roles:
+    - haxorof.docker-ce

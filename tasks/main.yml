@@ -33,11 +33,10 @@
 - include_tasks: setup-audit.yml
   tags: ["configure"]
 
-- include_tasks: configure-drop-ins.yml
+- include_tasks: bug-tweaks.yml
   tags: ["configure"]
 
-- include_tasks: kernel-3-mount-fixes.yml
-  when: ansible_kernel | version_compare('4', '<')
+- include_tasks: configure-drop-ins.yml
   tags: ["configure"]
 
 - include_tasks: configure-docker.yml
