@@ -18,30 +18,40 @@ fail () {
   printf "%b\n" "${BLDRED}[FAIL]${TXTRST} $1"
 }
 
+redText() {
+  printf "%b\n" "${BLDRED}$1${TXTRST}"
+}
+
 vagrantExists() {
   which vagrant
   echo "$?"
 }
 
 vagrantUp() {
-  if [[ $(vagrantExists) == "0" ]]; then
+  if [[ "$(vagrantExists)" == "0" ]]; then
     vagrant up
     return $?
+  else
+    redText "[vagrantUp] vagrant not found!"
   fi
 }
 
 vagrantDestroy() {
-  if [[ $(vagrantExists) == "0" ]]; then
+  if [[ "$(vagrantExists)" == "0" ]]; then
     vagrant destroy -f
     return $?
+  else
+    redText "[vagrantDestroy] vagrant not found!"
   fi
 }
 
 vagrantBoxAdd() {
   echo "Download Vagrant box $1"
-  if [[ $(vagrantExists) == "0" ]]; then
+  if [[ "$(vagrantExists)" == "0" ]]; then
     vagrant box add $1
     return $?
+  else
+    redText "[vagrantBoxAdd] vagrant not found!"
   fi
   return 0
 }
