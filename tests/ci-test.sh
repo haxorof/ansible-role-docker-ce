@@ -23,8 +23,10 @@ redText() {
 }
 
 vagrantExists() {
-  which vagrant
-  echo "$?"
+  if ! vagrant_loc="$(type -p vagrant)" || [[ -z $vagrant_loc ]]; then
+    return 1
+  fi
+  return 0
 }
 
 vagrantUp() {
