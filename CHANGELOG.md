@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Add support to add environment variables to Docker daemon ([#43](../../issues/43))
 - Add support to add systemd configuration options to Docker service ([#44](../../issues/44))
 
 ### Fixed

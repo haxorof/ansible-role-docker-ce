@@ -39,6 +39,11 @@ docker_daemon_config:
 #  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
 #  https://github.com/moby/moby/issues/25471
 docker_daemon_opts: ''
+# Map of environment variables to Docker daemon
+docker_daemon_envs: {}
+# List of additional service configuration options for systemd
+# Important! Configuring this can cause Docker to not start at all.
+docker_systemd_service_config: []
 # To compensate for situation where Docker daemon fails because of usermod incompatibility.
 # Ensures that 'dockremap:500000:65536' is present in /etc/subuid and /etc/subgid.
 # Note! If userns-remap is set to 'default' in docker_daemon_config this config will be unnecessary.
@@ -68,9 +73,23 @@ Following sub sections show different kind of examples to illustrate what this r
 
 ### Simplest
 
-    - hosts: localhost
-      roles:
-        - role: haxorof.docker-ce
+```yaml
+- hosts: docker
+  roles:
+    - role: haxorof.docker-ce
+```
+
+### Configure Docker daemon to use proxy
+
+```yaml
+- hosts: docker
+  vars:
+    docker_daemon_envs:
+      HTTP_PROXY: http://localhost:3128/
+      NO_PROXY: localhost,127.0.0.1,docker-registry.somecorporation.com
+  roles:
+    - haxorof.docker-ce
+```
 
 ### On the road to CIS security compliant Docker engine installation
 

@@ -19,6 +19,13 @@
     systemd_envs_dir: "{{ docker_envs_dir[_docker_os_dist] }}"
     systemd_service_conf: "{{ _systemd_service_config }}"
 
+- name: Combine Docker daemon environment variable configuration
+  set_fact:
+    docker_service_envs: "{{ docker_service_envs | combine(_docker_service_opts) | combine(docker_daemon_envs) }}"
+  vars:
+    _docker_service_opts:
+      DOCKER_OPTS: "{{ docker_daemon_opts }}"
+
 - name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist] }}/docker-envs
   template:
     src: docker-envs.j2
@@ -26,7 +33,7 @@
   become: yes
   notify: restart docker
   vars:
-    docker_opts: "{{ docker_daemon_opts }}"
+    docker_envs: "{{ docker_service_envs }}"
 
 - name: Force daemon reload of systemd
   systemd: 

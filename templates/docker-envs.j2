@@ -1,2 +1,4 @@
 # {{ ansible_managed }}
-DOCKER_OPTS='{{ docker_opts }}'
+{% for key, value in docker_envs.iteritems() %}
+{{ key }}="{{ value }}"
+{% endfor %}

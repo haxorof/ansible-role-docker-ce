@@ -10,6 +10,8 @@ docker_daemon_config:
 #  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
 #  https://github.com/moby/moby/issues/25471
 docker_daemon_opts: ''
+# Map of environment variables to Docker daemon
+docker_daemon_envs: {}
 # List of additional service configuration options for systemd
 # Important! Configuring this can cause Docker to not start at all.
 docker_systemd_service_config: []
