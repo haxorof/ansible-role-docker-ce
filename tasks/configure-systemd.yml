@@ -16,13 +16,13 @@
   become: yes
   register: _systemd_docker_dropin
   vars:
-    systemd_envs_dir: "{{ docker_systemd_envs_dir[_docker_os_dist] }}"
+    systemd_envs_dir: "{{ docker_envs_dir[_docker_os_dist] }}"
     systemd_service_conf: "{{ _systemd_service_config }}"
 
-- name: Setup Docker environment file {{ docker_systemd_envs_dir[_docker_os_dist] }}/docker-envs
+- name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist] }}/docker-envs
   template:
     src: docker-envs.j2
-    dest: "{{ docker_systemd_envs_dir[_docker_os_dist] }}/docker-envs"
+    dest: "{{ docker_envs_dir[_docker_os_dist] }}/docker-envs"
   become: yes
   notify: restart docker
   vars:

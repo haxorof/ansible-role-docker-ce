@@ -1,0 +1,8 @@
+- name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist] }}/docker
+  template:
+    src: docker-envs.j2
+    dest: "{{ docker_envs_dir[_docker_os_dist] }}/docker"
+  become: yes
+  notify: restart docker
+  vars:
+    docker_opts: "{{ docker_daemon_opts }}"

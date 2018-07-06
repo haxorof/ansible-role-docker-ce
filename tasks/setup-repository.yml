@@ -38,6 +38,7 @@
   args:
     warn: false
   become: true
+  changed_when: false
   when: _docker_os_dist == "Ubuntu" and
         _docker_os_dist_major_version == '14'
 

@@ -17,27 +17,53 @@
     _docker_os_dist_major_version == "18"
   tags: ["install", "configure"]
 
-- include_tasks: checks.yml
+# https://wiki.ubuntu.com/SystemdForUpstartUsers
+# Important! systemd is only fully supported in Ubuntu 15.04 and later releases
+- name: Determine usage of systemd
+  shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
+  become: true
+  changed_when: no  
+  register: _determine_systemd_usage
+
+- name: Set fact to indicate systemd is not used
+  set_fact:
+    _docker_systemd_used: "{{ _determine_systemd_usage is defined and _determine_systemd_usage.stdout == 'systemd' }}"
+
+- name: Compatibility and distribution checks
+  include_tasks: checks.yml
   tags: ["install", "configure"]
 
-- include_tasks: setup-repository.yml
+- name: Setup Docker package repositories
+  include_tasks: setup-repository.yml
   tags: ["install"]
 
-- include_tasks: remove-pre-docker-ce.yml
+- name: Remove Docker versions before Docker CE
+  include_tasks: remove-pre-docker-ce.yml
   when: docker_remove_pre_ce | bool
   tags: ["install"]
 
-- include_tasks: install-docker.yml
+- name: Install Docker
+  include_tasks: install-docker.yml
   tags: ["install"]
 
-- include_tasks: setup-audit.yml
+- name: Configure audit logging
+  include_tasks: setup-audit.yml
   tags: ["configure"]
 
-- include_tasks: bug-tweaks.yml
+- name: Apply workarounds for bugs and/or tweaks
+  include_tasks: bug-tweaks.yml
   tags: ["configure"]
 
-- include_tasks: configure-drop-ins.yml
+- name: Configure systemd service
+  include_tasks: configure-systemd.yml
+  when: _docker_systemd_used | bool  
   tags: ["configure"]
 
-- include_tasks: configure-docker.yml
+- name: Configure non-systemd service
+  include_tasks: configure-non-systemd.yml
+  when: _docker_systemd_used | bool == false 
+  tags: ["configure"]
+
+- name: Configure Docker
+  include_tasks: configure-docker.yml
   tags: ["configure"]

@@ -42,7 +42,7 @@ docker_cmd_update_repo_cache:
   Ubuntu: apt-get update
   Debian: apt-get update
 
-docker_systemd_envs_dir:
+docker_envs_dir:
   CentOS: /etc/sysconfig
   RedHat: /etc/sysconfig
   Fedora: /etc/sysconfig
