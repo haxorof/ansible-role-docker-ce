@@ -61,7 +61,7 @@ vagrantBoxAdd() {
 LIMIT="$1"
 
 echo "Starting tests..."
-boxes=$(parse_yaml vagrant_config.yml | grep _box | cut -d= -f2 | sed 's/[\(\"\)]//g' | sort | uniq)
+boxes=$(parse_yaml vagrant_config.yml | grep _box | cut -d= -f2 | sed 's/[\(\"\)]//g' | sed "s/'//g" | sort | uniq)
 for box in $boxes; do
   vagrantBoxAdd $box
   exitCode=$?
