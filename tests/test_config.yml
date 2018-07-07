@@ -7,7 +7,7 @@
       icc: false
       init: true
       disable-legacy-registry: true
-      live-restore: true
+      live-restore: false
       userland-proxy: false
   roles:
     - haxorof.docker-ce

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.7.0](../../releases/tag/1.7.0) - 2018-07-08
+
 ### Added
 
 - Add support to add environment variables to Docker daemon ([#43](../../issues/43))
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- systemctl daemon-reload is not run when toggling docker_enable_mount_flag_fix ([#39](../../issues/39))
 - Role is not idempotent for Ubuntu and Debian distributions ([#41](../../issues/41))
 - Cannot set hosts in daemon.json because of arguments to dockerd in Ubuntu/Debian ([#42](../../issues/42))
 

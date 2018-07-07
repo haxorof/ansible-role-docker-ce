@@ -8,6 +8,10 @@ fi
 
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
+BLDBLU='\033[1;34m'
+BLDYLW='\033[1;33m' # Yellow
+BLDMGT='\033[1;35m' # Magenta
+BLDCYN='\033[1;36m' # Cyan 
 TXTRST='\033[0m'
 
 pass () {
@@ -16,6 +20,10 @@ pass () {
 
 fail () {
   printf "%b\n" "${BLDRED}[FAIL]${TXTRST} $1"
+}
+
+skip() {
+  printf "%b\n" "${BLDCYN}[SKIP]${TXTRST} $1"
 }
 
 redText() {
@@ -48,7 +56,6 @@ vagrantDestroy() {
 }
 
 vagrantBoxAdd() {
-  echo "Download Vagrant box $1"
   if [[ "$(vagrantExists)" == "0" ]]; then
     vagrant box add $1
     return $?
@@ -58,30 +65,40 @@ vagrantBoxAdd() {
   return 0
 }
 
+LIMIT=$1
+
 echo "Starting tests..."
 boxes=$(parse_yaml vagrant_config.yml | grep _box | cut -d= -f2 | sed 's/[\(\"\)]//g' | sed "s/'//g" | sort | uniq)
 for box in $boxes; do
+  if [[ "$box" != *"$LIMIT"* ]]; then
+    skip "Download $box"
+    continue
+  fi
   vagrantBoxAdd $box
   # A bit unstable downloads and if already downloaded exit code 1 is returned.
   # So ignore exit code for now.
-  #exitCode=$?
-  #if [[ $exitCode != "0" ]]; then
-  #  exit $exitCode
-  #fi
+  if [[ "$?" == "0" ]]; then
+    pass "Download $box"
+  else
+    pass "Download $box"
+  fi
 done
 
 configs=$(parse_yaml vagrant_config.yml | grep _box | awk '{split($0,a,"_box"); $1=a[1]; split($1,b,"configs_"); $2=b[2];  print $2}')
 exitCode=0
 for config in $configs; do
   CONFIG_KEY=$config
-  echo "###### $CONFIG_KEY..."
+  if [[ "$CONFIG_KEY" != *"$LIMIT"* ]]; then
+    skip "$CONFIG_KEY"
+    continue
+  fi
   vagrantUp
   exitCode=$?
   vagrantDestroy
   if [[ $exitCode == "0" ]]; then
-    pass "$CONFIG_KEY"
+    pass "Test $CONFIG_KEY"
   else
-    fail "$CONFIG_KEY"
+    fail "Test $CONFIG_KEY"
     break
   fi
 done

@@ -14,6 +14,7 @@
     src: drop-ins/default.conf.j2
     dest: /etc/systemd/system/docker.service.d/default.conf
   become: yes
+  notify: restart docker
   register: _systemd_docker_dropin
   vars:
     systemd_envs_dir: "{{ docker_envs_dir[_docker_os_dist] }}"
