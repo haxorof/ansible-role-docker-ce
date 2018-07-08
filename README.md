@@ -34,7 +34,7 @@ Variables related to this role are listed below:
 # Example:
 # docker_daemon_config:
 #   experimental: true
-docker_daemon_config:
+docker_daemon_config: {}
 # Docker daemon options
 #  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
 #  https://github.com/moby/moby/issues/25471

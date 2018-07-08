@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Ansible Galaxy linting report error during import  ([#45](../../issues/45))
+- null written to /etc/docker/daemon.json ([#46](../../issues/46))
 
 ## [1.7.0](../../releases/tag/1.7.0) - 2018-07-08
 
