@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.7.1](../../releases/tag/1.7.1) - 2018-07-08
+
 ### Fixed
 
 - Ansible Galaxy linting report error during import  ([#45](../../issues/45))
