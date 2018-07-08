@@ -137,9 +137,10 @@ LIMIT=$1
 
 if [[ "$SKIP_DOWNLOAD" == "" ]]; then
   DownloadBoxes
+  downloadResult=$?
   echo "Download complete!"
   if [[ "$DOWNLOAD_ONLY" != "" ]]; then
-    exit 0
+    exit $downloadResult
   fi
 fi
 
