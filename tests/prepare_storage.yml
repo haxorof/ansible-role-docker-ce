@@ -1,7 +1,8 @@
 ---
 - hosts: test-host
   tasks:
-    - package:
+    - name: Ensure git and parted is installed
+      package:
         name: "{{ item }}"
         state: present
       become: true
@@ -13,6 +14,7 @@
       git:
         repo: 'https://github.com/docker/docker-bench-security.git'
         dest: /home/vagrant/docker-bench-security
+        version: master
       when: docker_bench_security is defined
 
     - name: Create partition sdb1
@@ -46,6 +48,5 @@
         path: /var/lib/docker
         src: /dev/sdb1
         fstype: ext4
-        state: mounted    
+        state: mounted
       become: true
-

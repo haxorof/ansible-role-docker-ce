@@ -37,7 +37,7 @@
     docker_envs: "{{ docker_service_envs }}"
 
 - name: Force daemon reload of systemd
-  systemd: 
+  systemd:
     daemon_reload: yes
   become: yes
   notify: restart docker

@@ -1,7 +1,8 @@
 ---
 - hosts: test-host
   tasks:
-    - package:
+    - name: Ensure git is installed
+      package:
         name: git
         state: present
       become: true
@@ -9,4 +10,5 @@
       git:
         repo: 'https://github.com/docker/docker-bench-security.git'
         dest: /home/vagrant/docker-bench-security
+        version: master
       when: docker_bench_security is defined

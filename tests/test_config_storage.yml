@@ -12,6 +12,6 @@
       log-driver: journald
       storage-driver: devicemapper
       storage-opts:
-        - "dm.directlvm_device=/dev/sdb2"      
+        - "dm.directlvm_device=/dev/sdb2"
   roles:
     - haxorof.docker-ce

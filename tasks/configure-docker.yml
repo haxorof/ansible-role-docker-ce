@@ -61,4 +61,3 @@
   notify: restart docker
   changed_when: docker_service.status.SubState != "running"
   when: docker_service.status is defined
-

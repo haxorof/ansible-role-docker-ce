@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Ansible Galaxy linting report error during import  ([#45](../../issues/45))
+
 ## [1.7.0](../../releases/tag/1.7.0) - 2018-07-08
 
 ### Added
@@ -95,7 +99,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- MountFlags "slave" helps to prevent "device busy" errors on RHEL/CentOS 7.3 kernels [@jgagnon1] ([#11](../../issues/11)) 
+- MountFlags "slave" helps to prevent "device busy" errors on RHEL/CentOS 7.3 kernels [@jgagnon1] ([#11](../../issues/11))
 
 ## [0.4.2](../../releases/tag/0.4.2) - 2017-08-13
 

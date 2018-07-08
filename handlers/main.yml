@@ -10,7 +10,7 @@
 
 # Workaround because systemd cannot be used: https://github.com/ansible/ansible/issues/22171
 - name: restart auditd
-  shell: service auditd restart
+  command: service auditd restart
   args:
     warn: no
   become: yes

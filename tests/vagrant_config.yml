@@ -47,7 +47,7 @@ configs:
   config_adv_ubuntu_trusty:
     box: 'geerlingguy/ubuntu1404'
     prep_yml: prepare.yml
-    test_yml: test_config_adv.yml    
+    test_yml: test_config_adv.yml
 
   # Ubuntu 16.04
   # Role default tests
@@ -59,7 +59,7 @@ configs:
   config_adv_ubuntu_xenial:
     box: 'geerlingguy/ubuntu1604'
     prep_yml: prepare.yml
-    test_yml: test_config_adv.yml    
+    test_yml: test_config_adv.yml
   # Storage testing
   config_storage_ubuntu_xenial:
     box: 'geerlingguy/ubuntu1604'
@@ -81,7 +81,7 @@ configs:
   config_adv_debian_jessie:
     box: 'geerlingguy/debian8'
     prep_yml: prepare.yml
-    test_yml: test_config_adv.yml    
+    test_yml: test_config_adv.yml
 
   # Debian 9
   # Role default tests
@@ -93,7 +93,7 @@ configs:
   config_adv_debian_stretch:
     box: 'geerlingguy/debian9'
     prep_yml: prepare.yml
-    test_yml: test_config_adv.yml      
+    test_yml: test_config_adv.yml
   # Storage testing
   config_storage_debian_stretch:
     box: 'geerlingguy/debian9'

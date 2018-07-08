@@ -13,7 +13,7 @@
       reload: yes
     become: yes
     when: may_detach_mounts.stat.exists
-  
+
   # Keep for compatibility reasons of this role. Now everything is in the same file.
   - name: Remove systemd drop-in for Docker Mount Flags slave configuration (CentOS/RedHat)
     file:
@@ -32,5 +32,3 @@
     - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
     - docker_enable_mount_flag_fix | bool
     - ansible_kernel | version_compare('4', '<')
-
-
