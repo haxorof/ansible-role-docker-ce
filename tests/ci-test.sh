@@ -6,12 +6,12 @@ if [[ ! -f "$YAML_INC_FILE" ]]; then
 fi
 . $YAML_INC_FILE
 
-export CONFIG_KEY=
 UBUNTU_ON_WIN=$(uname -a | grep Microsoft)
 if [[ $? -eq 0 ]]; then
   echo "Ubuntu on Windows - assuming Vagrant is installed in Windows."
   VAGRANT_CMD=vagrant.exe
   # To share CONFIG_KEY to Windows environment
+  export CONFIG_KEY=
   export WSLENV=CONFIG_KEY/w
 else
   VAGRANT_CMD=vagrant
