@@ -6,6 +6,17 @@ if [[ ! -f yaml.sh ]]; then
 fi
 . yaml.sh
 
+export CONFIG_KEY=
+UBUNTU_ON_WIN=$(uname -a | grep Microsoft)
+if [[ $? -eq 0 ]]; then
+  echo "Ubuntu on Windows - assuming Vagrant is installed in Windows."
+  VAGRANT_CMD=vagrant.exe
+  # To share CONFIG_KEY to Windows environment
+  export WSLENV=CONFIG_KEY/w
+else
+  VAGRANT_CMD=vagrant
+fi
+
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
 BLDBLU='\033[1;34m'
@@ -31,7 +42,7 @@ redText() {
 }
 
 vagrantExists() {
-  if ! vagrant_loc="$(type -p vagrant)" || [[ -z $vagrant_loc ]]; then
+  if ! vagrant_loc="$(type -p $VAGRANT_CMD)" || [[ -z $vagrant_loc ]]; then
     echo "1"
   fi
   echo "0"
@@ -39,7 +50,7 @@ vagrantExists() {
 
 vagrantUp() {
   if [[ "$(vagrantExists)" == "0" ]]; then
-    vagrant up
+    $VAGRANT_CMD up
     return $?
   else
     redText "[vagrantUp] vagrant not found!"
@@ -48,7 +59,7 @@ vagrantUp() {
 
 vagrantDestroy() {
   if [[ "$(vagrantExists)" == "0" ]]; then
-    vagrant destroy -f
+    $VAGRANT_CMD destroy -f
     return $?
   else
     redText "[vagrantDestroy] vagrant not found!"
@@ -57,7 +68,7 @@ vagrantDestroy() {
 
 vagrantBoxAdd() {
   if [[ "$(vagrantExists)" == "0" ]]; then
-    vagrant box add $1
+    $VAGRANT_CMD box add $1
     return $?
   else
     redText "[vagrantBoxAdd] vagrant not found!"
@@ -67,7 +78,7 @@ vagrantBoxAdd() {
 
 LIMIT=$1
 
-echo "Starting tests..."
+echo "Downloading boxes..."
 boxes=$(parse_yaml vagrant_config.yml | grep _box | cut -d= -f2 | sed 's/[\(\"\)]//g' | sed "s/'//g" | sort | uniq)
 for box in $boxes; do
   if [[ "$box" != *"$LIMIT"* ]]; then
@@ -84,10 +95,12 @@ for box in $boxes; do
   fi
 done
 
+echo "Starting tests..."
 configs=$(parse_yaml vagrant_config.yml | grep _box | awk '{split($0,a,"_box"); $1=a[1]; split($1,b,"configs_"); $2=b[2];  print $2}')
 exitCode=0
 for config in $configs; do
   CONFIG_KEY=$config
+  export CONFIG_KEY
   if [[ "$CONFIG_KEY" != *"$LIMIT"* ]]; then
     skip "$CONFIG_KEY"
     continue
