@@ -16,6 +16,7 @@ notifications:
   webhooks:
     urls:
     - https://galaxy.ansible.com/api/v1/notifications/
+    - https://galaxy-qa.ansible.com/api/v1/notifications/
     on_success: always
     on_failure: never
     on_start: never
