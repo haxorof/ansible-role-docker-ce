@@ -1,4 +1,4 @@
 # {{ ansible_managed }}
-{% for key, value in docker_envs.iteritems() %}
+{% for key, value in docker_envs.items()|list %}
 {{ key }}="{{ value }}"
 {% endfor %}
