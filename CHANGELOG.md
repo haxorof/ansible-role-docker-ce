@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Python 3 forward compatibility ([#47](../../pull/47))
+
 ## [1.7.1](../../releases/tag/1.7.1) - 2018-07-08
 
 ### Fixed
