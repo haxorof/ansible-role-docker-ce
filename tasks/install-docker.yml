@@ -5,8 +5,8 @@
   when: docker_latest_version|bool
 
 - name: Ensure docker-ce is installed
+  become: true
   package:
     name: "{{ docker_pkg_name }}"
     state: "{{ docker_pkg_state|default('present') }}"
-  become: true
   notify: restart docker

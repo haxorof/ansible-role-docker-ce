@@ -1,62 +1,62 @@
 ---
 - name: Ensure python and deps for Ansible modules
-  raw: dnf install -y python2 python2-dnf libselinux-python
   become: true
+  raw: dnf install -y python2 python2-dnf libselinux-python
   changed_when: false
   when: _docker_os_dist == "Fedora"
 
 - name: Update APT cache
+  become: true
   apt:
     update_cache: yes
   changed_when: false
-  become: true
   when: _docker_os_dist == "Ubuntu" or
         _docker_os_dist == "Debian"
 
 - name: Ensure packages are installed for repository setup
+  become: true
   package:
     name: "{{ item }}"
     state: present
   with_items:
     - "{{ docker_repository_related_packages[_docker_os_dist] }}"
-  become: true
   when: _docker_os_dist == "Ubuntu" or
         _docker_os_dist == "Debian" or
         _docker_os_dist == "CentOS" or
         _docker_os_dist == "RedHat"
 
 - name: Add Docker official GPG key
+  become: true
   apt_key:
     url: https://download.docker.com/linux/{{ _docker_os_dist|lower }}/gpg
     state: present
-  become: true
   when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > '14')
         or _docker_os_dist == "Debian"
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
+  become: true
   shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
   args:
     warn: false
-  become: true
   changed_when: false
   when: _docker_os_dist == "Ubuntu" and
         _docker_os_dist_major_version == '14'
 
 - name: Add Docker CE repository (Ubuntu/Debian)
+  become: true
   apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} {{ _docker_os_dist_release }} stable {{ (docker_enable_ce_edge == true) | ternary('edge','') }}
     state: present
     filename: 'docker-ce'
-  become: true
   when: _docker_os_dist == "Ubuntu" or
         _docker_os_dist == "Debian"
 
 - name: Add Docker CE repository (Fedora/CentOS/RedHat)
+  become: true
   get_url:
     url: "{{ docker_repository_url[_docker_os_dist] }}"
     dest: /etc/yum.repos.d/docker-ce.repo
     mode: 0644
-  become: true
   register: docker_repo
   when: _docker_os_dist == "CentOS" or
         _docker_os_dist == "Fedora" or
@@ -81,42 +81,42 @@
         _docker_os_dist == "RedHat"
 
 - name: Enable/Disable Docker CE Edge Repository (Fedora/CentOS/RedHat)
-  shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
   become: true
+  shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
   when: (_docker_os_dist == "CentOS" or _docker_os_dist == "Fedora" or _docker_os_dist == "RedHat") and
         _fact_docker_ce_edge_enabled != docker_enable_ce_edge
 
 # disable rt-beta so we don't get a 403 error retrieving repomd.xml
 - name: Check if rhel-7-server-rt-beta-rpms Repository is enabled (RedHat)
-  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-rt-beta-rpms"
   become: true
+  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-rt-beta-rpms"
   register: cmd_rhel_rt_beta_repo_enabled
   when: _docker_os_dist == "RedHat"
   changed_when: false
   failed_when: cmd_rhel_rt_beta_repo_enabled.rc not in [ 0, 1 ]
 
 - name: Disable rhel-7-server-rt-beta-rpms Repository (RedHat)
-  shell: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
   become: true
+  shell: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
   when: _docker_os_dist == "RedHat" and cmd_rhel_rt_beta_repo_enabled.rc == 0
 
 # container-selinux package wants this
 - name: Check if rhel-7-server-extras-rpms Repository is enabled (RedHat)
-  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-extras-rpms"
   become: true
+  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-extras-rpms"
   register: cmd_rhel_extras_repo_enabled
   when: _docker_os_dist == "RedHat"
   changed_when: false
   failed_when: cmd_rhel_extras_repo_enabled.rc not in [ 0, 1 ]
 
 - name: Enable rhel-7-server-extras-rpms Repository (RedHat)
-  shell: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
   become: true
+  shell: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
   when: _docker_os_dist == "RedHat" and cmd_rhel_extras_repo_enabled.rc == 1
 
 - name: Update repository cache
+  become: true
   shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist] }}"
   args:
     warn: false
-  become: true
   when: docker_repo.changed

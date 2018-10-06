@@ -1,34 +1,34 @@
 ---
 - name: Ensure /etc/docker directory exists
+  become: true
   file:
     path: /etc/docker
     state: directory
     mode: 0755
-  become: true
 
 - name: Configure Docker daemon (file)
+  become: true
   copy:
     src: "{{ docker_daemon_config_file }}"
     dest: /etc/docker/daemon.json
-  become: true
   notify: restart docker
   when: docker_daemon_config_file is defined
 
 - name: Configure Docker daemon (variables)
+  become: true
   copy:
     content: "{{ docker_daemon_config | to_nice_json }}"
     dest: /etc/docker/daemon.json
-  become: true
   notify: restart docker
   when: docker_daemon_config_file is not defined and
         docker_daemon_config is defined
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
+  become: true
   lineinfile:
     path: "{{ item }}"
     regexp: '^dockremap'
     line: 'dockremap:500000:65536'
-  become: yes
   with_items:
     - /etc/subuid
     - /etc/subgid
@@ -39,21 +39,21 @@
         docker_bug_usermod|bool == true)
 
 - name: Ensure thin-provisioning-tools is installed when devicemapper is used (Ubuntu)
+  become: true
   package:
     name: thin-provisioning-tools
     state: present
-  become: yes
   when: (_docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian") and
         docker_daemon_config['storage-driver'] is defined and
         docker_daemon_config['storage-driver'] == 'devicemapper'
 
 - name: Enable Docker service
+  become: true
   service:
     name: docker
     enabled: yes
   notify: restart docker
   register: docker_service
-  become: yes
 
 - name: Trigger start/restart of Docker
   service:

@@ -1,24 +1,23 @@
 ---
 - name: Ensure auditd is installed
+  become: true
   package:
     name: auditd
     state: present
-  become: true
-  when: _docker_os_dist == "Ubuntu" or
-        _docker_os_dist == "Debian"
+  when: docker_enable_audit and (_docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian")
 
 - name: Copy Docker audit rules
+  become: yes
   copy:
     src: files/etc/audit/rules.d/docker.rules
     dest: /etc/audit/rules.d/docker.rules
-  become: yes
   notify: restart auditd
-  when: docker_enable_audit | bool
+  when: docker_enable_audit
 
 - name: Ensure Docker audit rules are removed
+  become: yes
   file:
     path: /etc/audit/rules.d/docker.rules
     state: absent
-  become: yes
   notify: restart auditd
-  when: not docker_enable_audit | bool
+  when: not docker_enable_audit

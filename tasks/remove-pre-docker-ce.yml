@@ -11,12 +11,12 @@
   when: cmd_docker_version.stdout_lines is defined and cmd_docker_version.stdout_lines[0] is defined
 
 - name: Check if Docker is running
+  become: true
   command: systemctl status docker
   ignore_errors: yes
   changed_when: false
   register: service_docker_status
   when: remove_old_docker | default(false) | bool == true
-  become: true
 
 - name: Stop Docker service
   service:
@@ -25,10 +25,10 @@
   when: "service_docker_status.rc | default(1) == 0"
 
 - name: Remove old Docker installation before Docker CE
+  become: true
   package:
     name: "{{ item }}"
     state: absent
-  become: true
   when: remove_old_docker|default(false) | bool == true
   with_items:
     - "{{ docker_old_packages[_docker_os_dist] }}"

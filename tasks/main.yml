@@ -20,8 +20,8 @@
 # https://wiki.ubuntu.com/SystemdForUpstartUsers
 # Important! systemd is only fully supported in Ubuntu 15.04 and later releases
 - name: Determine usage of systemd
-  shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
   become: true
+  shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
   changed_when: no
   register: _determine_systemd_usage
 
