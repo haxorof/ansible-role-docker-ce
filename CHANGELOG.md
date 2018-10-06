@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Add support to install Docker Ansible module dependencies ([#48](../../issues/48))
+- Add support to install packages after install via PiP or OS package manager ([#49](../../issues/49))
+
 ## [1.7.2](../../releases/tag/1.7.2) - 2018-09-27
 
 ### Fixed

@@ -1,22 +1,4 @@
 #!/usr/bin/env bash
-YAML_INC_FILE=yamlparser.sh.inc
-if [[ ! -f "$YAML_INC_FILE" ]]; then
-  echo "Fetching YAML parsing script..."
-  wget -O $YAML_INC_FILE -q https://raw.githubusercontent.com/jasperes/bash-yaml/master/yaml.sh
-fi
-. $YAML_INC_FILE
-
-UBUNTU_ON_WIN=$(uname -a | grep Microsoft)
-if [[ $? -eq 0 ]]; then
-  echo "Ubuntu on Windows - assuming Vagrant is installed in Windows."
-  VAGRANT_CMD=vagrant.exe
-  # To share CONFIG_KEY to Windows environment
-  export CONFIG_KEY=
-  export WSLENV=CONFIG_KEY/w
-else
-  VAGRANT_CMD=vagrant
-fi
-
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
 BLDBLU='\033[1;34m'
@@ -43,6 +25,29 @@ Skip() {
 
 RedText() {
   printf "%b\n" "${BLDRED}$1${TXTRST}"
+}
+
+Info() {
+  printf "%b\n" "${BLDBLU}[INFO]${TXTRST} $1"
+}
+
+SetupYamlParser() {
+  YAML_INC_FILE=yamlparser.sh.inc
+  if [[ ! -f "$YAML_INC_FILE" ]]; then
+    Info "Fetching YAML parsing script..."
+    wget -O $YAML_INC_FILE -q https://raw.githubusercontent.com/jasperes/bash-yaml/master/yaml.sh
+  fi
+  . $YAML_INC_FILE
+}
+
+DetectWSL() {
+  UBUNTU_ON_WIN=$(uname -a | grep Microsoft)
+  if [[ $? -eq 0 ]]; then
+    Info "Ubuntu on Windows - assuming Vagrant is installed in Windows."
+    VAGRANT_CMD=vagrant.exe
+  else
+    VAGRANT_CMD=vagrant
+  fi
 }
 
 VagrantExists() {
@@ -89,10 +94,9 @@ VagrantBoxAdd() {
 }
 
 DownloadBoxes() {
-  echo "Downloading boxes..."
-  boxes=$(parse_yaml vagrant_config.yml | grep _box | cut -d= -f2 | sed 's/[\(\"\)]//g' | sed "s/'//g" | sort | uniq)
+  Info "Downloading boxes..."
   exitCode=0
-  for box in $boxes; do
+  for box in ${boxes[*]}; do
     if [[ "$box" != *"$LIMIT"* ]]; then
       Skip "Download $box"
       continue
@@ -109,36 +113,50 @@ DownloadBoxes() {
 }
 
 ExecuteTests() {
-  echo "Starting tests..."
-  configs=$(parse_yaml vagrant_config.yml | grep _box | awk '{split($0,a,"_box"); $1=a[1]; split($1,b,"configs_"); $2=b[2];  print $2}')
-  exitCode=0
-  for config in $configs; do
-    CONFIG_KEY=$config
-    export CONFIG_KEY
-    if [[ "$CONFIG_KEY" != *"$LIMIT"* ]]; then
-      Skip "$CONFIG_KEY"
-      continue
-    fi
-    VagrantUp
-    exitCode=$?
-    VagrantDestroy
-    if [[ $exitCode == "0" ]]; then
-      Pass "Test $CONFIG_KEY"
-    else
-      Fail "Test $CONFIG_KEY"
-      break
-    fi
+  Info "Starting tests..."
+  #configs=$(parse_yaml vagrant_config.yml | grep _box | awk '{split($0,a,"_box"); $1=a[1]; split($1,b,"configs_"); $2=b[2];  print $2}')
+  configs=
+  for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
+    for box in ${boxes[*]}; do
+      test_name=${tests__name[$index]}
+      WSLENV=CI:VAGRANT_BOX:VAGRANT_PREP_YML:VAGRANT_TEST_YML
+      CI=1
+      VAGRANT_BOX=$box
+      VAGRANT_PREP_YML=${tests__prep_yml[$index]}
+      VAGRANT_TEST_YML=${tests__test_yml[$index]}
+      if [[ "$test_name" != *"$LIMIT"* ]]; then
+        Skip "Test: $test_name"
+        continue
+      fi
+      Info "Test: ${tests__name[$index]} [$box]"
+      export WSLENV CI VAGRANT_BOX VAGRANT_PREP_YML VAGRANT_TEST_YML
+      VagrantUp
+      exitCode=$?
+      VagrantDestroy
+      if [[ $exitCode == "0" ]]; then
+        Pass "Test: $test_name"
+      else
+        Fail "Test: $test_name"
+        break
+      fi
+    done
   done
-  echo "Ended with exit code $exitCode"
+  exitCode=0
+  Info "Ended with exit code $exitCode"
   return $exitCode
 }
 
+SetupYamlParser
+DetectWSL
+
 LIMIT=$1
+
+create_variables vagrant_config.yml
 
 if [[ "$SKIP_DOWNLOAD" == "" ]]; then
   DownloadBoxes
   downloadResult=$?
-  echo "Download complete!"
+  Info "Download complete!"
   if [[ "$DOWNLOAD_ONLY" != "" ]]; then
     exit $downloadResult
   fi

@@ -5,8 +5,16 @@ require 'yaml'
 
 current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/vagrant_config.yml")
-config_key     = ENV['CONFIG_KEY'] || configs['configs']['use']
-vagrant_config = configs['configs'][config_key]
+vagrant_config={}
+if ENV.has_key?('CI')
+  config_key = "CI"
+  vagrant_config['box'] = ENV['VAGRANT_BOX']
+  vagrant_config['prep_yml'] = ENV['VAGRANT_PREP_YML']
+  vagrant_config['test_yml'] = ENV['VAGRANT_TEST_YML']
+else
+  config_key = ENV['CONFIG_KEY'] || configs['configs']['use']
+  vagrant_config = configs['configs'][config_key]
+end
 
 # Plugins:
 #   vagrant plugin install vagrant-vbguest
@@ -29,6 +37,8 @@ Vagrant.configure("2") do |config|
   # Print config in use
   config.vm.provision "shell",
     inline: "echo '" + config_key + "' > /var/tmp/provisioning-config"
+  config.vm.provision "shell",
+    inline: "echo '--> Using configuration key: " + config_key + "'"
 
   # Prepare Ansible roles directory
   config.vm.provision "shell",

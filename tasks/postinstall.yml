@@ -1,0 +1,61 @@
+---
+- name: Reset internal variables for additional packages to be installed
+  set_fact:
+    _docker_additional_packages_os: []
+    _docker_additional_packages_pip: []
+
+- name: Set facts to ensure 'docker_container' module works
+  set_fact:
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['sdk'] }}"
+  when:
+    - docker_container_deps
+
+- name: Set facts to ensure 'docker_service' module works
+  set_fact:
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['compose'] }}"
+  when:
+    - docker_service_deps
+
+- name: Set facts to ensure 'docker_stack' module works
+  set_fact:
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['stack'] }}"
+  when:
+    - docker_stack_deps
+
+- name: Set facts with additional package to be installed
+  set_fact:
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_additional_packages_pip }}"
+    _docker_additional_packages_os: "{{ _docker_additional_packages_os + docker_additional_packages_os }}"
+
+- name: Set facts to ensure PiP is installed if required
+  set_fact:
+    _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-pip', 'python-virtualenv'] }}"
+  when:
+    - _docker_additional_packages_pip | length > 0
+
+- name: Install additional packages (OS package manager)
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ _docker_additional_packages_os }}"
+  when: _docker_additional_packages_os | length > 0
+
+- name: Upgrade PiP
+  become: true
+  pip:
+    name: pip
+    state: forcereinstall
+  when: docker_pip_upgrade
+
+- name: Install additional packages (PiP)
+  become: true
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ _docker_additional_packages_pip }}"
+  when: _docker_additional_packages_pip | length > 0
+  environment:
+    PYTHONWARNINGS: ignore

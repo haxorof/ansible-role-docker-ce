@@ -67,3 +67,7 @@
 - name: Configure Docker
   include_tasks: configure-docker.yml
   tags: ["configure"]
+
+- name: Postinstall tasks
+  include_tasks: postinstall.yml
+  tags: ["install"]

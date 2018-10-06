@@ -61,6 +61,19 @@ docker_latest_version: true
 docker_pkg_name: docker-ce
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
+# Ensures 'docker_container' Ansible module dependencies are installed
+docker_container_deps: false
+# Ensures 'docker_service' Ansible module dependencies are installed
+docker_service_deps: false
+# Ensures 'docker_stack' Ansible module dependencies are installed
+docker_stack_deps: false
+# Ensure PiP is upgraded before further use.
+# IMPORTANT! Be carful to set this because it might cause dependecy problems
+docker_pip_upgrade: false
+# Additional PiP packages to install after Docker is configured and started
+docker_additional_packages_pip: []
+# Additional OS packages to install after Docker is configured and started
+docker_additional_packages_os: []
 ```
 
 ## Dependencies

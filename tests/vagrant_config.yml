@@ -1,3 +1,43 @@
+boxes:
+  - geerlingguy/centos7
+  - geerlingguy/ubuntu1404
+  - geerlingguy/ubuntu1604
+  - geerlingguy/ubuntu1804
+  - geerlingguy/debian8
+  - geerlingguy/debian9
+tests:
+  -
+    name: No configuration
+    prep_yml: prepare.yml
+    test_yml: test_defaults.yml
+  -
+    name: Simple configuration
+    prep_yml: prepare.yml
+    test_yml: test_config.yml
+  -
+    name: Configuration via file
+    prep_yml: prepare.yml
+    test_yml: test_config_file.yml
+  -
+    name: Advanced configuration
+    prep_yml: prepare.yml
+    test_yml: test_config_adv.yml
+  -
+    name: Storage configuration
+    prep_yml: prepare_storage.yml
+    test_yml: test_config_storage.yml
+  -
+    name: Postinstall
+    prep_yml: prepare.yml
+    test_yml: test_postinstall.yml
+  -
+    name: Old version of Docker
+    prep_yml: prepare.yml
+    test_yml: test_old_version.yml
+  -
+    name: Issue 42
+    prep_yml: prepare.yml
+    test_yml: test_issue_42.yml
 configs:
   use: 'defaults_centos'
   # CentOS 7
@@ -11,6 +51,31 @@ configs:
     box: 'geerlingguy/centos7'
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
+  # Postinstall tests
+  postinstall_centos:
+    box: 'geerlingguy/centos7'
+    prep_yml: prepare.yml
+    test_yml: test_postinstall.yml
+  postinstall_ubuntu_trusty:
+    box: 'geerlingguy/ubuntu1404'
+    prep_yml: prepare.yml
+    test_yml: test_postinstall.yml
+  postinstall_ubuntu_xenial:
+    box: 'geerlingguy/ubuntu1604'
+    prep_yml: prepare.yml
+    test_yml: test_postinstall.yml
+  postinstall_ubuntu_bionic:
+    box: 'geerlingguy/ubuntu1804'
+    prep_yml: prepare.yml
+    test_yml: test_postinstall.yml
+  postinstall_debian_jessie:
+    box: 'geerlingguy/debian8'
+    prep_yml: prepare.yml
+    test_yml: test_postinstall.yml
+  postinstall_debian_stretch:
+    box: 'geerlingguy/debian9'
+    prep_yml: prepare.yml
+    test_yml: test_postinstall.yml
   # Config tests
   config_centos:
     box: 'geerlingguy/centos7'

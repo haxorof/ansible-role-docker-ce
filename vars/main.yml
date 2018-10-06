@@ -77,3 +77,47 @@ docker_old_packages:
     - docker
     - docker-engine
     - docker.io
+
+docker_predefined_packages_os: []
+
+docker_predefined_packages_pip:
+  CentOS:
+    sdk:
+      - docker
+    compose:
+      - docker-compose
+    stack:
+      - jsondiff
+      - pyyaml
+  RedHat:
+    sdk:
+      - docker
+    compose:
+      - docker-compose
+    stack:
+      - jsondiff
+      - pyyaml
+  Fedora:
+    sdk:
+      - docker
+    compose:
+      - docker-compose
+    stack:
+      - jsondiff
+      - pyyaml
+  Ubuntu:
+    sdk:
+      - docker
+    compose:
+      - docker-compose
+    stack:
+      - jsondiff
+      - pyyaml
+  Debian:
+    sdk:
+      - docker
+    compose:
+      - docker-compose
+    stack:
+      - jsondiff
+      - pyyaml

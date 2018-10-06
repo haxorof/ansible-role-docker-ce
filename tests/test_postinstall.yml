@@ -1,0 +1,24 @@
+---
+- hosts: test-host
+  vars:
+    docker_container_deps: true
+    docker_service_deps: true
+    docker_stack_deps: true
+  roles:
+    - haxorof.docker-ce
+  post_tasks:
+    - name: Test hello container
+      become: yes
+      docker_container:
+        name: hello
+        image: hello-world
+
+    - name: Test hello service
+      become: yes
+      docker_service:
+        project_name: hello
+        definition:
+          version: '3'
+          services:
+            hello:
+              image: "hello-world"
