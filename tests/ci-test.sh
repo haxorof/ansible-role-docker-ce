@@ -114,8 +114,7 @@ DownloadBoxes() {
 
 ExecuteTests() {
   Info "Starting tests..."
-  #configs=$(parse_yaml vagrant_config.yml | grep _box | awk '{split($0,a,"_box"); $1=a[1]; split($1,b,"configs_"); $2=b[2];  print $2}')
-  configs=
+  exitCode=0
   for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
     for box in ${boxes[*]}; do
       test_name=${tests__name[$index]}
@@ -124,8 +123,12 @@ ExecuteTests() {
       VAGRANT_BOX=$box
       VAGRANT_PREP_YML=${tests__prep_yml[$index]}
       VAGRANT_TEST_YML=${tests__test_yml[$index]}
-      if [[ "$test_name" != *"$LIMIT"* ]]; then
-        Skip "Test: $test_name"
+      if [[ "$box" != *"$LIMIT_BOX"* ]]; then
+        Skip "Test: $test_name [$box]"
+        continue
+      fi
+      if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
+        Skip "Test: $test_name [$box]"
         continue
       fi
       Info "Test: ${tests__name[$index]} [$box]"
@@ -133,15 +136,17 @@ ExecuteTests() {
       VagrantUp
       exitCode=$?
       VagrantDestroy
-      if [[ $exitCode == "0" ]]; then
-        Pass "Test: $test_name"
+      if [[ "$exitCode" == "0" ]]; then
+        Pass "Test: $test_name [$box]"
       else
-        Fail "Test: $test_name"
+        Fail "Test: $test_name [$box]"
         break
       fi
     done
+    if [[ "$exitCode" != "0" ]]; then
+      break
+    fi
   done
-  exitCode=0
   Info "Ended with exit code $exitCode"
   return $exitCode
 }
@@ -149,9 +154,14 @@ ExecuteTests() {
 SetupYamlParser
 DetectWSL
 
-LIMIT=$1
-
 create_variables vagrant_config.yml
+
+if [[ "$1" != "" ]]; then
+  LIMIT_TEST=$1
+  if [[ "$2" != "" ]]; then
+    LIMIT_BOX=$2
+  fi
+fi
 
 if [[ "$SKIP_DOWNLOAD" == "" ]]; then
   DownloadBoxes

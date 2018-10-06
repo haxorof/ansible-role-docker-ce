@@ -3,13 +3,18 @@
 If you have Vagrant and VirtualBox installed you can test this role in different Linux distributions.
 The simplest way you can do this is just to run `vagrant up` in this directory.
 
-If you would like to do different test then check out the `vagrant_config.yml` and you can select the different tests by setting the environment variable `CONFIG_KEY` to a key available in that file. After that you just run `vagrant up`.
+If you would like to do different test that are specified in `vagrant_config.yml` under the `tests` then you can use the `ci-test.sh` and you can limit the testing to a
+certain test and/or box by specifying one or two arguments. The first argument limits by ID and the second limit by box.
 
-Example to run test in an Ubuntu distributions:
+Example to run `no_config` tests for all Ubuntu distributions:
 
 ```console
-# export CONFIG_KEY=ubuntu_xenial
-# vagrant up
+# ./ci-test.sh no_config ubuntu
 ```
 
-To destroy it just run `vagrant destroy`.
+If you do not want to pre-download all the boxes specified in the `vagrant_config.yml` then you can this before running `ci-test.sh`:
+
+```console
+# export SKIP_DOWNLOAD=1
+# ./ci-test.sh
+```

@@ -5,162 +5,58 @@ boxes:
   - geerlingguy/ubuntu1804
   - geerlingguy/debian8
   - geerlingguy/debian9
+
 tests:
   -
+    id: no_config
     name: No configuration
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
   -
+    id: simple_config
     name: Simple configuration
     prep_yml: prepare.yml
     test_yml: test_config.yml
   -
+    id: file_config
     name: Configuration via file
     prep_yml: prepare.yml
     test_yml: test_config_file.yml
   -
+    id: advanced_config
     name: Advanced configuration
     prep_yml: prepare.yml
     test_yml: test_config_adv.yml
   -
+    id: storage_config
     name: Storage configuration
     prep_yml: prepare_storage.yml
     test_yml: test_config_storage.yml
   -
+    id: postinstall
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
   -
+    id: old_docker
     name: Old version of Docker
     prep_yml: prepare.yml
     test_yml: test_old_version.yml
   -
+    id: issue_42
     name: Issue 42
     prep_yml: prepare.yml
     test_yml: test_issue_42.yml
+
 configs:
   use: 'defaults_centos'
-  # CentOS 7
   # No Docker installed
-  # no_docker_centos:
-  #   box: 'geerlingguy/centos7'
-  #   prep_yml: prepare.yml
-  #   test_yml: test_nothing.yml
-  # Role default tests
+  no_docker_centos:
+    box: 'geerlingguy/centos7'
+    prep_yml: prepare.yml
+    test_yml: test_nothing.yml
+  # Role default
   defaults_centos:
     box: 'geerlingguy/centos7'
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
-  # Postinstall tests
-  postinstall_centos:
-    box: 'geerlingguy/centos7'
-    prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
-  postinstall_ubuntu_trusty:
-    box: 'geerlingguy/ubuntu1404'
-    prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
-  postinstall_ubuntu_xenial:
-    box: 'geerlingguy/ubuntu1604'
-    prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
-  postinstall_ubuntu_bionic:
-    box: 'geerlingguy/ubuntu1804'
-    prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
-  postinstall_debian_jessie:
-    box: 'geerlingguy/debian8'
-    prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
-  postinstall_debian_stretch:
-    box: 'geerlingguy/debian9'
-    prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
-  # Config tests
-  config_centos:
-    box: 'geerlingguy/centos7'
-    prep_yml: prepare.yml
-    test_yml: test_config.yml
-  config_adv_centos:
-    box: 'geerlingguy/centos7'
-    prep_yml: prepare.yml
-    test_yml: test_config_adv.yml
-  # Older Docker test
-  old_docker_centos:
-    box: 'geerlingguy/centos7'
-    prep_yml: prepare.yml
-    test_yml: test_old_version.yml
-  # Storage testing
-  config_storage_centos:
-    box: 'geerlingguy/centos7'
-    prep_yml: prepare_storage.yml
-    test_yml: test_config_storage.yml
-  # Issue testing
-  issue_42_centos:
-    box: 'geerlingguy/centos7'
-    prep_yml: prepare.yml
-    test_yml: test_issue_42.yml
-  # Ubuntu 14.04
-  # Role default tests
-  defaults_ubuntu_trusty:
-    box: 'geerlingguy/ubuntu1404'
-    prep_yml: prepare.yml
-    test_yml: test_defaults.yml
-  # Config tests
-  config_adv_ubuntu_trusty:
-    box: 'geerlingguy/ubuntu1404'
-    prep_yml: prepare.yml
-    test_yml: test_config_adv.yml
-  # Ubuntu 16.04
-  # Role default tests
-  defaults_ubuntu_xenial:
-    box: 'geerlingguy/ubuntu1604'
-    prep_yml: prepare.yml
-    test_yml: test_defaults.yml
-  # Config tests
-  config_adv_ubuntu_xenial:
-    box: 'geerlingguy/ubuntu1604'
-    prep_yml: prepare.yml
-    test_yml: test_config_adv.yml
-  # Storage testing
-  config_storage_ubuntu_xenial:
-    box: 'geerlingguy/ubuntu1604'
-    prep_yml: prepare_storage.yml
-    test_yml: test_config_storage.yml
-  # Issue testing
-  issue_42_ubuntu_xenial:
-    box: 'geerlingguy/ubuntu1604'
-    prep_yml: prepare.yml
-    test_yml: test_issue_42.yml
-  # Debian 8
-  # Role default tests
-  defaults_debian_jessie:
-    box: 'geerlingguy/debian8'
-    prep_yml: prepare.yml
-    test_yml: test_defaults.yml
-  # Config tests
-  config_adv_debian_jessie:
-    box: 'geerlingguy/debian8'
-    prep_yml: prepare.yml
-    test_yml: test_config_adv.yml
-  # Debian 9
-  # Role default tests
-  defaults_debian_stretch:
-    box: 'geerlingguy/debian9'
-    prep_yml: prepare.yml
-    test_yml: test_defaults.yml
-  # Config tests
-  config_adv_debian_stretch:
-    box: 'geerlingguy/debian9'
-    prep_yml: prepare.yml
-    test_yml: test_config_adv.yml
-  # Storage testing
-  config_storage_debian_stretch:
-    box: 'geerlingguy/debian9'
-    prep_yml: prepare_storage.yml
-    test_yml: test_config_storage.yml
-  # Issue testing
-  issue_42_debian_stretch:
-    box: 'geerlingguy/debian9'
-    prep_yml: prepare.yml
-    test_yml: test_issue_42.yml
