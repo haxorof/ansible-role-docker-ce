@@ -1,5 +1,5 @@
-# Configuration to avoid 'Device or resource busy'
-- block:
+- name: Configuration to avoid 'Device or resource busy'
+  block:
   - name: Stat /proc/sys/fs/may_detach_mounts (CentOS/RedHat)
     stat:
       path: /proc/sys/fs/may_detach_mounts
@@ -32,3 +32,36 @@
     - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
     - docker_enable_mount_flag_fix | bool
     - ansible_kernel | version_compare('4', '<')
+
+- name: Best effort handling to directlvm for Debian 8 to get uniform behavior across distributions
+  block:
+  - name: Create LVM thinpool for Docker according to Docker documentation
+    include_tasks: lvm-thinpool.yml
+    vars:
+      pool:
+        name: thinpool
+        volume_group: docker
+        physical_volumes: "{{ docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+') | list | regex_replace('dm.directlvm_device=\\s*(.+)', '\\1') }}"
+        metadata_size: "1%VG"
+        data_size: "95%VG"
+
+  - name: Modify storage-opts to handle problems with thinpool on Debian 8
+    set_fact:
+      _modified_storage_config: "{{ (docker_daemon_config['storage-opts'] | difference(_exclusions)) + ['dm.thinpooldev=/dev/mapper/docker-thinpool-tpool'] }}"
+    vars:
+      _exclusions: "{{ docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+') | list }}"
+
+  - name: Update Docker daemon configuration to handle consistency between distributions
+    set_fact:
+      docker_daemon_config: "{{ docker_daemon_config | combine(_updated_item, recursive=true) }}"
+    vars:
+      _updated_item: "{ 'storage-opts': {{ _modified_storage_config }} }"
+
+  - name: Updated Docker daemon configuration
+    debug:
+      var: docker_daemon_config
+  when:
+    - _docker_os_dist == "Debian"
+    - _docker_os_dist_major_version == '8'
+    - docker_daemon_config['storage-opts'] is defined
+    - docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+')

@@ -1,0 +1,42 @@
+- name: Create LVM volume group
+  become: true
+  lvg:
+    pvs: '{{ pool.physical_volumes }}'
+    state: present
+    vg: '{{ pool.volume_group }}'
+  when: pool.physical_volumes|default(None)
+
+- name: Check if data volume exists
+  become: true
+  stat:
+    path: '/dev/mapper/{{ pool.volume_group }}-{{ pool.name }}'
+  ignore_errors: true
+  register: _volume
+
+- name: Create data volume
+  become: true
+  lvol:
+    lv: '{{ pool.name }}'
+    size: '{{ pool.data_size }}'
+    vg: '{{ pool.volume_group }}'
+  register: _datavolume_created
+  when: not _volume.stat.exists
+
+- name: Create meta data volume
+  become: true
+  lvol:
+    lv: '{{ pool.name }}meta'
+    size: '{{ pool.metadata_size }}'
+    vg: '{{ pool.volume_group }}'
+  when: _datavolume_created | changed
+
+- name: Convert data volume to thinpool
+  become: true
+  shell:
+    lvconvert
+        -y
+        --zero n
+        -c 512K
+        --thinpool "{{ pool.volume_group }}/{{ pool.name }}"
+        --poolmetadata "{{ pool.volume_group }}/{{ pool.name }}meta"
+  when: _datavolume_created | changed

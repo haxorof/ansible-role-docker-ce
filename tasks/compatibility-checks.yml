@@ -8,6 +8,7 @@
       and `live-restore=true` (docker_daemon_config['live-restore']: true)
       triggers a bug (https://github.com/moby/moby/issues/35873). For now,
       don't use both.
-  when: docker_enable_mount_flag_fix
-        and (docker_daemon_config['live-restore'] is defined
-        and docker_daemon_config['live-restore'])
+  when:
+    - docker_enable_mount_flag_fix
+    - docker_daemon_config['live-restore'] is defined
+    - docker_daemon_config['live-restore']

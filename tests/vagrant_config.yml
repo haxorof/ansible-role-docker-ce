@@ -36,7 +36,7 @@ tests:
     name: Storage configuration
     prep_yml: prepare_storage.yml
     test_yml: test_config_storage.yml
-    skip_boxes: debian8
+    skip_boxes: none
   -
     id: postinstall
     name: Postinstall
@@ -57,14 +57,8 @@ tests:
     skip_boxes: centos
 
 configs:
-  use: 'defaults_centos'
-  # No Docker installed
-  no_docker_centos:
-    box: 'geerlingguy/centos7'
-    prep_yml: prepare.yml
-    test_yml: test_nothing.yml
-  # Role default
-  defaults_centos:
+  use: 'default'
+  default:
     box: 'geerlingguy/centos7'
     prep_yml: prepare.yml
     test_yml: test_defaults.yml

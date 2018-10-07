@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - auditd is installed even if docker_enable_audit set to false ([#50](../../issues/50))
+- Cannot use dm.directlvm_device in Debian 8 ([#51](../../issues/51))
 
 ## [1.7.2](../../releases/tag/1.7.2) - 2018-09-27
 

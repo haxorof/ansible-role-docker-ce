@@ -74,6 +74,15 @@ VagrantUp() {
   fi
 }
 
+VagrantProvision() {
+  if [[ "$(VagrantExists)" == "0" ]]; then
+    $VAGRANT_CMD provision
+    return $?
+  else
+    RedText "[VagrantProvision] vagrant not found!"
+  fi
+}
+
 VagrantDestroy() {
   if [[ "$(VagrantExists)" == "0" ]]; then
     $VAGRANT_CMD destroy -f
@@ -132,11 +141,11 @@ ExecuteTests() {
       VAGRANT_PREP_YML=${tests__prep_yml[$index]}
       VAGRANT_TEST_YML=${tests__test_yml[$index]}
       if [[ "$box" != *"$LIMIT_BOX"* ]]; then
-        Skip "Test(Reason:1): $test_name [$box]"
+        Skip "(code:1) Test: $test_name [$box]"
         continue
       fi
       if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
-        Skip "Test(Reason:2): $test_name [$box]"
+        Skip "(code:2) Test: $test_name [$box]"
         continue
       fi
       if [[ "${tests__skip_boxes[$index]}" != "" ]]; then
@@ -144,7 +153,7 @@ ExecuteTests() {
         for skip_box in ${tests__skip_boxes[$index]//,/ }
         do
           if [[ "$box" == *"$skip_box"* ]]; then
-            Skip "Test(Reason:3): $test_name [$box]"
+            Skip "(code:3) Test: $test_name [$box]"
             do_skip=1
             break
           fi
@@ -155,7 +164,11 @@ ExecuteTests() {
       fi
       Info "Test: ${tests__name[$index]} [$box]"
       export WSLENV CI VAGRANT_BOX VAGRANT_PREP_YML VAGRANT_TEST_YML
-      VagrantUp
+      if [[ "$PROVISION_ONLY" == "1" ]]; then
+        VagrantProvision
+      else
+        VagrantUp
+      fi
       exitCode=$?
       if [[ "$exitCode" == "0" ]]; then
         VagrantDestroy
@@ -181,7 +194,6 @@ ExecuteTests() {
 SetupYamlParser
 DetectWSL
 
-parse_yaml vagrant_config.yml
 create_variables vagrant_config.yml
 
 if [[ "$1" != "" ]]; then
