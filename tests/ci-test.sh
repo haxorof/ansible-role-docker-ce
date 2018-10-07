@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+#
+# Environment variables:
+#
+# To NOT destroy VM on failure (for debugging):
+#   ON_FAILURE_KEEP=1
+# Skip pre-download of boxes:
+#   SKIP_DOWNLOAD=1
+
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
 BLDBLU='\033[1;34m'
@@ -124,21 +132,40 @@ ExecuteTests() {
       VAGRANT_PREP_YML=${tests__prep_yml[$index]}
       VAGRANT_TEST_YML=${tests__test_yml[$index]}
       if [[ "$box" != *"$LIMIT_BOX"* ]]; then
-        Skip "Test: $test_name [$box]"
+        Skip "Test(Reason:1): $test_name [$box]"
         continue
       fi
       if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
-        Skip "Test: $test_name [$box]"
+        Skip "Test(Reason:2): $test_name [$box]"
         continue
+      fi
+      if [[ "${tests__skip_boxes[$index]}" != "" ]]; then
+        do_skip=0
+        for skip_box in ${tests__skip_boxes[$index]//,/ }
+        do
+          if [[ "$box" == *"$skip_box"* ]]; then
+            Skip "Test(Reason:3): $test_name [$box]"
+            do_skip=1
+            break
+          fi
+        done
+        if [[ "$do_skip" == "1" ]]; then
+          continue
+        fi
       fi
       Info "Test: ${tests__name[$index]} [$box]"
       export WSLENV CI VAGRANT_BOX VAGRANT_PREP_YML VAGRANT_TEST_YML
       VagrantUp
       exitCode=$?
-      VagrantDestroy
       if [[ "$exitCode" == "0" ]]; then
+        VagrantDestroy
         Pass "Test: $test_name [$box]"
       else
+        if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
+          Info "VM is kept for debugging"
+        else
+          VagrantDestroy
+        fi
         Fail "Test: $test_name [$box]"
         break
       fi
@@ -154,6 +181,7 @@ ExecuteTests() {
 SetupYamlParser
 DetectWSL
 
+parse_yaml vagrant_config.yml
 create_variables vagrant_config.yml
 
 if [[ "$1" != "" ]]; then

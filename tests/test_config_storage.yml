@@ -1,15 +1,7 @@
 ---
 - hosts: test-host
   vars:
-    docker_enable_audit: true
     docker_daemon_config:
-      icc: false
-      init: true
-      #User namespaces not enabled in kernel
-      #userns-remap: default
-      disable-legacy-registry: true
-      userland-proxy: false
-      log-driver: journald
       storage-driver: devicemapper
       storage-opts:
         - "dm.directlvm_device=/dev/sdb2"
