@@ -30,50 +30,69 @@ No additional requirements.
 Variables related to this role are listed below:
 
 ```yaml
-# Daemon configuration (https://docs.docker.com/engine/reference/commandline/dockerd/)
-# Example:
-# docker_daemon_config:
-#   experimental: true
-docker_daemon_config: {}
-# Docker daemon options
-#  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
-#  https://github.com/moby/moby/issues/25471
-docker_daemon_opts: ''
-# Map of environment variables to Docker daemon
-docker_daemon_envs: {}
-# List of additional service configuration options for systemd
-# Important! Configuring this can cause Docker to not start at all.
-docker_systemd_service_config: []
-# To compensate for situation where Docker daemon fails because of usermod incompatibility.
-# Ensures that 'dockremap:500000:65536' is present in /etc/subuid and /etc/subgid.
-# Note! If userns-remap is set to 'default' in docker_daemon_config this config will be unnecessary.
-docker_bug_usermod: false
-# Enable auditing of Docker related files and directories
-docker_enable_audit: false
+################################################################################
+# Docker install configuration
+################################################################################
 # Enable Docker CE Edge
 docker_enable_ce_edge: false
-# Set `MountFlags=slave`
-#  https://github.com/haxorof/ansible-role-docker-ce/issues/34
-docker_enable_mount_flag_fix: yes
 # Always ensure latest version of Docker CE
 docker_latest_version: true
 # Docker package to install. Change this if you want a specific version of Docker
 docker_pkg_name: docker-ce
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
-# Ensures 'docker_container' Ansible module dependencies are installed
-docker_container_deps: false
-# Ensures 'docker_service' Ansible module dependencies are installed
-docker_service_deps: false
-# Ensures 'docker_stack' Ansible module dependencies are installed
-docker_stack_deps: false
-# Ensure PiP is upgraded before further use.
-# IMPORTANT! Be carful to set this because it might cause dependecy problems
-docker_pip_upgrade: false
+
+################################################################################
+# Docker daemon configuration
+################################################################################
+# Daemon configuration (https://docs.docker.com/engine/reference/commandline/dockerd/)
+# Example:
+# docker_daemon_config:
+#   experimental: true
+docker_daemon_config: {}
+# Map of environment variables to Docker daemon
+docker_daemon_envs: {}
+# Docker daemon options
+#  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
+#  https://github.com/moby/moby/issues/25471
+docker_daemon_opts: ''
+# List of additional service configuration options for systemd
+# Important! Configuring this can cause Docker to not start at all.
+docker_systemd_service_config: []
+
+################################################################################
+# Audit configuration
+################################################################################
+# Enable auditing of Docker related files and directories
+docker_enable_audit: false
+
+################################################################################
+# Configuration to handle bugs/deviations
+################################################################################
+# To compensate for situation where Docker daemon fails because of usermod incompatibility.
+# Ensures that 'dockremap:500000:65536' is present in /etc/subuid and /etc/subgid.
+# Note! If userns-remap is set to 'default' in docker_daemon_config this config will be unnecessary.
+docker_bug_usermod: false
+# Set `MountFlags=slave`
+#  https://github.com/haxorof/ansible-role-docker-ce/issues/34
+docker_enable_mount_flag_fix: yes
+
+################################################################################
+# Postinstall related configuration
+################################################################################
+# Ensures dependencies are installed so that most of the 'docker' Ansible modules will work
+docker_sdk: false
+# Ensures dependencies are installed so that 'docker_service' Ansible module will work
+docker_compose: false
+# Ensures dependencies are installed so that 'docker_stack' Ansible module will work
+docker_stack: false
 # Additional PiP packages to install after Docker is configured and started
 docker_additional_packages_pip: []
 # Additional OS packages to install after Docker is configured and started
 docker_additional_packages_os: []
+# Ensure PiP is upgraded before further use.
+# IMPORTANT! Be carful to set this because it might cause dependecy problems
+docker_pip_upgrade: false
 ```
 
 ## Dependencies
@@ -102,6 +121,33 @@ Following sub sections show different kind of examples to illustrate what this r
       NO_PROXY: localhost,127.0.0.1,docker-registry.somecorporation.com
   roles:
     - haxorof.docker-ce
+```
+
+### Ensure Ansible can use Docker modules after install
+
+```yaml
+- hosts: test-host
+  vars:
+    docker_sdk: true
+    docker_compose: true
+  roles:
+    - haxorof.docker-ce
+  post_tasks:
+    - name: Test hello container
+      become: yes
+      docker_container:
+        name: hello
+        image: hello-world
+
+    - name: Test hello service
+      become: yes
+      docker_service:
+        project_name: hello
+        definition:
+          version: '3'
+          services:
+            hello:
+              image: "hello-world"
 ```
 
 ### On the road to CIS security compliant Docker engine installation

@@ -4,23 +4,23 @@
     _docker_additional_packages_os: []
     _docker_additional_packages_pip: []
 
-- name: Set facts to ensure 'docker_container' module works
+- name: Set facts to install Docker SDK for Python
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['sdk'] }}"
   when:
-    - docker_container_deps
+    - docker_sdk
 
-- name: Set facts to ensure 'docker_service' module works
+- name: Set facts to install Docker Compose
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['compose'] }}"
   when:
-    - docker_service_deps
+    - docker_compose
 
-- name: Set facts to ensure 'docker_stack' module works
+- name: Set facts to install Docker Stack dependencies ('docker_stack')
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['stack'] }}"
   when:
-    - docker_stack_deps
+    - docker_stack
 
 - name: Set facts with additional package to be installed
   set_fact:

@@ -1,9 +1,9 @@
 ---
 - hosts: test-host
   vars:
-    docker_container_deps: true
-    docker_service_deps: true
-    docker_stack_deps: true
+    docker_sdk: true
+    docker_compose: true
+    docker_stack: true
   roles:
     - haxorof.docker-ce
   post_tasks:
