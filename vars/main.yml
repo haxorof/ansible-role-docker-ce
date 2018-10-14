@@ -39,7 +39,7 @@ docker_cmd_enable_disable_edge_repo:
 docker_cmd_update_repo_cache:
   CentOS: yum makecache fast
   RedHat: yum makecache fast
-  Fedora: dnf makecache fast
+  Fedora: dnf makecache
   Ubuntu: apt-get update
   Debian: apt-get update
 
