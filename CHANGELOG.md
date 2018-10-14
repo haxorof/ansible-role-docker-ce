@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.8.0](../../releases/tag/1.8.0) - 2018-10-14
+
 ### Added
 
 - Add support to install Docker Ansible module dependencies ([#48](../../issues/48))
@@ -15,8 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Testing:
-  - Improved structure in `vagrant_config.yml` for `ci-test.sh`
-  - Improved `ci-test.sh` with better limit functionality
+  - Improved structure in `vagrant_config.yml` for `test.sh`
+  - Improved `test.sh` with better limit functionality
 
 ### Fixed
 
