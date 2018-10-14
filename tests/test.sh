@@ -51,7 +51,7 @@ SetupYamlParser() {
 DetectWSL() {
   UBUNTU_ON_WIN=$(uname -a | grep Microsoft)
   if [[ $? -eq 0 ]]; then
-    Info "Ubuntu on Windows - assuming Vagrant is installed in Windows."
+    Info "Windows Subsystem for Linux detected - assuming Vagrant is installed in Windows."
     VAGRANT_CMD=vagrant.exe
   else
     VAGRANT_CMD=vagrant
@@ -135,11 +135,13 @@ ExecuteTests() {
   for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
     for box in ${boxes[*]}; do
       test_name=${tests__name[$index]}
-      WSLENV=CI:VAGRANT_BOX:VAGRANT_PREP_YML:VAGRANT_TEST_YML
+      WSLENV=CI:VAGRANT_BOX:VAGRANT_PREP_YML:VAGRANT_TEST_YML:VAGRANT_VBGUEST_UPDATE
       CI=1
       VAGRANT_BOX=$box
       VAGRANT_PREP_YML=${tests__prep_yml[$index]}
       VAGRANT_TEST_YML=${tests__test_yml[$index]}
+      # Just a preparation for later adding handling of guest addition upgrades
+      VAGRANT_VBGUEST_UPDATE=false
       if [[ "$box" != *"$LIMIT_BOX"* ]]; then
         Skip "(code:1) Test: $test_name [$box]"
         continue
@@ -176,6 +178,17 @@ ExecuteTests() {
       else
         if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
           Info "VM is kept for debugging"
+          cat << EOF > test-dbg.sh
+WSLENV=$WSLENV
+CI=$CI
+VAGRANT_BOX=$VAGRANT_BOX
+VAGRANT_PREP_YML=$VAGRANT_PREP_YML
+VAGRANT_TEST_YML=$VAGRANT_TEST_YML
+VAGRANT_VBGUEST_UPDATE=$VAGRANT_VBGUEST_UPDATE
+export WSLENV CI VAGRANT_BOX VAGRANT_PREP_YML VAGRANT_TEST_YML VAGRANT_VBGUEST_UPDATE
+vagrant \$@
+EOF
+          chmod +x test-dbg.sh
         else
           VagrantDestroy
         fi

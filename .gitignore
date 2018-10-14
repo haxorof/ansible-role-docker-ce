@@ -5,3 +5,4 @@
 /.project
 tests/yaml.sh
 tests/yamlparser.sh.inc
+tests/test-dbg.sh

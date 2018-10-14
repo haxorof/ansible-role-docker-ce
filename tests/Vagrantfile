@@ -11,21 +11,28 @@ if ENV.has_key?('CI')
   vagrant_config['box'] = ENV['VAGRANT_BOX']
   vagrant_config['prep_yml'] = ENV['VAGRANT_PREP_YML']
   vagrant_config['test_yml'] = ENV['VAGRANT_TEST_YML']
+  if ENV.has_key?('VAGRANT_VBGUEST_UPDATE')
+    vagrant_config['vbguest_update'] = ENV['VAGRANT_VBGUEST_UPDATE']
+  end
 else
   config_key = ENV['CONFIG_KEY'] || configs['configs']['use']
   vagrant_config = configs['configs'][config_key]
 end
 
-# Plugins:
-#   vagrant plugin install vagrant-vbguest
+if !vagrant_config.has_key?('vbguest_update')
+  vagrant_config['vbguest_update'] = false
+end
+
 Vagrant.configure("2") do |config|
   config.vm.box = vagrant_config['box']
   config.ssh.insert_key = false
-  config.vbguest.auto_update = false
+  config.vbguest.auto_update = vagrant_config['vbguest_update']
   config.vbguest.no_remote = true
+  config.vm.synced_folder ".", "/vagrant", :mount_options => ["ro"]
   config.vm.synced_folder "../", "/mnt/ansible-role-docker-ce", :mount_options => ["ro"]
   config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
   config.vm.provider "virtualbox" do |vb|
+    vb.name = "docker-test"
     vb.memory = "2048"
     docker_disk = 'extra_disk/docker_disk.vdi'
     unless File.exist?(docker_disk)
