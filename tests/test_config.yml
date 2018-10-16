@@ -9,5 +9,7 @@
       disable-legacy-registry: true
       live-restore: false
       userland-proxy: false
+    docker_users:
+      - vagrant
   roles:
     - haxorof.docker-ce

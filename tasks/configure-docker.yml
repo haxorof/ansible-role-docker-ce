@@ -38,6 +38,14 @@
         docker_daemon_config['userns-remap'] == 'default') or
         docker_bug_usermod|bool == true)
 
+- name: Ensure Docker users are added to the docker group
+  become: true
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  with_items: "{{ docker_users }}"
+
 - name: Ensure thin-provisioning-tools is installed when devicemapper is used (Ubuntu)
   become: true
   package:

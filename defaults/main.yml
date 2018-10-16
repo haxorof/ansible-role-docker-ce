@@ -10,6 +10,8 @@ docker_latest_version: true
 docker_pkg_name: docker-ce
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
+# Users to be part of the docker group
+docker_users: []
 
 ################################################################################
 # Docker daemon configuration

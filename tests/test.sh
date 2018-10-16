@@ -114,7 +114,7 @@ DownloadBoxes() {
   Info "Downloading boxes..."
   exitCode=0
   for box in ${boxes[*]}; do
-    if [[ "$box" != *"$LIMIT"* ]]; then
+    if [[ "$box" != *"$LIMIT_BOX"* ]]; then
       Skip "Download $box"
       continue
     fi
