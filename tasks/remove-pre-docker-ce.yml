@@ -3,26 +3,26 @@
   command: bash -c "docker version | grep Version | awk '{print $2}'"
   ignore_errors: yes
   changed_when: false
-  register: cmd_docker_version
+  register: _cmd_docker_version
 
 - name: Set fact if old Docker installation shall be removed
   set_fact:
-    remove_old_docker: "{{ docker_remove_pre_ce | bool }} == true and {{ cmd_docker_version.stdout_lines[0] | search('-ce') }} == false"
-  when: cmd_docker_version.stdout_lines is defined and cmd_docker_version.stdout_lines[0] is defined
+    remove_old_docker: "{{ docker_remove_pre_ce | bool }} == true and {{ _cmd_docker_version.stdout_lines[0] | search('-ce') }} == false"
+  when: _cmd_docker_version.stdout_lines is defined and _cmd_docker_version.stdout_lines[0] is defined
 
 - name: Check if Docker is running
   become: true
   command: systemctl status docker
   ignore_errors: yes
   changed_when: false
-  register: service_docker_status
+  register: _service_docker_status
   when: remove_old_docker | default(false) | bool == true
 
 - name: Stop Docker service
   service:
     name: docker
     state: stopped
-  when: "service_docker_status.rc | default(1) == 0"
+  when: "_service_docker_status.rc | default(1) == 0"
 
 - name: Remove old Docker installation before Docker CE
   become: true
