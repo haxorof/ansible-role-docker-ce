@@ -30,8 +30,8 @@
   apt_key:
     url: https://download.docker.com/linux/{{ _docker_os_dist|lower }}/gpg
     state: present
-  when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > '14')
-        or _docker_os_dist == "Debian"
+  when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > '14') or
+        _docker_os_dist == "Debian"
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
   become: true
@@ -42,10 +42,18 @@
   when: _docker_os_dist == "Ubuntu" and
         _docker_os_dist_major_version == '14'
 
-- name: Add Docker CE repository (Ubuntu/Debian)
+- name: Determine channels to be enabled and/or disabled
+  set_fact:
+    _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
+    _docker_enable_channels: "{{ docker_channels | intersect(_docker_merged_channels) }}"
+  vars:
+    _docker_mandatory_channel: [ 'stable' ]
+    _docker_merged_channels: "{{ _docker_mandatory_channel }} + [ '{{ docker_channel }}' ]"
+
+- name: Add Docker CE repository with correct channels (Ubuntu/Debian)
   become: true
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} {{ _docker_os_dist_release }} stable {{ (docker_enable_ce_edge == true) | ternary('edge','') }}
+    repo: deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} {{ _docker_os_dist_release }} {{ _docker_enable_channels | join(" ") }}
     state: present
     filename: 'docker-ce'
   when: _docker_os_dist == "Ubuntu" or
@@ -57,34 +65,32 @@
     url: "{{ docker_repository_url[_docker_os_dist] }}"
     dest: /etc/yum.repos.d/docker-ce.repo
     mode: 0644
-  register: docker_repo
+  register: _docker_repo
   when: _docker_os_dist == "CentOS" or
         _docker_os_dist == "Fedora" or
         _docker_os_dist == "RedHat"
 
-- name: Determine Docker CE Edge repo status (Fedora/CentOS/RedHat)
-  shell: "{{ docker_cmd_check_edge_repo_status[_docker_os_dist] }}"
-  args:
-    warn: false
-  ignore_errors: yes
-  changed_when: false
-  register: cmd_docker_ce_edge_enabled
-  when: _docker_os_dist == "CentOS" or
-        _docker_os_dist == "Fedora" or
-        _docker_os_dist == "RedHat"
-
-- name: Set current Docker CE Edge repo status fact (Fedora/CentOS/RedHat)
-  set_fact:
-    _fact_docker_ce_edge_enabled: "{{ cmd_docker_ce_edge_enabled.stdout == 'enabled = True' }}"
-  when: _docker_os_dist == "CentOS" or
-        _docker_os_dist == "Fedora" or
-        _docker_os_dist == "RedHat"
-
-- name: Enable/Disable Docker CE Edge Repository (Fedora/CentOS/RedHat)
+- name: Disable Docker CE repository channels (Fedora/CentOS/RedHat)
   become: true
   shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
-  when: (_docker_os_dist == "CentOS" or _docker_os_dist == "Fedora" or _docker_os_dist == "RedHat") and
-        _fact_docker_ce_edge_enabled != docker_enable_ce_edge
+  with_items: "{{ _docker_disable_channels }}"
+  changed_when: false
+  vars:
+    _item_enabled: false
+  when: _docker_os_dist == "CentOS" or
+        _docker_os_dist == "Fedora" or
+        _docker_os_dist == "RedHat"
+
+- name: Enable Docker CE repository channels (Fedora/CentOS/RedHat)
+  become: true
+  shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
+  with_items: "{{ _docker_enable_channels }}"
+  changed_when: false
+  vars:
+    _item_enabled: true
+  when: _docker_os_dist == "CentOS" or
+        _docker_os_dist == "Fedora" or
+        _docker_os_dist == "RedHat"
 
 # disable rt-beta so we don't get a 403 error retrieving repomd.xml
 - name: Check if rhel-7-server-rt-beta-rpms Repository is enabled (RedHat)
@@ -119,4 +125,4 @@
   shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist] }}"
   args:
     warn: false
-  when: docker_repo.changed
+  changed_when: false

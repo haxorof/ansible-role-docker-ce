@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Add support to allow users to be added to the docker group ([#53](../../issues/53))
+- Add support to select different Docker repository channels ([#55](../../issues/55))
+
+### Deprecated
+
+- Variable `docker_enable_ce_edge` will be removed because Docker no longer provide edge releases ([#54](../../issues/54))
 
 ## [1.8.0](../../releases/tag/1.8.0) - 2018-10-14
 

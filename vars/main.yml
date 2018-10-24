@@ -25,16 +25,16 @@ docker_repository_url:
   RedHat: https://download.docker.com/linux/centos/docker-ce.repo
   Fedora: https://download.docker.com/linux/fedora/docker-ce.repo
 
-docker_cmd_check_edge_repo_status:
-  CentOS: yum-config-manager docker-ce-edge | grep enabled
-  RedHat: yum-config-manager docker-ce-edge | grep enabled
-  Fedora: dnf config-manager --dump docker-ce-edge | grep enabled
-  Ubuntu: cat /etc/apt/sources.list.d/docker-ce.list | grep edge
+docker_channels:
+  - stable
+  - nightly
+  - test
+  - edge
 
 docker_cmd_enable_disable_edge_repo:
-  CentOS: yum-config-manager --{{ (docker_enable_ce_edge == true) | ternary('enable','disable') }} docker-ce-edge
-  RedHat: yum-config-manager --{{ (docker_enable_ce_edge == true) | ternary('enable','disable') }} docker-ce-edge
-  Fedora: dnf config-manager --set-{{ (docker_enable_ce_edge == true) | ternary('enabled','disabled') }} docker-ce-edge
+  CentOS: yum-config-manager --{{ (_item_enabled == true) | ternary('enable','disable') }} docker-ce-{{ item }}
+  RedHat: yum-config-manager --{{ (_item_enabled == true) | ternary('enable','disable') }} docker-ce-{{ item }}
+  Fedora: dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled','disabled') }} docker-ce-{{ item }}
 
 docker_cmd_update_repo_cache:
   CentOS: yum makecache fast

@@ -44,14 +44,16 @@ Variables related to this role are listed below:
 ################################################################################
 # Docker install configuration
 ################################################################################
-# Enable Docker CE Edge
-docker_enable_ce_edge: false
+# Docker repo channel: stable, nigthly, test (more info: https://docs.docker.com/install/)
+docker_channel: stable
 # Always ensure latest version of Docker CE
 docker_latest_version: true
 # Docker package to install. Change this if you want a specific version of Docker
 docker_pkg_name: docker-ce
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
+# Users to be part of the docker group
+docker_users: []
 
 ################################################################################
 # Docker daemon configuration

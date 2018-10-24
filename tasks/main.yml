@@ -29,6 +29,13 @@
   set_fact:
     _docker_systemd_used: "{{ _determine_systemd_usage is defined and _determine_systemd_usage.stdout == 'systemd' }}"
 
+- name: Temporary handling of deprecated variable docker_enable_ce_edge (#54)
+  set_fact:
+    docker_channel: edge
+  when:
+    - docker_enable_ce_edge is defined
+    - docker_enable_ce_edge == true
+
 - name: Compatibility and distribution checks
   include_tasks: checks.yml
   tags: ["install", "configure"]
