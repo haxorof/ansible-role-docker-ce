@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.9.0](../../releases/tag/1.9.0) - 2018-10-24
+
 ### Added
 
 - Add support to allow users to be added to the docker group ([#53](../../issues/53))

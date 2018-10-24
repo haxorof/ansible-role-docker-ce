@@ -94,7 +94,7 @@ VagrantDestroy() {
 
 VagrantBoxAdd() {
   if [[ "$(VagrantExists)" == "0" ]]; then
-    cmdOutput=$($VAGRANT_CMD box add $1 2>&1)
+    cmdOutput=$($VAGRANT_CMD box add --provider=virtualbox $1 2>&1)
     exitCode=$?
     if [[ "$cmdOutput" == *force* ]]; then
       return 0
