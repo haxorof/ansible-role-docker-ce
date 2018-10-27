@@ -12,16 +12,16 @@ Example to run `t_no_config` tests for all Ubuntu distributions:
 # ./test.sh t_no_config ubuntu
 ```
 
-If you do not want to pre-download all the boxes specified in the `vagrant_config.yml` then you can this before running `test.sh`:
+If you want to pre-download all the boxes specified in the `vagrant_config.yml` then you can this before running `test.sh`:
 
 ```console
-# SKIP_DOWNLOAD=1 ./test.sh
+# PRE_DOWNLOAD_BOXES=1 ./test.sh
 ```
 
 Below is a table listing some environment variables you can set before running `test.sh`:
 
 | Environment variable | Value | Description |
 | --- | --- | --- |
-| SKIP_DOWNLOAD | 1 | If you do not want to pre-download all the boxes specified in the `vagrant_config.yml` |
+| PRE_DOWNLOAD_BOXES | 1 | If you want to pre-download all the boxes specified in the `vagrant_config.yml` |
 | ON_FAILURE_KEEP | 1 | If test fails and you do not want it to destroy the VM |
 | PROVISION_ONLY | 1 | When you have a running VM and you just want to reprovision it |

@@ -3,25 +3,14 @@
 
 require 'yaml'
 
-current_dir    = File.dirname(File.expand_path(__FILE__))
-configs        = YAML.load_file("#{current_dir}/vagrant_config.yml")
-vagrant_config={}
-if ENV.has_key?('CI')
-  config_key = "CI"
-  vagrant_config['box'] = ENV['VAGRANT_BOX']
-  vagrant_config['prep_yml'] = ENV['VAGRANT_PREP_YML']
-  vagrant_config['test_yml'] = ENV['VAGRANT_TEST_YML']
-  if ENV.has_key?('VAGRANT_VBGUEST_UPDATE')
-    vagrant_config['vbguest_update'] = ENV['VAGRANT_VBGUEST_UPDATE']
-  end
-else
-  config_key = ENV['CONFIG_KEY'] || configs['configs']['use']
-  vagrant_config = configs['configs'][config_key]
+current_dir = File.dirname(File.expand_path(__FILE__))
+testcase_file = "#{current_dir}/vagrant_testcase.yml"
+unless File.exist?(testcase_file)
+  puts "--> Test case file does not exist: #{testcase_file}"
+  puts "--> Please use 'test.sh' to execute tests."
+  exit 1
 end
-
-if !vagrant_config.has_key?('vbguest_update')
-  vagrant_config['vbguest_update'] = false
-end
+vagrant_config = YAML.load_file("#{testcase_file}")
 
 Vagrant.configure("2") do |config|
   config.vm.box = vagrant_config['box']
@@ -38,14 +27,14 @@ Vagrant.configure("2") do |config|
     unless File.exist?(docker_disk)
       vb.customize ['createhd', '--filename', docker_disk, '--size', 5 * 1024]
     end
-    vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', docker_disk]
+    vb.customize ['storageattach', :id, '--storagectl', vagrant_config['ide_ctl_name'], '--port', 1, '--device', 0, '--type', 'hdd', '--medium', docker_disk]
   end
 
   # Print config in use
   config.vm.provision "shell",
-    inline: "echo '" + config_key + "' > /var/tmp/provisioning-config"
+    inline: "echo '" + vagrant_config['id'] + "' > /var/tmp/provisioning-config"
   config.vm.provision "shell",
-    inline: "echo '--> Using configuration key: " + config_key + "'"
+    inline: "echo '--> Using configuration key: " + vagrant_config['id'] + "'"
 
   # Prepare Ansible roles directory
   config.vm.provision "shell",

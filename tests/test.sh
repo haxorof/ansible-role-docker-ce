@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 #
-# Environment variables:
-#
-# To NOT destroy VM on failure (for debugging):
-#   ON_FAILURE_KEEP=1
-# Skip pre-download of boxes:
-#   SKIP_DOWNLOAD=1
+VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
+
 
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
@@ -65,6 +61,15 @@ VagrantExists() {
   echo "0"
 }
 
+VagrantVersion() {
+  if [[ "$(VagrantExists)" == "0" ]]; then
+    $VAGRANT_CMD --version
+    return $?
+  else
+    RedText "[VagrantVersion] vagrant not found!"
+  fi
+}
+
 VagrantUp() {
   if [[ "$(VagrantExists)" == "0" ]]; then
     $VAGRANT_CMD up
@@ -113,7 +118,7 @@ VagrantBoxAdd() {
 DownloadBoxes() {
   Info "Downloading boxes..."
   exitCode=0
-  for box in ${boxes[*]}; do
+  for box in ${boxes__box[*]}; do
     if [[ "$box" != *"$LIMIT_BOX"* ]]; then
       Skip "Download $box"
       continue
@@ -129,11 +134,25 @@ DownloadBoxes() {
   return $exitCode
 }
 
+GenerateTestCaseConfig() {
+  _box_index=$1
+  _test_index=$2
+          cat << EOF > $VAGRANT_TESTCASE_FILE
+box: ${boxes__box[$_box_index]}
+ide_ctl_name: ${boxes__ide_ctl_name[$_box_index]}
+vbguest_update: ${boxes__vbguest_update[$_box_index]}
+id: ${tests__id[$_test_index]}
+prep_yml: ${tests__prep_yml[$_test_index]}
+test_yml: ${tests__test_yml[$_test_index]}
+EOF
+}
+
 ExecuteTests() {
   Info "Starting tests..."
   exitCode=0
   for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
-    for box in ${boxes[*]}; do
+    for box_index in $(seq 0 `expr ${#boxes__box[@]} - 1`); do
+      box=${boxes__box[$box_index]}
       test_name=${tests__name[$index]}
       WSLENV=CI:VAGRANT_BOX:VAGRANT_PREP_YML:VAGRANT_TEST_YML:VAGRANT_VBGUEST_UPDATE
       CI=1
@@ -164,6 +183,7 @@ ExecuteTests() {
           continue
         fi
       fi
+      GenerateTestCaseConfig $box_index $index
       Info "Test: ${tests__name[$index]} [$box]"
       export WSLENV CI VAGRANT_BOX VAGRANT_PREP_YML VAGRANT_TEST_YML
       if [[ "$PROVISION_ONLY" == "1" ]]; then
@@ -174,21 +194,11 @@ ExecuteTests() {
       exitCode=$?
       if [[ "$exitCode" == "0" ]]; then
         VagrantDestroy
+        rm $VAGRANT_TESTCASE_FILE
         Pass "Test: $test_name [$box]"
       else
         if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
           Info "VM is kept for debugging"
-          cat << EOF > test-dbg.sh
-WSLENV=$WSLENV
-CI=$CI
-VAGRANT_BOX=$VAGRANT_BOX
-VAGRANT_PREP_YML=$VAGRANT_PREP_YML
-VAGRANT_TEST_YML=$VAGRANT_TEST_YML
-VAGRANT_VBGUEST_UPDATE=$VAGRANT_VBGUEST_UPDATE
-export WSLENV CI VAGRANT_BOX VAGRANT_PREP_YML VAGRANT_TEST_YML VAGRANT_VBGUEST_UPDATE
-vagrant \$@
-EOF
-          chmod +x test-dbg.sh
         else
           VagrantDestroy
         fi
@@ -208,6 +218,9 @@ SetupYamlParser
 DetectWSL
 
 create_variables vagrant_config.yml
+if [[ "$DEBUG" != "" ]]; then
+  parse_yaml vagrant_config.yml
+fi
 
 if [[ "$1" != "" ]]; then
   LIMIT_TEST=$1
@@ -216,13 +229,11 @@ if [[ "$1" != "" ]]; then
   fi
 fi
 
-if [[ "$SKIP_DOWNLOAD" == "" ]]; then
+Info "$(VagrantVersion)"
+if [[ "$PRE_DOWNLOAD_BOXES" != "" ]]; then
   DownloadBoxes
   downloadResult=$?
   Info "Download complete!"
-  if [[ "$DOWNLOAD_ONLY" != "" ]]; then
-    exit $downloadResult
-  fi
 fi
 
 ExecuteTests
