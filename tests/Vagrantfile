@@ -30,11 +30,9 @@ Vagrant.configure("2") do |config|
     vb.customize ['storageattach', :id, '--storagectl', vagrant_config['ide_ctl_name'], '--port', 1, '--device', 0, '--type', 'hdd', '--medium', docker_disk]
   end
 
-  # Print config in use
+  # Print test ID
   config.vm.provision "shell",
-    inline: "echo '" + vagrant_config['id'] + "' > /var/tmp/provisioning-config"
-  config.vm.provision "shell",
-    inline: "echo '--> Using configuration key: " + vagrant_config['id'] + "'"
+    inline: "echo '--> Test: " + vagrant_config['id'] + "'"
 
   # Prepare Ansible roles directory
   config.vm.provision "shell",

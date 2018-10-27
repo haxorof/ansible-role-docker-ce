@@ -2,7 +2,6 @@
 #
 VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
 
-
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
 BLDBLU='\033[1;34m'
@@ -49,70 +48,121 @@ DetectWSL() {
   if [[ $? -eq 0 ]]; then
     Info "Windows Subsystem for Linux detected - assuming Vagrant is installed in Windows."
     VAGRANT_CMD=vagrant.exe
+    VIRTUALBOX_CMD=VBoxManage.exe
   else
     VAGRANT_CMD=vagrant
+    VIRTUALBOX_CMD=vboxmanage
   fi
 }
 
-VagrantExists() {
-  if ! vagrant_loc="$(type -p $VAGRANT_CMD)" || [[ -z $vagrant_loc ]]; then
-    echo "1"
+VirtualBox() {
+  if ! virtualbox_loc="$(type -p $VIRTUALBOX_CMD)" || [[ -z $virtualbox_loc ]]; then
+    RedText "$VIRTUALBOX_CMD not found!"
+    exit 2
   fi
-  echo "0"
+  $VIRTUALBOX_CMD $@ 2>&1
+  _exitCode=$?
+  return $_exitCode
 }
 
-VagrantVersion() {
-  if [[ "$(VagrantExists)" == "0" ]]; then
-    $VAGRANT_CMD --version
-    return $?
+LogVirtualBoxVersion() {
+  _output=$(VirtualBox --version)
+  _exitCode=$?
+  if [[ $_exitCode -eq 0 ]]; then
+    Info "VirtualBox $_output"
   else
-    RedText "[VagrantVersion] vagrant not found!"
+    Fail "$_output"
+    exit $_exitCode
+  fi
+}
+
+Vagrant() {
+  if ! vagrant_loc="$(type -p $VAGRANT_CMD)" || [[ -z $vagrant_loc ]]; then
+    RedText "$VAGRANT_CMD not found!"
+    exit 2
+  fi
+  $VAGRANT_CMD $@ 2>&1
+  _exitCode=$?
+  return $_exitCode
+}
+
+LogVagrantVersion() {
+  _output=$(Vagrant --version)
+  _exitCode=$?
+  if [[ $_exitCode -eq 0 ]]; then
+    Info "$_output"
+  else
+    Fail "$_output"
+    exit $_exitCode
   fi
 }
 
 VagrantUp() {
-  if [[ "$(VagrantExists)" == "0" ]]; then
-    $VAGRANT_CMD up
-    return $?
-  else
-    RedText "[VagrantUp] vagrant not found!"
-  fi
+  Vagrant up
+  return $?
+}
+
+VagrantHalt() {
+  Vagrant halt
+  return $?
 }
 
 VagrantProvision() {
-  if [[ "$(VagrantExists)" == "0" ]]; then
-    $VAGRANT_CMD provision
-    return $?
-  else
-    RedText "[VagrantProvision] vagrant not found!"
-  fi
+  Vagrant provision
+  return $?
 }
 
 VagrantDestroy() {
-  if [[ "$(VagrantExists)" == "0" ]]; then
-    $VAGRANT_CMD destroy -f
-    return $?
-  else
-    RedText "[VagrantDestroy] vagrant not found!"
+  Vagrant destroy -f
+  _exitCode=$?
+  if [[ -f $VAGRANT_TESTCASE_FILE ]]; then
+    rm $VAGRANT_TESTCASE_FILE
   fi
+  return $_exitCode
 }
 
 VagrantBoxAdd() {
-  if [[ "$(VagrantExists)" == "0" ]]; then
-    cmdOutput=$($VAGRANT_CMD box add --provider=virtualbox $1 2>&1)
-    exitCode=$?
-    if [[ "$cmdOutput" == *force* ]]; then
-      return 0
-    else
-      if [[ "$exitCode" != "0" ]]; then
-        RedText "$cmdOutput"
-      fi
-      return $exitCode
-    fi
+  cmdOutput=$(Vagrant box add --provider=virtualbox $1)
+  exitCode=$?
+  if [[ "$cmdOutput" == *force* ]]; then
+    return 0
   else
-    RedText "[VagrantBoxAdd] vagrant not found!"
+    if [[ "$exitCode" != "0" ]]; then
+      RedText "$cmdOutput"
+    fi
   fi
-  return 0
+  return $exitCode
+}
+
+GenerateDoNothingConfig() {
+  _box_index=$1
+  _test_index=$2
+          cat << EOF > $VAGRANT_TESTCASE_FILE
+box: ${boxes__box[$_box_index]}
+ide_ctl_name: ${boxes__ide_ctl_name[$_box_index]}
+vbguest_update: ${boxes__vbguest_update[$_box_index]}
+id: snapshot
+prep_yml: test_nothing.yml
+test_yml: test_nothing.yml
+EOF
+}
+
+VagrantSaveSnapshot() {
+  GenerateDoNothingConfig $1
+  Vagrant up
+  Vagrant halt
+  Vagrant snapshot save default base
+  return $?
+}
+
+VagrantRestoreSnapShot() {
+  Vagrant snapshot restore base
+  return $?
+}
+
+VagrantDeleteSnapshot() {
+  Vagrant snapshot delete base
+  return $?
 }
 
 DownloadBoxes() {
@@ -150,21 +200,15 @@ EOF
 ExecuteTests() {
   Info "Starting tests..."
   exitCode=0
-  for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
-    for box_index in $(seq 0 `expr ${#boxes__box[@]} - 1`); do
-      box=${boxes__box[$box_index]}
+  for box_index in $(seq 0 `expr ${#boxes__box[@]} - 1`); do
+    box=${boxes__box[$box_index]}
+    if [[ "$box" != *"$LIMIT_BOX"* ]]; then
+      Skip "(code:1) Test: Skipping box [$box]"
+      continue
+    fi
+    VagrantSaveSnapshot $box_index
+    for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
       test_name=${tests__name[$index]}
-      WSLENV=CI:VAGRANT_BOX:VAGRANT_PREP_YML:VAGRANT_TEST_YML:VAGRANT_VBGUEST_UPDATE
-      CI=1
-      VAGRANT_BOX=$box
-      VAGRANT_PREP_YML=${tests__prep_yml[$index]}
-      VAGRANT_TEST_YML=${tests__test_yml[$index]}
-      # Just a preparation for later adding handling of guest addition upgrades
-      VAGRANT_VBGUEST_UPDATE=false
-      if [[ "$box" != *"$LIMIT_BOX"* ]]; then
-        Skip "(code:1) Test: $test_name [$box]"
-        continue
-      fi
       if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
         Skip "(code:2) Test: $test_name [$box]"
         continue
@@ -189,24 +233,26 @@ ExecuteTests() {
       if [[ "$PROVISION_ONLY" == "1" ]]; then
         VagrantProvision
       else
-        VagrantUp
+        VagrantRestoreSnapShot
       fi
       exitCode=$?
       if [[ "$exitCode" == "0" ]]; then
-        VagrantDestroy
-        rm $VAGRANT_TESTCASE_FILE
+        VagrantHalt
         Pass "Test: $test_name [$box]"
       else
-        if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
-          Info "VM is kept for debugging"
-        else
-          VagrantDestroy
-        fi
         Fail "Test: $test_name [$box]"
         break
       fi
     done
-    if [[ "$exitCode" != "0" ]]; then
+    VagrantDeleteSnapshot
+    if [[ "$exitCode" == "0" ]]; then
+      VagrantDestroy
+    else
+      if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
+        Info "VM is kept for debugging"
+      else
+        VagrantDestroy
+      fi
       break
     fi
   done
@@ -229,7 +275,8 @@ if [[ "$1" != "" ]]; then
   fi
 fi
 
-Info "$(VagrantVersion)"
+LogVagrantVersion
+LogVirtualBoxVersion
 if [[ "$PRE_DOWNLOAD_BOXES" != "" ]]; then
   DownloadBoxes
   downloadResult=$?
