@@ -1,3 +1,9 @@
+- name: Ensure lvm2 is installed
+  become: true
+  package:
+    name: lvm2
+    state: present
+
 - name: Create LVM volume group
   become: true
   lvg:

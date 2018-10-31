@@ -4,6 +4,6 @@
     docker_daemon_config:
       storage-driver: devicemapper
       storage-opts:
-        - "dm.directlvm_device=/dev/sdb2"
+        - "dm.directlvm_device={{ lvm_device }}2"
   roles:
     - haxorof.docker-ce

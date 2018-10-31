@@ -1,42 +1,42 @@
 ---
 - hosts: test-host
   tasks:
-    - name: Ensure git and parted is installed
+    - name: Ensure dependencies are installed
       package:
         name: "{{ item }}"
         state: present
       become: true
       with_items:
-        - git
         - parted
+        #- git
 
-    - name: Ensure Docker Bench Security is cloned
-      git:
-        repo: 'https://github.com/docker/docker-bench-security.git'
-        dest: /home/vagrant/docker-bench-security
-        version: master
-      when: docker_bench_security is defined
+    # - name: Ensure Docker Bench Security is cloned
+    #   git:
+    #     repo: 'https://github.com/docker/docker-bench-security.git'
+    #     dest: /home/vagrant/docker-bench-security
+    #     version: master
+    #   when: docker_bench_security is defined
 
-    - name: Create partition sdb1
+    - name: Create partition {{ lvm_device }}1
       parted:
-        device: /dev/sdb
+        device: "{{ lvm_device }}"
         number: 1
         flags: [ lvm ]
         part_end: 1GiB
         state: present
       become: true
-    - name: Create partition sdb2
+    - name: Create partition {{ lvm_device }}2
       parted:
-        device: /dev/sdb
+        device: "{{ lvm_device }}"
         number: 2
         flags: [ lvm ]
         part_start: 1GiB
         state: present
       become: true
-    - name: Ensure file system is EXT4 for /dev/sdb1
+    - name: Ensure file system is EXT4 for {{ lvm_device }}1
       filesystem:
         fstype: ext4
-        dev: /dev/sdb1
+        dev: "{{ lvm_device }}1"
       become: true
     - name: Ensure /var/lib/docker directory exists
       file:
@@ -46,7 +46,7 @@
     - name: Ensure /var/lib/docker is mounted
       mount:
         path: /var/lib/docker
-        src: /dev/sdb1
+        src: "{{ lvm_device }}1"
         fstype: ext4
         state: mounted
       become: true

@@ -1,0 +1,8 @@
+---
+- hosts: test-host
+  vars:
+    docker_channel: nightly
+    docker_users:
+      - vagrant
+  roles:
+    - haxorof.docker-ce

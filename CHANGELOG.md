@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Docker startup fails in Fedora 28 because it cannot find pvcreate ([#58](../../issues/58))
+- LVM2 package is required to be installed when devicemapper is used ([#61](../../issues/61))
+
+### Internal
+
+- Testing: Snapshotting used during testing by `test.sh` to speed up by avoiding unnecessary installs of Ansible and guest additions
+- Add Fedora distributions to test suite ([#57](../../issues/57))
+- Fails to install VirtualBox guest additions on Fedora 29 beta ([#59](../../issues/59))
+- Replace currently used Vagrant boxes during testing with more official boxes ([#60](../../issues/60))
+
 ## [1.9.0](../../releases/tag/1.9.0) - 2018-10-24
 
 ### Added
@@ -25,11 +37,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add support to install Docker Ansible module dependencies ([#48](../../issues/48))
 - Add support to install packages after install via PiP or OS package manager ([#49](../../issues/49))
 
-### Changed
+### Itnernal
 
-- Testing:
-  - Improved structure in `vagrant_config.yml` for `test.sh`
-  - Improved `test.sh` with better limit functionality
+- Testing: Improved structure in `vagrant_config.yml` for `test.sh`
+- Testing: Improved `test.sh` with better limit functionality
 
 ### Fixed
 

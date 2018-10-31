@@ -61,13 +61,13 @@ VirtualBox() {
     exit 2
   fi
   $VIRTUALBOX_CMD $@ 2>&1
-  _exitCode=$?
+  local _exitCode=$?
   return $_exitCode
 }
 
 LogVirtualBoxVersion() {
-  _output=$(VirtualBox --version)
-  _exitCode=$?
+  local _output=$(VirtualBox --version)
+  local _exitCode=$?
   if [[ $_exitCode -eq 0 ]]; then
     Info "VirtualBox $_output"
   else
@@ -82,13 +82,13 @@ Vagrant() {
     exit 2
   fi
   $VAGRANT_CMD $@ 2>&1
-  _exitCode=$?
+  local _exitCode=$?
   return $_exitCode
 }
 
 LogVagrantVersion() {
-  _output=$(Vagrant --version)
-  _exitCode=$?
+  local _output=$(Vagrant --version)
+  local _exitCode=$?
   if [[ $_exitCode -eq 0 ]]; then
     Info "$_output"
   else
@@ -114,7 +114,7 @@ VagrantProvision() {
 
 VagrantDestroy() {
   Vagrant destroy -f
-  _exitCode=$?
+  local _exitCode=$?
   if [[ -f $VAGRANT_TESTCASE_FILE ]]; then
     rm $VAGRANT_TESTCASE_FILE
   fi
@@ -122,8 +122,8 @@ VagrantDestroy() {
 }
 
 VagrantBoxAdd() {
-  cmdOutput=$(Vagrant box add --provider=virtualbox $1)
-  exitCode=$?
+  local cmdOutput=$(Vagrant box add --provider=virtualbox $1)
+  local exitCode=$?
   if [[ "$cmdOutput" == *force* ]]; then
     return 0
   else
@@ -135,11 +135,12 @@ VagrantBoxAdd() {
 }
 
 GenerateDoNothingConfig() {
-  _box_index=$1
-  _test_index=$2
-          cat << EOF > $VAGRANT_TESTCASE_FILE
+  local _box_index=$1
+  local _test_index=$2
+  cat << EOF > $VAGRANT_TESTCASE_FILE
 box: ${boxes__box[$_box_index]}
-ide_ctl_name: ${boxes__ide_ctl_name[$_box_index]}
+storage_ctl: ${boxes__storage_ctl[$_box_index]}
+storage_port: ${boxes__storage_port[$_box_index]}
 vbguest_update: ${boxes__vbguest_update[$_box_index]}
 id: snapshot
 prep_yml: test_nothing.yml
@@ -149,10 +150,21 @@ EOF
 
 VagrantSaveSnapshot() {
   GenerateDoNothingConfig $1
+  local _exitCode=0
   Vagrant up
+  let "_exitCode += $?"
   Vagrant halt
-  Vagrant snapshot save default base
-  return $?
+  let "_exitCode += $?"
+  Vagrant snapshot save default base -f
+  let "_exitCode += $?"
+  if [[ "$_exitCode" != "0" ]]; then
+    if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
+      Info "VM is kept for debugging"
+    else
+      VagrantDestroy
+    fi
+  fi
+  return $_exitCode
 }
 
 VagrantRestoreSnapShot() {
@@ -167,7 +179,7 @@ VagrantDeleteSnapshot() {
 
 DownloadBoxes() {
   Info "Downloading boxes..."
-  exitCode=0
+  local exitCode=0
   for box in ${boxes__box[*]}; do
     if [[ "$box" != *"$LIMIT_BOX"* ]]; then
       Skip "Download $box"
@@ -185,11 +197,12 @@ DownloadBoxes() {
 }
 
 GenerateTestCaseConfig() {
-  _box_index=$1
-  _test_index=$2
+  local _box_index=$1
+  local _test_index=$2
           cat << EOF > $VAGRANT_TESTCASE_FILE
 box: ${boxes__box[$_box_index]}
-ide_ctl_name: ${boxes__ide_ctl_name[$_box_index]}
+storage_ctl: ${boxes__storage_ctl[$_box_index]}
+storage_port: ${boxes__storage_port[$_box_index]}
 vbguest_update: ${boxes__vbguest_update[$_box_index]}
 id: ${tests__id[$_test_index]}
 prep_yml: ${tests__prep_yml[$_test_index]}
@@ -199,16 +212,22 @@ EOF
 
 ExecuteTests() {
   Info "Starting tests..."
-  exitCode=0
+  local exitCode=0
+  local do_skip=0
   for box_index in $(seq 0 `expr ${#boxes__box[@]} - 1`); do
-    box=${boxes__box[$box_index]}
+    local box=${boxes__box[$box_index]}
     if [[ "$box" != *"$LIMIT_BOX"* ]]; then
       Skip "(code:1) Test: Skipping box [$box]"
       continue
     fi
     VagrantSaveSnapshot $box_index
+    exitCode=$?
+    if [[ "$exitCode" != "0" ]]; then
+      Fail "Error when trying to create snapshot for box $box"
+      break
+    fi
     for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
-      test_name=${tests__name[$index]}
+      local test_name=${tests__name[$index]}
       if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
         Skip "(code:2) Test: $test_name [$box]"
         continue

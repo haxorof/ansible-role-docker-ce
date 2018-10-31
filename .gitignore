@@ -1,8 +1,9 @@
-.vagrant
-*.retry
-.vscode/
-*.vdi
 /.project
+.vagrant
+.vscode/
+*.retry
+*.vdi
+*.log
 tests/yaml.sh
 tests/yamlparser.sh.inc
 tests/test-dbg.sh

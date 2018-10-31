@@ -1,48 +1,64 @@
 boxes:
   -
-    box: geerlingguy/centos7
-    ide_ctl_name: IDE Controller
-    vbguest_update: false
+    box: centos/7
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: true
   -
-    box: geerlingguy/ubuntu1404
-    ide_ctl_name: IDE Controller
-    vbguest_update: false
+    box: ubuntu/trusty64
+    storage_ctl: SATAController
+    storage_port: 1
+    vbguest_update: true
   -
-    box: geerlingguy/ubuntu1604
-    ide_ctl_name: IDE Controller
-    vbguest_update: false
+    box: ubuntu/xenial64
+    storage_ctl: SCSI
+    storage_port: 2
+    vbguest_update: true
   -
-    box: geerlingguy/ubuntu1804
-    ide_ctl_name: IDE Controller
-    vbguest_update: false
+    box: ubuntu/bionic64
+    storage_ctl: SCSI
+    storage_port: 2
+    vbguest_update: true
   -
-    box: geerlingguy/debian8
-    ide_ctl_name: IDE Controller
-    vbguest_update: false
+    box: debian/wheezy64
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: true
   -
-    box: geerlingguy/debian9
-    ide_ctl_name: IDE Controller
-    vbguest_update: false
-  # -
-  #   box: fedora/25-cloud-base
-  #   ide_ctl_name: IDE
-  #   vbguest_update: true
-  # -
-  #   box: fedora/26-cloud-base
-  #   ide_ctl_name: IDE
-  #   vbguest_update: true
-  # -
-  #   box: fedora/27-cloud-base
-  #   ide_ctl_name: IDE
-  #   vbguest_update: true
-  # -
-  #   box: fedora/28-cloud-base
-  #   ide_ctl_name: IDE
-  #   vbguest_update: true
-  # -
-  #   box: fedora/beta-29-cloud-base
-  #   ide_ctl_name: IDE
-  #   vbguest_update: true
+    box: debian/jessie64
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: true
+  -
+    box: debian/stretch64
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: true
+  -
+    box: fedora/25-cloud-base
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: true
+  -
+    box: fedora/26-cloud-base
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: true
+  -
+    box: fedora/27-cloud-base
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: true
+  -
+    box: fedora/28-cloud-base
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: true
+  -
+    box: fedora/29-cloud-base
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: true
 
 tests:
   -
@@ -86,10 +102,10 @@ tests:
     name: Old version of Docker
     prep_yml: prepare.yml
     test_yml: test_old_version.yml
-    skip_boxes: ubuntu,debian
+    skip_boxes: ubuntu,debian,fedora
   -
     id: t_issue_42
     name: Issue 42
     prep_yml: prepare.yml
     test_yml: test_issue_42.yml
-    skip_boxes: centos
+    skip_boxes: centos,fedora

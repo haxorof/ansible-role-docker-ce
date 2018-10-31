@@ -11,6 +11,7 @@ unless File.exist?(testcase_file)
   exit 1
 end
 vagrant_config = YAML.load_file("#{testcase_file}")
+vagrant_devs = ["/dev/sda", "/dev/sdb", "/dev/sdc"]
 
 Vagrant.configure("2") do |config|
   config.vm.box = vagrant_config['box']
@@ -27,13 +28,8 @@ Vagrant.configure("2") do |config|
     unless File.exist?(docker_disk)
       vb.customize ['createhd', '--filename', docker_disk, '--size', 5 * 1024]
     end
-    vb.customize ['storageattach', :id, '--storagectl', vagrant_config['ide_ctl_name'], '--port', 1, '--device', 0, '--type', 'hdd', '--medium', docker_disk]
+    vb.customize ['storageattach', :id, '--storagectl', vagrant_config['storage_ctl'], '--port', vagrant_config['storage_port'], '--device', 0, '--type', 'hdd', '--medium', docker_disk]
   end
-
-  # Print test ID
-  config.vm.provision "shell",
-    inline: "echo '--> Test: " + vagrant_config['id'] + "'"
-
   # Prepare Ansible roles directory
   config.vm.provision "shell",
     inline: "test -d /etc/ansible/roles/haxorof.docker-ce || \
@@ -42,18 +38,30 @@ Vagrant.configure("2") do |config|
 
   # Prepare box
   config.vm.provision "ansible_local" do |ansible|
-    ansible.verbose        = false
-    ansible.playbook       = vagrant_config['prep_yml']
-    ansible.limit          = "test-host"
+    ansible.verbose = false
+    ansible.install_mode = "pip"
+    ansible.compatibility_mode = "2.0"
+    ansible.version = "latest"
+    ansible.playbook = vagrant_config['prep_yml']
+    ansible.limit = "test-host"
     ansible.inventory_path = "hosts"
-    ansible.config_file    = "/vagrant/ansible.cfg"
+    ansible.config_file = "/vagrant/ansible.cfg"
+    ansible.extra_vars = {
+      lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
+    }
   end
   # Test storage config
   config.vm.provision "ansible_local" do |ansible|
-    ansible.verbose        = false
-    ansible.playbook       = vagrant_config['test_yml']
-    ansible.limit          = "test-host"
+    ansible.verbose = false
+    ansible.install_mode = "pip"
+    ansible.compatibility_mode = "2.0"
+    ansible.version = "latest"
+    ansible.playbook = vagrant_config['test_yml']
+    ansible.limit = "test-host"
     ansible.inventory_path = "hosts"
-    ansible.config_file    = "/vagrant/ansible.cfg"
+    ansible.config_file = "/vagrant/ansible.cfg"
+    ansible.extra_vars = {
+      lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
+    }
   end
 end
