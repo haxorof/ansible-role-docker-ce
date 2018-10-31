@@ -1,7 +1,7 @@
 ---
 - hosts: test-host
   tasks:
-    - name: Ensure dependencies are installed
+    - name: Ensure dependencies are installed (All)
       package:
         name: "{{ item }}"
         state: present
@@ -9,6 +9,13 @@
       with_items:
         - parted
         #- git
+
+    - name: Ensure dependencies are installed (CentOS)
+      package:
+        name: e4fsprogs
+        state: present
+      become: true
+      when: ansible_distribution == "CentOS"
 
     # - name: Ensure Docker Bench Security is cloned
     #   git:

@@ -46,16 +46,16 @@
     append: true
   with_items: "{{ docker_users }}"
 
-- name: Ensure lvm2 is installed when devicemapper is used (Fedora/Debian)
+- name: Ensure lvm2 is installed when devicemapper is used
   become: true
   package:
     name: lvm2
     state: present
-  when: (_docker_os_dist == "Fedora" or _docker_os_dist == "Debian") and
+  when: (_docker_os_dist != "Ubuntu" and _docker_os_dist != "Debian") and
         docker_daemon_config['storage-driver'] is defined and
         docker_daemon_config['storage-driver'] == 'devicemapper'
 
-- name: Ensure thin-provisioning-tools is installed when devicemapper is used (Ubuntu/Debian)
+- name: Ensure thin-provisioning-tools is installed when devicemapper is used
   become: true
   package:
     name: thin-provisioning-tools
