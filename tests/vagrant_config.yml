@@ -75,12 +75,6 @@ tests:
     test_yml: test_config.yml
     skip_boxes: none
   -
-    id: t_file_config
-    name: Configuration via file
-    prep_yml: prepare.yml
-    test_yml: test_config_file.yml
-    skip_boxes: none
-  -
     id: t_advanced_config
     name: Advanced configuration
     prep_yml: prepare.yml

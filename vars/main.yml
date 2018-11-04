@@ -53,21 +53,36 @@ docker_envs_dir:
 docker_old_packages:
   CentOS:
     - docker
+    - docker-client
+    - docker-client-latest
     - docker-common
-    - container-selinux
+    - docker-latest
+    - docker-latest-logrotate
+    - docker-logrotate
     - docker-selinux
+    - docker-engine-selinux
     - docker-engine
   RedHat:
     - docker
+    - docker-client
+    - docker-client-latest
     - docker-common
-    - container-selinux
+    - docker-latest
+    - docker-latest-logrotate
+    - docker-logrotate
     - docker-selinux
+    - docker-engine-selinux
     - docker-engine
   Fedora:
     - docker
+    - docker-client
+    - docker-client-latest
     - docker-common
-    - container-selinux
+    - docker-latest
+    - docker-latest-logrotate
+    - docker-logrotate
     - docker-selinux
+    - docker-engine-selinux
     - docker-engine
   Ubuntu:
     - docker
