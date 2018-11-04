@@ -3,6 +3,12 @@
   set_fact:
     _docker_additional_packages_os: []
     _docker_additional_packages_pip: []
+    _docker_python_system: false
+
+- name: Do best effort detection and set fact to indicate system Python environment is used
+  set_fact:
+    _docker_python_system: true
+  when: ansible_python.executable | regex_search('^/bin') or ansible_python.executable | regex_search('^/usr/bin')
 
 - name: Set facts to install Docker SDK for Python
   set_fact:
@@ -27,11 +33,14 @@
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_additional_packages_pip }}"
     _docker_additional_packages_os: "{{ _docker_additional_packages_os + docker_additional_packages_os }}"
 
-- name: Set facts to ensure PiP is installed if required
-  set_fact:
-    _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-pip', 'python-virtualenv'] }}"
+- name: Ensure EPEL release repository is installed
+  become: true
+  package:
+    name: "epel-release"
+    state: present
   when:
-    - _docker_additional_packages_pip | length > 0
+    - _docker_os_dist == "CentOS"
+    - _docker_additional_packages_os | length > 0
 
 - name: Install additional packages (OS package manager)
   become: true
@@ -54,8 +63,29 @@
   pip:
     name: "{{ item }}"
     state: present
+    extra_args: --user
   with_items:
     - "{{ _docker_additional_packages_pip }}"
   when: _docker_additional_packages_pip | length > 0
   environment:
     PYTHONWARNINGS: ignore
+
+# Not using github_release:  https://github.com/ansible/ansible/issues/45391
+- name: Get latest release of docker-compose
+  uri:
+    url: https://api.github.com/repos/docker/compose/releases/latest
+    body_format: json
+  register: _github_docker_compose
+  when:
+    - docker_compose_no_pip
+
+# Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
+- name: Install docker-compose (Linux)
+  become: true
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    checksum: "sha256:https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+  when:
+    - docker_compose_no_pip

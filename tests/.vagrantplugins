@@ -1,5 +1,4 @@
 required_plugins = %w(
-  vagrant-share
   vagrant-vbguest
 )
 

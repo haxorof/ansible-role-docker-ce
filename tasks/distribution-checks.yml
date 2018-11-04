@@ -19,9 +19,14 @@
 
 - name: Fail if unsupported Debian version
   fail:
-    msg: "Debian 8 (jessie) or later is required!"
+    msg: "Debian 7 (wheezy) or later is required!"
   when: _docker_os_dist == "Debian" and
-        _docker_os_dist_major_version < '8'
+        _docker_os_dist_major_version < '7'
+
+- name: Fail if kernel version is lower than 3.10
+  fail:
+    msg: "Kernel version 3.10 or later is required!"
+  when: ansible_kernel | version_compare("3.10", '<')
 
 - name: Fail if this roles does not support the distribution
   fail:

@@ -93,18 +93,20 @@ docker_enable_mount_flag_fix: yes
 ################################################################################
 # Postinstall related configuration
 ################################################################################
-# Ensures dependencies are installed so that most of the 'docker' Ansible modules will work
+# Ensures dependencies are installed so that most of the 'docker' Ansible modules will work.
 docker_sdk: false
-# Ensures dependencies are installed so that 'docker_service' Ansible module will work
+# Ensures dependencies are installed so that 'docker_service' Ansible module will work.
 docker_compose: false
-# Ensures dependencies are installed so that 'docker_stack' Ansible module will work
+# Ensures that docker-compose is installed without pip, meaning 'docker_service' will NOT work.
+docker_compose_no_pip: false
+# Ensures dependencies are installed so that 'docker_stack' Ansible module will work.
 docker_stack: false
-# Additional PiP packages to install after Docker is configured and started
+# Additional PiP packages to install after Docker is configured and started.
 docker_additional_packages_pip: []
-# Additional OS packages to install after Docker is configured and started
+# Additional OS packages to install after Docker is configured and started.
 docker_additional_packages_os: []
 # Ensure PiP is upgraded before further use.
-# IMPORTANT! Be carful to set this because it might cause dependecy problems
+# IMPORTANT! Be carful to set this because it might cause dependecy problems.
 docker_pip_upgrade: false
 ```
 

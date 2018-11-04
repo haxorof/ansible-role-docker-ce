@@ -8,7 +8,7 @@
       become: true
       with_items:
         - parted
-        #- git
+        - git
 
     - name: Ensure dependencies are installed (CentOS)
       package:
@@ -17,12 +17,12 @@
       become: true
       when: ansible_distribution == "CentOS"
 
-    # - name: Ensure Docker Bench Security is cloned
-    #   git:
-    #     repo: 'https://github.com/docker/docker-bench-security.git'
-    #     dest: /home/vagrant/docker-bench-security
-    #     version: master
-    #   when: docker_bench_security is defined
+    - name: Ensure Docker Bench Security is cloned
+      git:
+        repo: 'https://github.com/docker/docker-bench-security.git'
+        dest: /home/vagrant/docker-bench-security
+        version: master
+      when: docker_bench_security is defined
 
     - name: Create partition {{ lvm_device }}1
       parted:

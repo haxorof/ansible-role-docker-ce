@@ -19,6 +19,7 @@ boxes:
     storage_ctl: SCSI
     storage_port: 2
     vbguest_update: true
+  # Only possible to run using snapshots because of kernel upgrade
   -
     box: debian/wheezy64
     storage_ctl: SATA Controller
@@ -54,11 +55,11 @@ boxes:
     storage_ctl: IDE
     storage_port: 1
     vbguest_update: true
-  -
-    box: fedora/29-cloud-base
-    storage_ctl: IDE
-    storage_port: 1
-    vbguest_update: true
+  # -
+  #   box: fedora/29-cloud-base
+  #   storage_ctl: IDE
+  #   storage_port: 1
+  #   vbguest_update: true
 
 tests:
   -
@@ -90,7 +91,7 @@ tests:
     name: Storage configuration
     prep_yml: prepare_storage.yml
     test_yml: test_config_storage.yml
-    skip_boxes: none
+    skip_boxes: wheezy64
   -
     id: t_postinstall
     name: Postinstall

@@ -31,7 +31,7 @@
     url: https://download.docker.com/linux/{{ _docker_os_dist|lower }}/gpg
     state: present
   when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > '14') or
-        _docker_os_dist == "Debian"
+        (_docker_os_dist == "Debian" and _docker_os_dist_major_version > '7')
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
   become: true
@@ -39,8 +39,7 @@
   args:
     warn: false
   changed_when: false
-  when: _docker_os_dist == "Ubuntu" and
-        _docker_os_dist_major_version == '14'
+  when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == '14') or (_docker_os_dist == "Debian" and _docker_os_dist_major_version == '7')
 
 - name: Determine channels to be enabled and/or disabled
   set_fact:
@@ -58,6 +57,15 @@
     filename: 'docker-ce'
   when: _docker_os_dist == "Ubuntu" or
         _docker_os_dist == "Debian"
+
+# Backport is required but not documented by Docker: https://github.com/moby/moby/issues/16878
+- name: Add backport repository for Debian Wheezy
+  become: true
+  apt_repository:
+    repo: deb [arch=amd64] http://ftp.debian.org/debian wheezy-backports main
+    state: present
+    filename: 'debian-backport'
+  when: _docker_os_dist == "Debian" and _docker_os_dist_major_version == '7'
 
 - name: Add Docker CE repository (Fedora/CentOS/RedHat)
   become: true

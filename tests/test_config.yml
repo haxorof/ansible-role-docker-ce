@@ -2,7 +2,7 @@
 - hosts: test-host
   vars:
     docker_enable_mount_flag_fix: false
-    docker_enable_audit: true
+    #docker_enable_audit: true
     docker_daemon_config:
       icc: false
       init: true

@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Add support for Debian 7 (Wheezy) ([#64](../../issues/64))
+
 ### Fixed
 
 - Docker startup fails in Fedora 28 because it cannot find pvcreate ([#58](../../issues/58))
 - LVM2 package is required to be installed when devicemapper is used ([#61](../../issues/61))
+- docker-compose won't install ([#62](../../issues/62))
+- Revisit install of docker-compose ([#63](../../issues/63))
 
 ### Internal
 

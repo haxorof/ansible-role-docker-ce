@@ -46,23 +46,31 @@
     append: true
   with_items: "{{ docker_users }}"
 
-- name: Ensure lvm2 is installed when devicemapper is used
-  become: true
-  package:
-    name: lvm2
-    state: present
-  when: (_docker_os_dist != "Ubuntu" and _docker_os_dist != "Debian") and
-        docker_daemon_config['storage-driver'] is defined and
-        docker_daemon_config['storage-driver'] == 'devicemapper'
+- name: Ensure devicemapper prerequisites are fulfilled
+  block:
+    - name: Ensure lvm2 is installed
+      become: true
+      package:
+        name: lvm2
+        state: present
+      when: (
+            (_docker_os_dist != "Ubuntu" and _docker_os_dist != "Debian") or
+            (_docker_os_dist == "Debian" and _docker_os_dist_major_version == '7')
+            )
 
-- name: Ensure thin-provisioning-tools is installed when devicemapper is used
-  become: true
-  package:
-    name: thin-provisioning-tools
-    state: present
-  when: (_docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian") and
-        docker_daemon_config['storage-driver'] is defined and
-        docker_daemon_config['storage-driver'] == 'devicemapper'
+    - name: Ensure thin-provisioning-tools is installed
+      become: true
+      package:
+        name: thin-provisioning-tools
+        state: present
+      when: (
+            _docker_os_dist == "Ubuntu" or
+            (_docker_os_dist == "Debian" and _docker_os_dist_major_version > '7')
+            )
+  when:
+    - docker_daemon_config['storage-driver'] is defined
+    - docker_daemon_config['storage-driver'] == 'devicemapper'
+
 
 - name: Enable Docker service
   become: true
@@ -70,11 +78,11 @@
     name: docker
     enabled: yes
   notify: restart docker
-  register: docker_service
+  register: _docker_service
 
 - name: Trigger start/restart of Docker
   service:
     name: docker
   notify: restart docker
-  changed_when: docker_service.status.SubState != "running"
-  when: docker_service.status is defined
+  changed_when: _docker_service.status.SubState != "running"
+  when: _docker_service.status is defined and _docker_service.status.SubState is defined

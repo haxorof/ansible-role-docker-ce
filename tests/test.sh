@@ -143,7 +143,7 @@ storage_ctl: ${boxes__storage_ctl[$_box_index]}
 storage_port: ${boxes__storage_port[$_box_index]}
 vbguest_update: ${boxes__vbguest_update[$_box_index]}
 id: snapshot
-prep_yml: test_nothing.yml
+prep_yml: prepare_snapshot.yml
 test_yml: test_nothing.yml
 EOF
 }
@@ -169,12 +169,62 @@ VagrantSaveSnapshot() {
 
 VagrantRestoreSnapShot() {
   Vagrant snapshot restore base
-  return $?
 }
 
 VagrantDeleteSnapshot() {
   Vagrant snapshot delete base
-  return $?
+}
+
+PrepareBox() {
+  local _index=$1
+  if [[ "$SKIP_SNAPSHOT" != "1" ]]; then
+    VagrantSaveSnapshot $_index
+  fi
+}
+
+CleanupBox() {
+  local _testRunExitCode=$1
+  if [[ "$SKIP_SNAPSHOT" != "1" ]]; then
+    VagrantDeleteSnapshot
+  fi
+
+  if [[ "$_testRunExitCode" == "0" ]]; then
+    VagrantDestroy
+  else
+    if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
+      Info "VM is kept for debugging"
+    else
+      VagrantDestroy
+    fi
+  fi
+}
+
+StartTest() {
+  if [[ "$SKIP_SNAPSHOT" != "1" ]]; then
+    VagrantRestoreSnapShot
+    return $?
+  else
+    VagrantUp
+    return $?
+  fi
+}
+
+EndTest() {
+  local _testRunExitCode=$1
+  if [[ "$SKIP_SNAPSHOT" == "1" ]]; then
+    if [[ "$ON_FAILURE_KEEP" != "1" ]]; then
+      VagrantDestroy
+      return $?
+    fi
+  else
+    if [[ "$_testRunExitCode" == "0" ]]; then
+      if [[ "$ON_FAILURE_KEEP" != "1" ]]; then
+        VagrantHalt
+        return $?
+      fi
+    fi
+  fi
+  return 0
 }
 
 DownloadBoxes() {
@@ -220,14 +270,16 @@ ExecuteTests() {
       Skip "(code:1) Test: Skipping box [$box]"
       continue
     fi
-    VagrantSaveSnapshot $box_index
+    PrepareBox $box_index
     exitCode=$?
     if [[ "$exitCode" != "0" ]]; then
       Fail "Error when trying to create snapshot for box $box"
       break
     fi
+    Info "Box ready for testing: $box"
     for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
       local test_name=${tests__name[$index]}
+      Info "Starting test: $test_name"
       if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
         Skip "(code:2) Test: $test_name [$box]"
         continue
@@ -248,30 +300,18 @@ ExecuteTests() {
       fi
       GenerateTestCaseConfig $box_index $index
       Info "Test: ${tests__name[$index]} [$box]"
-      export WSLENV CI VAGRANT_BOX VAGRANT_PREP_YML VAGRANT_TEST_YML
-      if [[ "$PROVISION_ONLY" == "1" ]]; then
-        VagrantProvision
-      else
-        VagrantRestoreSnapShot
-      fi
+      StartTest
       exitCode=$?
+      EndTest $exitCode
       if [[ "$exitCode" == "0" ]]; then
-        VagrantHalt
         Pass "Test: $test_name [$box]"
       else
         Fail "Test: $test_name [$box]"
         break
       fi
     done
-    VagrantDeleteSnapshot
-    if [[ "$exitCode" == "0" ]]; then
-      VagrantDestroy
-    else
-      if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
-        Info "VM is kept for debugging"
-      else
-        VagrantDestroy
-      fi
+    CleanupBox $exitCode
+    if [[ "$exitCode" != "0" ]]; then
       break
     fi
   done
