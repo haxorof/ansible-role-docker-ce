@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.10.0](../../releases/tag/1.10.0) - 2018-11-05
+
 ### Added
 
 - Add support for Debian 7 (Wheezy) ([#64](../../issues/64))
