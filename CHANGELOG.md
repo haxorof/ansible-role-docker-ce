@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Identify systemd support even in check mode ([#66](../../issues/66))
+
 ## [1.10.0](../../releases/tag/1.10.0) - 2018-11-05
 
 ### Added
