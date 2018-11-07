@@ -23,6 +23,7 @@
   become: true
   shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
   changed_when: no
+  check_mode: no
   register: _determine_systemd_usage
 
 - name: Set fact to indicate systemd is not used
