@@ -38,7 +38,7 @@ SetupYamlParser() {
   YAML_INC_FILE=yamlparser.sh.inc
   if [[ ! -f "$YAML_INC_FILE" ]]; then
     Info "Fetching YAML parsing script..."
-    wget -O $YAML_INC_FILE -q https://raw.githubusercontent.com/jasperes/bash-yaml/master/yaml.sh
+    wget -O $YAML_INC_FILE -q https://raw.githubusercontent.com/jasperes/bash-yaml/master/script/yaml.sh
   fi
   . $YAML_INC_FILE
 }
