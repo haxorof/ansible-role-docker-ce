@@ -22,9 +22,10 @@
       state: absent
     notify: restart docker
 
-  - name: Set systemd service MountFlags option to "slave" to prevent "device busy" errors on CentOS/RedHat 7.3 kernels (CentOS/RedHat)
+  - name: Set MountFlags option to "slave" to prevent "device busy" errors on CentOS/RedHat 7.3 kernels (CentOS/RedHat)
     set_fact:
-      docker_systemd_service_config_tweaks: "{{ docker_systemd_service_config_tweaks + _systemd_service_config_tweaks }}"
+      docker_systemd_service_config_tweaks: "{{ docker_systemd_service_config_tweaks + \
+        _systemd_service_config_tweaks }}"
     vars:
       _systemd_service_config_tweaks:
         - 'MountFlags=slave'
@@ -41,13 +42,15 @@
       pool:
         name: thinpool
         volume_group: docker
-        physical_volumes: "{{ docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+') | list | regex_replace('dm.directlvm_device=\\s*(.+)', '\\1') }}"
+        physical_volumes: "{{ docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+') \
+          | list | regex_replace('dm.directlvm_device=\\s*(.+)', '\\1') }}"
         metadata_size: "1%VG"
         data_size: "95%VG"
 
   - name: Modify storage-opts to handle problems with thinpool on Debian 8
     set_fact:
-      _modified_storage_config: "{{ (docker_daemon_config['storage-opts'] | difference(_exclusions)) + ['dm.thinpooldev=/dev/mapper/docker-thinpool-tpool'] }}"
+      _modified_storage_config: "{{ (docker_daemon_config['storage-opts'] | difference(_exclusions)) + \
+        ['dm.thinpooldev=/dev/mapper/docker-thinpool-tpool'] }}"
     vars:
       _exclusions: "{{ docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+') | list }}"
 

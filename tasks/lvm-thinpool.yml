@@ -46,3 +46,5 @@
         --thinpool "{{ pool.volume_group }}/{{ pool.name }}"
         --poolmetadata "{{ pool.volume_group }}/{{ pool.name }}meta"
   when: _datavolume_created | changed
+  tags:
+    - skip_ansible_lint

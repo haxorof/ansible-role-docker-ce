@@ -7,16 +7,17 @@
 
 - name: Set fact if old Docker installation shall be removed
   set_fact:
-    _remove_old_docker: "{{ docker_remove_pre_ce | bool }} == true and {{ _cmd_docker_version.stdout_lines[0] | search('-ce') }} == false"
+    _remove_old_docker: "{{ docker_remove_pre_ce | bool }} and not \
+      {{ _cmd_docker_version.stdout_lines[0] | search('-ce') }}"
   when: _cmd_docker_version.stdout_lines is defined and _cmd_docker_version.stdout_lines[0] is defined
 
 - name: Check if Docker is running
   become: true
-  command: systemctl status docker
+  systemd:
+    name: docker
   ignore_errors: yes
-  changed_when: false
   register: _service_docker_status
-  when: _remove_old_docker | default(False) | bool == true
+  when: _remove_old_docker | default(False) | bool
 
 - name: Stop Docker service
   service:

@@ -36,7 +36,7 @@
         ((docker_daemon_config is defined and
         docker_daemon_config['userns-remap'] is defined and
         docker_daemon_config['userns-remap'] == 'default') or
-        docker_bug_usermod|bool == true)
+        docker_bug_usermod | bool)
 
 - name: Ensure Docker users are added to the docker group
   become: true

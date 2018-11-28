@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Identify systemd support even in check mode ([#66](../../issues/66))
 
+### Internal
+
+- Ansible-lint with Ansible Galaxy rules report problems ([#67](../../issues/67))
+
 ## [1.10.0](../../releases/tag/1.10.0) - 2018-11-05
 
 ### Added

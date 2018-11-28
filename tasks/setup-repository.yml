@@ -39,7 +39,8 @@
   args:
     warn: false
   changed_when: false
-  when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == '14') or (_docker_os_dist == "Debian" and _docker_os_dist_major_version == '7')
+  when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == '14') or (_docker_os_dist == "Debian" and
+    _docker_os_dist_major_version == '7')
 
 - name: Determine channels to be enabled and/or disabled
   set_fact:
@@ -52,7 +53,8 @@
 - name: Add Docker CE repository with correct channels (Ubuntu/Debian)
   become: true
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} {{ _docker_os_dist_release }} {{ _docker_enable_channels | join(" ") }}
+    repo: "deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} \
+      {{ _docker_os_dist_release }} {{ _docker_enable_channels | join(' ') }}"
     state: present
     filename: 'docker-ce'
   when: _docker_os_dist == "Ubuntu" or
@@ -88,6 +90,8 @@
   when: _docker_os_dist == "CentOS" or
         _docker_os_dist == "Fedora" or
         _docker_os_dist == "RedHat"
+  tags:
+    - skip_ansible_lint
 
 - name: Enable Docker CE repository channels (Fedora/CentOS/RedHat)
   become: true
@@ -99,6 +103,8 @@
   when: _docker_os_dist == "CentOS" or
         _docker_os_dist == "Fedora" or
         _docker_os_dist == "RedHat"
+  tags:
+    - skip_ansible_lint
 
 # disable rt-beta so we don't get a 403 error retrieving repomd.xml
 - name: Check if rhel-7-server-rt-beta-rpms Repository is enabled (RedHat)
@@ -113,6 +119,8 @@
   become: true
   shell: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
   when: _docker_os_dist == "RedHat" and cmd_rhel_rt_beta_repo_enabled.rc == 0
+  tags:
+    - skip_ansible_lint
 
 # container-selinux package wants this
 - name: Check if rhel-7-server-extras-rpms Repository is enabled (RedHat)
@@ -127,6 +135,8 @@
   become: true
   shell: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
   when: _docker_os_dist == "RedHat" and cmd_rhel_extras_repo_enabled.rc == 1
+  tags:
+    - skip_ansible_lint
 
 - name: Update repository cache
   become: true
@@ -134,3 +144,5 @@
   args:
     warn: false
   changed_when: false
+  tags:
+    - skip_ansible_lint

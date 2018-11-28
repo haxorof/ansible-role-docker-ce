@@ -15,7 +15,6 @@
     src: drop-ins/default.conf.j2
     dest: /etc/systemd/system/docker.service.d/default.conf
   notify: restart docker
-  register: _systemd_docker_dropin
   vars:
     systemd_envs_dir: "{{ docker_envs_dir[_docker_os_dist] }}"
     systemd_service_conf: "{{ _systemd_service_config }}"
@@ -35,10 +34,3 @@
   notify: restart docker
   vars:
     docker_envs: "{{ docker_service_envs }}"
-
-- name: Force daemon reload of systemd
-  become: true
-  systemd:
-    daemon_reload: yes
-  notify: restart docker
-  when: _systemd_docker_dropin|changed

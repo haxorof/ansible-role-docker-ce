@@ -26,7 +26,7 @@
   check_mode: no
   register: _determine_systemd_usage
 
-- name: Set fact to indicate systemd is not used
+- name: Set fact to indicate systemd is used or not
   set_fact:
     _docker_systemd_used: "{{ _determine_systemd_usage is defined and _determine_systemd_usage.stdout == 'systemd' }}"
 
@@ -35,7 +35,7 @@
     docker_channel: edge
   when:
     - docker_enable_ce_edge is defined
-    - docker_enable_ce_edge == true
+    - docker_enable_ce_edge
 
 - name: Compatibility and distribution checks
   include_tasks: checks.yml
@@ -69,7 +69,7 @@
 
 - name: Configure non-systemd service
   include_tasks: configure-non-systemd.yml
-  when: _docker_systemd_used | bool == false
+  when: _docker_systemd_used | bool
   tags: ["configure"]
 
 - name: Configure Docker

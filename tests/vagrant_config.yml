@@ -55,11 +55,11 @@ boxes:
     storage_ctl: IDE
     storage_port: 1
     vbguest_update: true
-  # -
-  #   box: fedora/29-cloud-base
-  #   storage_ctl: IDE
-  #   storage_port: 1
-  #   vbguest_update: true
+  -
+    box: fedora/29-cloud-base
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: true
 
 tests:
   -
@@ -67,31 +67,31 @@ tests:
     name: No configuration
     prep_yml: prepare.yml
     test_yml: test_defaults.yml
-    skip_boxes: none
+    skip_boxes: fedora/29
   -
     id: t_simple_config
     name: Simple configuration
     prep_yml: prepare.yml
     test_yml: test_config.yml
-    skip_boxes: none
+    skip_boxes: fedora/29
   -
     id: t_advanced_config
     name: Advanced configuration
     prep_yml: prepare.yml
     test_yml: test_config_adv.yml
-    skip_boxes: none
+    skip_boxes: fedora/29
   -
     id: t_storage_config
     name: Storage configuration
     prep_yml: prepare_storage.yml
     test_yml: test_config_storage.yml
-    skip_boxes: wheezy64
+    skip_boxes: wheezy64,fedora/29
   -
     id: t_postinstall
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: none
+    skip_boxes: fedora/29
   -
     id: t_old_docker
     name: Old version of Docker
@@ -104,3 +104,9 @@ tests:
     prep_yml: prepare.yml
     test_yml: test_issue_42.yml
     skip_boxes: centos,fedora
+  -
+    id: t_nightly_channel
+    name: Nigthly channel
+    prep_yml: prepare.yml
+    test_yml: test_config_nightly.yml
+    skip_boxes: centos,fedora,ubuntu,debian

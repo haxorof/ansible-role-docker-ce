@@ -12,19 +12,22 @@
 
 - name: Set facts to install Docker SDK for Python
   set_fact:
-    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['sdk'] }}"
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
+      docker_predefined_packages_pip[_docker_os_dist]['sdk'] }}"
   when:
     - docker_sdk
 
 - name: Set facts to install Docker Compose
   set_fact:
-    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['compose'] }}"
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
+      docker_predefined_packages_pip[_docker_os_dist]['compose'] }}"
   when:
     - docker_compose
 
 - name: Set facts to install Docker Stack dependencies ('docker_stack')
   set_fact:
-    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_predefined_packages_pip[_docker_os_dist]['stack'] }}"
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
+      docker_predefined_packages_pip[_docker_os_dist]['stack'] }}"
   when:
     - docker_stack
 
@@ -83,8 +86,10 @@
 - name: Install docker-compose (Linux)
   become: true
   get_url:
-    url: "https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
-    checksum: "sha256:https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+    url: "https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/\
+      docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    checksum: "sha256:https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/\
+      docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
     dest: /usr/local/bin/docker-compose
     mode: 0755
   when:
