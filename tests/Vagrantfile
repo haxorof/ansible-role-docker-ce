@@ -11,6 +11,7 @@ if File.exist?(testcase_file)
 
   Vagrant.configure("2") do |config|
     config.vm.box = vagrant_config['box']
+    config.vm.box_url = vagrant_config['box_url']
     config.vm.box_check_update = true
     config.ssh.insert_key = false
     config.vbguest.auto_update = vagrant_config['vbguest_update']

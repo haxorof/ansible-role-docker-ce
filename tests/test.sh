@@ -121,13 +121,35 @@ VagrantDestroy() {
   return $_exitCode
 }
 
-VagrantBoxAdd() {
-  local cmdOutput=$(Vagrant box add --provider=virtualbox $1)
+VagrantBoxRemove() {
+  local cmdOutput=$(Vagrant box remove $1)
   local exitCode=$?
   if [[ "$cmdOutput" == *force* ]]; then
     return 0
   else
     if [[ "$exitCode" != "0" ]]; then
+      RedText "$cmdOutput"
+    fi
+  fi
+  return $exitCode
+}
+
+VagrantBoxAdd() {
+  local cmdOutput=
+  if [[ "$2" == "vagrantup" ]]; then
+    cmdOutput=$(Vagrant box add --provider=virtualbox $1)
+  else
+    cmdOutput=$(Vagrant box add --provider=virtualbox --name $1 $2)
+  fi
+  local exitCode=$?
+  if [[ "$cmdOutput" == *force* ]]; then
+    return 0
+  else
+    if [[ "$exitCode" == "0" ]]; then
+      if [[ "$cmdOutput" == *error* ]]; then
+        exitCode=1
+      fi
+    else
       RedText "$cmdOutput"
     fi
   fi
@@ -230,12 +252,17 @@ EndTest() {
 DownloadBoxes() {
   Info "Downloading boxes..."
   local exitCode=0
-  for box in ${boxes__box[*]}; do
+  for box_index in $(seq 0 `expr ${#boxes__box[@]} - 1`); do
+    local box=${boxes__box[$box_index]}
+    local box_url=${boxes__box_url[$box_index]}
     if [[ "$box" != *"$LIMIT_BOX"* ]]; then
       Skip "Download $box"
       continue
     fi
-    VagrantBoxAdd $box
+    if [[ "$REMOVE_BEFORE_DOWNLOAD" != "" ]]; then
+      VagrantBoxRemove $box
+    fi
+    VagrantBoxAdd $box $box_url
     if [[ "$?" == "0" ]]; then
       Done "Download $box"
     else
@@ -249,8 +276,13 @@ DownloadBoxes() {
 GenerateTestCaseConfig() {
   local _box_index=$1
   local _test_index=$2
+  local _box_url=
+  if [[ "${boxes__box_url[$_box_index]}" != "vagrantup" ]]; then
+    _box_url=${boxes__box_url[$_box_index]}
+  fi
           cat << EOF > $VAGRANT_TESTCASE_FILE
 box: ${boxes__box[$_box_index]}
+box_url: ${_box_url}
 storage_ctl: ${boxes__storage_ctl[$_box_index]}
 storage_port: ${boxes__storage_port[$_box_index]}
 vbguest_update: ${boxes__vbguest_update[$_box_index]}
@@ -339,7 +371,12 @@ LogVirtualBoxVersion
 if [[ "$PRE_DOWNLOAD_BOXES" != "" ]]; then
   DownloadBoxes
   downloadResult=$?
-  Info "Download complete!"
+  if [[ "$downloadResult" == "0" ]]; then
+    Info "Download complete!"
+  else
+    Fail "Download failed!"
+    exit 1
+  fi
 fi
 
 ExecuteTests

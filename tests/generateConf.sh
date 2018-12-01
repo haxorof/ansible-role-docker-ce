@@ -12,8 +12,13 @@ SetupYamlParser() {
 GenerateTestCaseConfig() {
   local _box_index=$1
   local _test_index=$2
+  local _box_url=
+  if [[ "${boxes__box_url[$_box_index]}" != "vagrantup" ]]; then
+    _box_url=${boxes__box_url[$_box_index]}
+  fi
           cat << EOF > $VAGRANT_TESTCASE_FILE
 box: ${boxes__box[$_box_index]}
+box_url: ${_box_url}
 storage_ctl: ${boxes__storage_ctl[$_box_index]}
 storage_port: ${boxes__storage_port[$_box_index]}
 vbguest_update: ${boxes__vbguest_update[$_box_index]}
