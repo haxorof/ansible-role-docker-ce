@@ -1,5 +1,6 @@
 ---
-- hosts: test-host
+- name: Test using PiP to install SDK, compose and stack
+  hosts: test-host
   vars:
     docker_sdk: true
     docker_compose: true
@@ -22,3 +23,11 @@
           services:
             hello:
               image: "hello-world"
+
+- name: Test install of Docker compose not using PiP
+  hosts: test-host
+  vars:
+    docker_compose: true
+    docker_compose_no_pip: true
+  roles:
+    - haxorof.docker-ce

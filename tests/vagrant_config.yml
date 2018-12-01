@@ -63,29 +63,17 @@ boxes:
 
 tests:
   -
-    id: t_no_config
-    name: No configuration
-    prep_yml: prepare.yml
-    test_yml: test_defaults.yml
-    skip_boxes: fedora/29
-  -
-    id: t_simple_config
-    name: Simple configuration
+    id: t_config
+    name: Configurations
     prep_yml: prepare.yml
     test_yml: test_config.yml
     skip_boxes: fedora/29
   -
-    id: t_advanced_config
-    name: Advanced configuration
+    id: t_nightly_channel
+    name: Nigthly channel configuration
     prep_yml: prepare.yml
-    test_yml: test_config_adv.yml
-    skip_boxes: fedora/29
-  -
-    id: t_storage_config
-    name: Storage configuration
-    prep_yml: prepare_storage.yml
-    test_yml: test_config_storage.yml
-    skip_boxes: wheezy64,fedora/29
+    test_yml: test_config_nightly.yml
+    skip_boxes: centos,ubuntu,debian,fedora/25,fedora/26,fedora/27,fedora/28
   -
     id: t_postinstall
     name: Postinstall
@@ -99,14 +87,8 @@ tests:
     test_yml: test_old_version.yml
     skip_boxes: ubuntu,debian,fedora
   -
-    id: t_issue_42
-    name: Issue 42
-    prep_yml: prepare.yml
-    test_yml: test_issue_42.yml
-    skip_boxes: centos,fedora
-  -
-    id: t_nightly_channel
-    name: Nigthly channel
-    prep_yml: prepare.yml
-    test_yml: test_config_nightly.yml
-    skip_boxes: centos,fedora,ubuntu,debian
+    id: t_storage_config
+    name: Storage configuration
+    prep_yml: prepare_storage.yml
+    test_yml: test_config_storage.yml
+    skip_boxes: ubuntu,debian,fedora/29

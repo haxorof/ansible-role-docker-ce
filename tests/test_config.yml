@@ -1,5 +1,20 @@
 ---
-- hosts: test-host
+- name: Test default configuration
+  hosts: test-host
+  roles:
+    - haxorof.docker-ce
+
+- name: Test configuration using file
+  hosts: test-host
+  vars:
+    docker_daemon_config_file: "files/daemon.json"
+    docker_daemon_config:
+      shall_skip_this: true
+  roles:
+    - haxorof.docker-ce
+
+- name: Test configuration using variable
+  hosts: test-host
   vars:
     docker_enable_mount_flag_fix: false
     #docker_enable_audit: true
@@ -13,3 +28,34 @@
       - vagrant
   roles:
     - haxorof.docker-ce
+
+- name: Test configuration for systemd and environment variables
+  hosts: test-host
+  vars:
+    # Setting proxy environment variables to Docker daemon (Only effective for distributions using systemd)
+    docker_systemd_service_config:
+      - 'Environment="HTTP_PROXY=http://localhost:3128/" "NO_PROXY=localhost,127.0.0.1,docker-registry.somecorporation.com"'
+    # Adding debug flag to Docker daemon
+    docker_daemon_opts: '-D'
+    # Setting proxy environment variables to Docker daemon (Works for both systemd, upstart and sysvinit)
+    docker_daemon_envs:
+      HTTP_PROXY: http://localhost:3128/
+      NO_PROXY: localhost,127.0.0.1,docker-registry.somecorporation.com
+  roles:
+    - haxorof.docker-ce
+
+- name: Test issue https://github.com/haxorof/ansible-role-docker-ce/issues/42
+  hosts: test-host
+  tasks:
+    - name: Test only for Ubuntu/Debian
+      include_role:
+        name: haxorof.docker-ce
+      vars:
+        docker_daemon_config:
+          hosts:
+            # fd:// does not work in CentOS
+            - unix:///var/run/docker.sock
+            - tcp://0.0.0.0:2376
+          init: true
+      when: ansible_distribution == "Ubuntu" or
+            ansible_distribution == "Debian"

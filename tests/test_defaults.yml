@@ -1,4 +1,0 @@
----
-- hosts: test-host
-  roles:
-    - haxorof.docker-ce
