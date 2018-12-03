@@ -12,10 +12,10 @@ To run all tests on all Ubuntu distributions:
 # ./test.sh t_ ubuntu
 ```
 
-To run test `t_no_config` on all Ubuntu distributions:
+To run test `t_config` on all Ubuntu distributions:
 
 ```console
-# ./test.sh t_no_config ubuntu
+# ./test.sh t_config ubuntu
 ```
 
 If you want to pre-download all the boxes specified in the `vagrant_config.yml` then you can this before running `test.sh`:

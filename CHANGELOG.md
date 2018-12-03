@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.11.1](../../releases/tag/1.11.1) - 2018-12-03
+
+### Fixed
+
+- Docker compose is installed via PiP even when docker_compose_no_pip is set to true ([#68](../../issues/68))
+
 ## [1.11.0](../../releases/tag/1.11.0) - 2018-12-01
 
 ### Added

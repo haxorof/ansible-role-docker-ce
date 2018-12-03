@@ -22,7 +22,7 @@
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist]['compose'] }}"
   when:
-    - docker_compose
+    - docker_compose and not docker_compose_no_pip
 
 - name: Set facts to install Docker Stack dependencies ('docker_stack')
   set_fact:
