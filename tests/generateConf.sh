@@ -28,6 +28,11 @@ test_yml: ${tests__test_yml[$_test_index]}
 EOF
 }
 
+if [[ "$1" == "--help" ]]; then
+  echo "Usage: $0 <box-index> <test-index>"
+  exit 0
+fi
+
 SetupYamlParser
 create_variables vagrant_config.yml
 

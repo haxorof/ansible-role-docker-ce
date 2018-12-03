@@ -1,0 +1,35 @@
+---
+- name: Install and configure Docker with Kata Containers
+  hosts: test-host
+  tasks:
+    - block:
+      - name: Add Kata Containers repository
+        become: true
+        get_url:
+          url: http://download.opensuse.org/repositories/home:/katacontainers:/releases:/x86_64:/master/CentOS_7/home:katacontainers:releases:x86_64:master.repo
+          dest: /etc/yum.repos.d/kata.repo
+          mode: 0644
+
+      - name: Install Kata Containers
+        become: true
+        yum:
+          name: "{{ item }}"
+          update_cache: yes
+        with_items:
+          - kata-runtime
+          - kata-proxy
+          - kata-shim
+
+      - name: Install and configure Docker
+        include_role:
+          name: haxorof.docker-ce
+        vars:
+          #docker_daemon_opts: '-D --add-runtime kata-runtime=/usr/bin/kata-runtime --default-runtime=kata-runtime'
+          docker_daemon_config:
+            default-runtime: "kata-runtime"
+            runtimes:
+              kata-runtime:
+                path: "/usr/bin/kata-runtime"
+          docker_users:
+            - vagrant
+      when: ansible_distribution == "CentOS"

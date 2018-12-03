@@ -51,9 +51,8 @@ if File.exist?(testcase_file)
     # Test storage config
     config.vm.provision "ansible_local" do |ansible|
       ansible.verbose = false
-      ansible.install_mode = "pip"
+      ansible.install = false
       ansible.compatibility_mode = "2.0"
-      ansible.version = "latest"
       ansible.playbook = vagrant_config['test_yml']
       ansible.limit = "test-host"
       ansible.inventory_path = "hosts"
