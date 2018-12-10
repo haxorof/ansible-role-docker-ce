@@ -108,6 +108,8 @@ docker_additional_packages_os: []
 # Ensure PiP is upgraded before further use.
 # IMPORTANT! Be carful to set this because it might cause dependecy problems.
 docker_pip_upgrade: false
+# Default python pip package to install if missing
+docker_pip_package: python-pip
 ```
 
 ## Dependencies

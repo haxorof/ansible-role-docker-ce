@@ -10,6 +10,17 @@
     _docker_python_system: true
   when: ansible_python.executable | regex_search('^/bin') or ansible_python.executable | regex_search('^/usr/bin')
 
+- name: Determine if pip exists in path
+  become: true
+  shell: type -p pip
+  register: _docker_pip_cmd
+  changed_when: false
+
+- name: Set fact to install Python PiP
+  set_fact:
+    _docker_additional_packages_pip: "{{ _docker_additional_packages_os + docker_pip_package }}"
+  when: _docker_pip_cmd.rc != 0
+
 - name: Set facts to install Docker SDK for Python
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
