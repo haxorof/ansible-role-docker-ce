@@ -39,7 +39,7 @@ if File.exist?(testcase_file)
       ansible.verbose = false
       ansible.install_mode = "pip"
       ansible.compatibility_mode = "2.0"
-      ansible.version = "latest"
+      ansible.version = "2.5.6"
       ansible.playbook = vagrant_config['prep_yml']
       ansible.limit = "test-host"
       ansible.inventory_path = "hosts"

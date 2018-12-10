@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- docker_compose_no_pip only works in Ansible 2.7 or later ([#68](../../issues/68))
+
 ## [1.11.1](../../releases/tag/1.11.1) - 2018-12-03
 
 ### Fixed

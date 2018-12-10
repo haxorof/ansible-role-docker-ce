@@ -1,6 +1,10 @@
 ---
 - hosts: test-host
   tasks:
+    - name: Print Ansible version
+      debug:
+        var: ansible_version.full
+
     - name: Add backport repository for Debian Wheezy
       become: true
       apt_repository:

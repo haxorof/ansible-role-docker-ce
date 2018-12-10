@@ -1,6 +1,10 @@
 ---
 - hosts: test-host
   tasks:
+    - name: Print Ansible version
+      debug:
+        var: ansible_version.full
+
     - name: Ensure dependencies are installed (All)
       package:
         name: "{{ item }}"

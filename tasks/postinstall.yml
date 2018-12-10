@@ -79,18 +79,66 @@
     url: https://api.github.com/repos/docker/compose/releases/latest
     body_format: json
   register: _github_docker_compose
-  when:
-    - docker_compose_no_pip
+  until: _github_docker_compose.status == 200
+  retries: 10
+  when: 
+    - docker_compose
+
+- name: Set common facts related to docker-compose
+  set_fact:
+    _docker_compose_shasum_url: "https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/\
+      docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+    _docker_compose_url: "https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/\
+      docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+  when: 
+    - docker_compose
+
+- name: Fetch docker-compose SHA265 sum file
+  get_url: 
+    url: "{{ _docker_compose_shasum_url }}"
+    dest: "/tmp/ansible.docker-compose-sha256"
+  register: _github_docker_compose_shasum_file
+  changed_when: false
+  until: _github_docker_compose_shasum_file.status_code == 200
+  retries: 10
+  when: 
+    - docker_compose
+
+- name: Dump SHA256 file contents to variable
+  command: cat /tmp/ansible.docker-compose-sha256
+  register: _github_docker_compose_shasum
+  changed_when: false
+  when: 
+    - docker_compose
+
+- name: Remove temporary file for SHA256 sum
+  file:
+    path: "/tmp/ansible.docker-compose-sha256"
+    state: absent
+  changed_when: false
+  when: 
+    - docker_compose
+
+- name: Set SHA256 facts related to docker-compose
+  set_fact:
+    _docker_compose_checksum: "sha256:{{ _github_docker_compose_shasum.stdout | regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
+  when: 
+    - docker_compose
+
+# Use when moving to Ansible 2.7 as minimum version
+# - name: Set SHA256 facts related to docker-compose (Ansible >= 2.7)
+#   set_fact:
+#     _docker_compose_checksum: "sha256:https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/\
+#       docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+#   when: ansible_version.full is version_compare('2.7', '>=')
 
 # Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
 - name: Install docker-compose (Linux)
   become: true
   get_url:
-    url: "https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/\
-      docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
-    checksum: "sha256:https://github.com/docker/compose/releases/download/{{ _github_docker_compose.json.tag_name }}/\
-      docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+    url: "{{ _docker_compose_url }}"
+    checksum: "{{ _docker_compose_checksum }}"
     dest: /usr/local/bin/docker-compose
     mode: 0755
-  when:
-    - docker_compose_no_pip
+  when: 
+    - docker_compose

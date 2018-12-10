@@ -1,11 +1,16 @@
 ---
 - hosts: test-host
   tasks:
+    - name: Print Ansible version
+      debug:
+        var: ansible_version.full
+
     - name: Ensure git is installed
       become: true
       package:
         name: git
         state: present
+
     - name: Ensure Docker Bench Security is cloned
       git:
         repo: 'https://github.com/docker/docker-bench-security.git'
