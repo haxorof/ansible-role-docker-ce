@@ -12,9 +12,10 @@
 
 - name: Determine if pip exists in path
   become: true
-  shell: type -p pip
+  shell: type pip
   register: _docker_pip_cmd
   changed_when: false
+  failed_when: false
 
 - name: Set fact to install Python PiP
   set_fact:
