@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [1.11.3](../../releases/tag/1.11.3) - 2018-12-11
+
+### Fixed
+
+- python-pip is always installed ([#71](../../issues/71))
+
 ## [1.11.2](../../releases/tag/1.11.2) - 2018-12-11
 
 ### Fixed
