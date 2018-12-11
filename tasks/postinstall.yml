@@ -19,7 +19,7 @@
 
 - name: Set fact to install Python PiP
   set_fact:
-    _docker_additional_packages_pip: "{{ _docker_additional_packages_os + docker_pip_package }}"
+    _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip_package] }}"
   when: _docker_pip_cmd.rc != 0
 
 - name: Set facts to install Docker SDK for Python
