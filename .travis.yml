@@ -1,6 +1,5 @@
 language: python
 python: '2.7'
-sudo: false
 addons:
   apt:
     packages:
@@ -15,8 +14,8 @@ notifications:
   email: false
   webhooks:
     urls:
-    - https://galaxy.ansible.com/api/v1/notifications/
-    - https://galaxy-qa.ansible.com/api/v1/notifications/
+      - https://galaxy.ansible.com/api/v1/notifications/
+      - https://galaxy-qa.ansible.com/api/v1/notifications/
     on_success: always
     on_failure: never
     on_start: never

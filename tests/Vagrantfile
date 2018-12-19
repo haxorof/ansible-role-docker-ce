@@ -27,6 +27,34 @@ if File.exist?(testcase_file)
         vb.customize ['createhd', '--filename', docker_disk, '--size', 5 * 1024]
       end
       vb.customize ['storageattach', :id, '--storagectl', vagrant_config['storage_ctl'], '--port', vagrant_config['storage_port'], '--device', 0, '--type', 'hdd', '--medium', docker_disk]
+
+      mem_divisor = 2
+      cpu_divisor = 2
+      host = RbConfig::CONFIG['host_os']
+      if host =~ /darwin|bsd/
+        cpus = `sysctl -n hw.ncpu`.to_i
+        mem = `sysctl -n hw.memsize`.to_i / 1024 / 1024
+      elsif host =~ /linux/
+        cpus = `nproc`.to_i
+        mem = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024
+      elsif host =~ /mswin|mingw/
+        cpus = `wmic CPU Get NumberOfLogicalProcessors /Value`.strip.split('=')[1].to_i
+        mem = `wmic ComputerSystem Get TotalPhysicalMemory /Value`.strip.split('=')[1].to_i / 1024 / 1024
+      else
+        cpus = 1
+        mem = 2048
+      end
+  
+      if cpus > 2
+        cpus = cpus / cpu_divisor
+      end
+
+      if mem > 4096
+        mem = mem / mem_divisor
+      end
+  
+      vb.customize ["modifyvm", :id, "--memory", mem]
+      vb.customize ["modifyvm", :id, "--cpus", cpus]      
     end
     # Prepare Ansible roles directory
     config.vm.provision "shell",
@@ -39,7 +67,7 @@ if File.exist?(testcase_file)
       ansible.verbose = false
       ansible.install_mode = "pip"
       ansible.compatibility_mode = "2.0"
-      ansible.version = "2.5.13"
+      ansible.version = "2.4.6.0"
       ansible.playbook = vagrant_config['prep_yml']
       ansible.limit = "test-host"
       ansible.inventory_path = "hosts"

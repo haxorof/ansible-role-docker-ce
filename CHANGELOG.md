@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Improve use of --check ([#72](../../issues/72))
+- Add more advanced options to control PiP package installation ([#73](../../issues/73))
+
 ## [1.11.3](../../releases/tag/1.11.3) - 2018-12-11
 
 ### Fixed
