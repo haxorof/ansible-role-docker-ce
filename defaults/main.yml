@@ -68,3 +68,7 @@ docker_additional_packages_os: []
 docker_pip_upgrade: false
 # Default python pip package to install if missing
 docker_pip_package: python-pip
+# PiP extra args
+docker_pip_extra_args: --user
+# PiP install packages using sudo
+docker_pip_sudo: true
