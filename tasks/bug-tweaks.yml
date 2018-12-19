@@ -4,6 +4,7 @@
     stat:
       path: /proc/sys/fs/may_detach_mounts
     register: may_detach_mounts
+    check_mode: no
 
   - name: Ensure fs.may_detach_mounts is set to avoid 'Device or resource busy' (CentOS/RedHat)
     become: true

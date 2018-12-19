@@ -4,6 +4,7 @@
   ignore_errors: yes
   changed_when: false
   register: _cmd_docker_version
+  check_mode: no
 
 - name: Set fact if old Docker installation shall be removed
   set_fact:
@@ -17,6 +18,7 @@
     name: docker
   ignore_errors: yes
   register: _service_docker_status
+  check_mode: no
   when: _remove_old_docker | default(False) | bool
 
 - name: Stop Docker service

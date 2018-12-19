@@ -42,6 +42,7 @@
   register: _docker_pip_cmd
   changed_when: false
   failed_when: false
+  check_mode: no
   when:
     - _docker_additional_packages_pip | length > 0
 
@@ -71,7 +72,7 @@
   when: _docker_additional_packages_os | length > 0
 
 - name: Upgrade PiP
-  become: true
+  become: "{{ docker_pip_sudo | bool }}"
   pip:
     name: pip
     state: forcereinstall
@@ -97,6 +98,7 @@
   register: _github_docker_compose
   until: _github_docker_compose.status == 200
   retries: 10
+  check_mode: no
   when: 
     - docker_compose
 
@@ -117,6 +119,7 @@
   changed_when: false
   until: _github_docker_compose_shasum_file.status_code == 200
   retries: 10
+  check_mode: no
   when: 
     - docker_compose
 
@@ -124,6 +127,7 @@
   command: cat /tmp/ansible.docker-compose-sha256
   register: _github_docker_compose_shasum
   changed_when: false
+  check_mode: no
   when: 
     - docker_compose
 
@@ -132,6 +136,7 @@
     path: "/tmp/ansible.docker-compose-sha256"
     state: absent
   changed_when: false
+  check_mode: no
   when: 
     - docker_compose
 
