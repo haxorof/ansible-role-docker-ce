@@ -19,11 +19,11 @@
     msg: >
       Make sure Docker SDK, docker-compose etc is already in place before using
       this role on a host running Debian Wheezy.
-  when: 
+  when:
     - _docker_os_dist == "Debian"
     - _docker_os_dist_major_version == '7'
-    - docker_stack|bool == true or
-      docker_sdk|bool == true or 
-      docker_pip_upgrade|bool == true or 
-      (docker_compose|bool == true and docker_compose_no_pip|bool == false) or 
+    - docker_stack|bool or
+      docker_sdk|bool or
+      docker_pip_upgrade|bool or
+      (docker_compose|bool and not docker_compose_no_pip|bool) or
       docker_additional_packages_pip|length > 0

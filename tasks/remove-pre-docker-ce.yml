@@ -32,6 +32,8 @@
   package:
     name: "{{ item }}"
     state: absent
+  register: _pkg_result
+  until: _pkg_result|succeeded
   when: _remove_old_docker | default(False) | bool
   with_items:
     - "{{ docker_old_packages[_docker_os_dist] }}"

@@ -53,12 +53,17 @@
       package:
         name: lvm2
         state: present
+      register: _pkg_result
+      until: _pkg_result|succeeded
+
 
     - name: Ensure thin-provisioning-tools is installed
       become: true
       package:
         name: thin-provisioning-tools
         state: present
+      register: _pkg_result
+      until: _pkg_result|succeeded
       when: (_docker_os_dist == "Ubuntu" or (_docker_os_dist == "Debian" and _docker_os_dist_major_version > '7'))
   when:
     - docker_daemon_config['storage-driver'] is defined

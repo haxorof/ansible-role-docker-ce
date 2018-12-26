@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Refactored automated tests to now execute Ansible from separate node due to issues
   with VirualBox guest additions from time to time.
+- Fixed issues reported by Ansible-lint
 
 ## [1.11.3](../../releases/tag/1.11.3) - 2018-12-11
 

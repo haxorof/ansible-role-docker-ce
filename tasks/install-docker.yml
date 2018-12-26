@@ -9,4 +9,6 @@
   package:
     name: "{{ docker_pkg_name }}"
     state: "{{ _docker_pkg_state | default('present') }}"
+  register: _pkg_result
+  until: _pkg_result|succeeded
   notify: restart docker
