@@ -1,0 +1,44 @@
+---
+- name: Install Python on host
+  hosts: test-host
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Wait for connection
+      wait_for_connection:
+        connect_timeout: 20
+        sleep: 2
+        delay: 5
+        timeout: 300
+
+    - name: Determine distribution
+      raw: cat /etc/os-release | grep "^NAME=" | cut -d= -f2 | sed 's/"//g'
+      register: _distribution
+
+    - name: Print distribution information
+      debug:
+        var: _distribution
+      
+    - name: Debian or Ubuntu
+      block:
+        - name: Install Python (Debian or Ubuntu)
+          raw: test -e /usr/bin/python || (apt-get update && apt-get -y install python-minimal)
+          changed_when: no
+      when:
+        - _distribution.stdout_lines[0] == "Debian" or _distribution.stdout_lines[0] == "Ubuntu"
+
+    - name: CentOS or RedHat
+      block:
+        - name: Install Python (CentOS or RedHat)
+          raw: test -e /usr/bin/python || (yum -y install python)
+          changed_when: no
+      when:
+        - _distribution.stdout_lines[0] == "CentOS" or _distribution.stdout_lines[0] == "RedHat"
+
+    - name: Fedora
+      block:
+        - name: Install Python (Fedora)
+          raw: test -e /usr/bin/python || (dnf -y install python)
+          changed_when: no
+      when:
+        - _distribution.stdout_lines[0] == "Fedora"

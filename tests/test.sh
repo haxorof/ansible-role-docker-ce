@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #
+VAGRANT_TEST_VM_NAME=test-host
 VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
 
 BLDRED='\033[1;31m'
@@ -98,7 +99,8 @@ LogVagrantVersion() {
 }
 
 VagrantUp() {
-  Vagrant up
+  local _input=${1:-""}
+  Vagrant up $_input
   return $?
 }
 
@@ -113,10 +115,13 @@ VagrantProvision() {
 }
 
 VagrantDestroy() {
-  Vagrant destroy -f
+  local _id=${1:-""}
+  Vagrant destroy $_id -f
   local _exitCode=$?
-  if [[ -f $VAGRANT_TESTCASE_FILE ]]; then
-    rm $VAGRANT_TESTCASE_FILE
+  if [[ "$_id" == "" ]]; then
+    if [[ -f $VAGRANT_TESTCASE_FILE ]]; then
+      rm $VAGRANT_TESTCASE_FILE
+    fi
   fi
   return $_exitCode
 }
@@ -197,19 +202,22 @@ VagrantDeleteSnapshot() {
   Vagrant snapshot delete base
 }
 
-PrepareBox() {
-  local _index=$1
-  if [[ "$SKIP_SNAPSHOT" != "1" ]]; then
-    VagrantSaveSnapshot $_index
+BeforeTests() {
+  if [[ "$PRE_DOWNLOAD_BOXES" != "" ]]; then
+    DownloadBoxes
+    downloadResult=$?
+    if [[ "$downloadResult" == "0" ]]; then
+      Info "Download complete!"
+    else
+      Fail "Download failed!"
+      exit 1
+    fi
   fi
+  return 0
 }
 
-CleanupBox() {
-  local _testRunExitCode=$1
-  if [[ "$SKIP_SNAPSHOT" != "1" ]]; then
-    VagrantDeleteSnapshot
-  fi
-
+AfterTests() {
+  local _testRunExitCode=$1  
   if [[ "$_testRunExitCode" == "0" ]]; then
     VagrantDestroy
   else
@@ -219,31 +227,28 @@ CleanupBox() {
       VagrantDestroy
     fi
   fi
+  return 0
+}
+
+SetupBox() {
+  return 0
+}
+
+TeardownBox() {
+  return 0
 }
 
 StartTest() {
-  if [[ "$SKIP_SNAPSHOT" != "1" ]]; then
-    VagrantRestoreSnapShot
-    return $?
-  else
-    VagrantUp
-    return $?
-  fi
+  VagrantUp --provision
+  return $?
 }
 
 EndTest() {
   local _testRunExitCode=$1
-  if [[ "$SKIP_SNAPSHOT" == "1" ]]; then
+  if [[ "$_testRunExitCode" == "0" ]]; then
     if [[ "$ON_FAILURE_KEEP" != "1" ]]; then
-      VagrantDestroy
+      VagrantDestroy $VAGRANT_TEST_VM_NAME
       return $?
-    fi
-  else
-    if [[ "$_testRunExitCode" == "0" ]]; then
-      if [[ "$ON_FAILURE_KEEP" != "1" ]]; then
-        VagrantHalt
-        return $?
-      fi
     fi
   fi
   return 0
@@ -293,6 +298,7 @@ EOF
 }
 
 ExecuteTests() {
+  BeforeTests
   Info "Starting tests..."
   local exitCode=0
   local do_skip=0
@@ -302,7 +308,7 @@ ExecuteTests() {
       Skip "(code:1) Test: Skipping box [$box]"
       continue
     fi
-    PrepareBox $box_index
+    SetupBox $box_index
     exitCode=$?
     if [[ "$exitCode" != "0" ]]; then
       Fail "Error when trying to create snapshot for box $box"
@@ -342,11 +348,12 @@ ExecuteTests() {
         break
       fi
     done
-    CleanupBox $exitCode
+    TeardownBox $exitCode
     if [[ "$exitCode" != "0" ]]; then
       break
     fi
   done
+  AfterTests $exitCode
   Info "Ended with exit code $exitCode"
   return $exitCode
 }
@@ -368,16 +375,6 @@ fi
 
 LogVagrantVersion
 LogVirtualBoxVersion
-if [[ "$PRE_DOWNLOAD_BOXES" != "" ]]; then
-  DownloadBoxes
-  downloadResult=$?
-  if [[ "$downloadResult" == "0" ]]; then
-    Info "Download complete!"
-  else
-    Fail "Download failed!"
-    exit 1
-  fi
-fi
 
 ExecuteTests
 exit $?

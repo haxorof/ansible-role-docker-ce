@@ -8,87 +8,105 @@ testcase_file = "#{current_dir}/vagrant_testcase.yml"
 if File.exist?(testcase_file)
   vagrant_config = YAML.load_file("#{testcase_file}")
   vagrant_devs = ["/dev/sda", "/dev/sdb", "/dev/sdc"]
-
   Vagrant.configure("2") do |config|
-    config.vm.box = vagrant_config['box']
-    config.vm.box_url = vagrant_config['box_url']
     config.vm.box_check_update = true
     config.ssh.insert_key = false
-    config.vbguest.auto_update = vagrant_config['vbguest_update']
-    config.vbguest.no_remote = true
-    config.vm.synced_folder ".", "/vagrant", :mount_options => ["ro"]
-    config.vm.synced_folder "../", "/mnt/ansible-role-docker-ce", :mount_options => ["ro"]
-    config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
-    config.vm.provider "virtualbox" do |vb|
-      vb.name = "docker-test"
-      vb.memory = "2048"
-      docker_disk = 'extra_disk/docker_disk.vdi'
-      unless File.exist?(docker_disk)
-        vb.customize ['createhd', '--filename', docker_disk, '--size', 5 * 1024]
-      end
-      vb.customize ['storageattach', :id, '--storagectl', vagrant_config['storage_ctl'], '--port', vagrant_config['storage_port'], '--device', 0, '--type', 'hdd', '--medium', docker_disk]
 
-      mem_divisor = 2
-      cpu_divisor = 2
-      host = RbConfig::CONFIG['host_os']
-      if host =~ /darwin|bsd/
-        cpus = `sysctl -n hw.ncpu`.to_i
-        mem = `sysctl -n hw.memsize`.to_i / 1024 / 1024
-      elsif host =~ /linux/
-        cpus = `nproc`.to_i
-        mem = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024
-      elsif host =~ /mswin|mingw/
-        cpus = `wmic CPU Get NumberOfLogicalProcessors /Value`.strip.split('=')[1].to_i
-        mem = `wmic ComputerSystem Get TotalPhysicalMemory /Value`.strip.split('=')[1].to_i / 1024 / 1024
-      else
-        cpus = 1
-        mem = 2048
-      end
-  
-      if cpus > 2
-        cpus = cpus / cpu_divisor
-      end
+    config.vm.define 'test-host' do |machine|
+      machine.vm.box = vagrant_config['box']
+      machine.vm.box_url = vagrant_config['box_url']
+      machine.vbguest.auto_update = false
+      machine.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
+      machine.vm.network "private_network", ip: "192.168.56.21"
+      machine.vm.synced_folder ".", "/vagrant", disabled: true
+      machine.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        docker_disk = 'extra_disk/docker_disk.vdi'
+        unless File.exist?(docker_disk)
+          vb.customize ['createhd', '--filename', docker_disk, '--size', 5 * 1024]
+        end
+        vb.customize ['storageattach', :id, '--storagectl', vagrant_config['storage_ctl'], '--port', vagrant_config['storage_port'], '--device', 0, '--type', 'hdd', '--medium', docker_disk]
 
-      if mem > 4096
-        mem = mem / mem_divisor
-      end
-  
-      vb.customize ["modifyvm", :id, "--memory", mem]
-      vb.customize ["modifyvm", :id, "--cpus", cpus]      
-    end
-    # Prepare Ansible roles directory
-    config.vm.provision "shell",
-      inline: "test -d /etc/ansible/roles/haxorof.docker-ce || \
-        (mkdir -p /etc/ansible/roles && \
-        ln -s /mnt/ansible-role-docker-ce /etc/ansible/roles/haxorof.docker-ce)"
+        mem_divisor = 2
+        cpu_divisor = 2
+        host = RbConfig::CONFIG['host_os']
+        if host =~ /darwin|bsd/
+          cpus = `sysctl -n hw.ncpu`.to_i
+          mem = `sysctl -n hw.memsize`.to_i / 1024 / 1024
+        elsif host =~ /linux/
+          cpus = `nproc`.to_i
+          mem = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024
+        elsif host =~ /mswin|mingw/
+          cpus = `wmic CPU Get NumberOfLogicalProcessors /Value`.strip.split('=')[1].to_i
+          mem = `wmic ComputerSystem Get TotalPhysicalMemory /Value`.strip.split('=')[1].to_i / 1024 / 1024
+        else
+          cpus = 1
+          mem = 2048
+        end
+    
+        if cpus > 2
+          cpus = cpus / cpu_divisor
+        end
 
-    # Prepare box
-    config.vm.provision "ansible_local" do |ansible|
-      ansible.verbose = false
-      ansible.install_mode = "pip"
-      ansible.compatibility_mode = "2.0"
-      ansible.version = "2.4.6.0"
-      ansible.playbook = vagrant_config['prep_yml']
-      ansible.limit = "test-host"
-      ansible.inventory_path = "hosts"
-      ansible.config_file = "/vagrant/ansible.cfg"
-      ansible.extra_vars = {
-        lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
-      }
+        if mem > 4096
+          mem = mem / mem_divisor
+        end
+    
+        vb.customize ["modifyvm", :id, "--memory", mem]
+        vb.customize ["modifyvm", :id, "--cpus", cpus]      
+      end
     end
-    # Test storage config
-    config.vm.provision "ansible_local" do |ansible|
-      ansible.verbose = false
-      ansible.install = false
-      ansible.compatibility_mode = "2.0"
-      ansible.playbook = vagrant_config['test_yml']
-      ansible.limit = "test-host"
-      ansible.inventory_path = "hosts"
-      ansible.config_file = "/vagrant/ansible.cfg"
-      ansible.extra_vars = {
-        lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
-      }
-    end
+
+    config.vm.define 'controller' do |machine|
+      machine.vm.box = "centos/7"
+      machine.vagrant.plugins = "vagrant-vbguest"
+      machine.vbguest.auto_update = true
+      machine.vbguest.no_remote = true
+      machine.vm.synced_folder ".", "/vagrant", :mount_options => ["ro"]
+      machine.vm.synced_folder "../", "/mnt/ansible-role-docker-ce", :mount_options => ["ro"]
+      machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
+      machine.vm.network "private_network", ip: "192.168.56.11"
+
+      # Prepare Ansible roles directory
+      machine.vm.provision "shell",
+        inline: "test -d /etc/ansible/roles/haxorof.docker-ce || \
+          (mkdir -p /etc/ansible/roles && \
+          ln -s /mnt/ansible-role-docker-ce /etc/ansible/roles/haxorof.docker-ce)"
+
+      machine.vm.provision "shell",
+        inline: "test -e /home/vagrant/.ssh/id_rsa || (mkdir -p /home/vagrant/.ssh && chmod 0700 /home/vagrant/.ssh && \
+          curl https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant > /home/vagrant/.ssh/id_rsa && \
+          chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
+
+      # Prepare box
+      machine.vm.provision "ansible_local" do |ansible|
+        ansible.verbose = false
+        ansible.install_mode = "pip"
+        ansible.compatibility_mode = "2.0"
+        ansible.version = "2.4.6.0"
+        ansible.playbook = vagrant_config['prep_yml']
+        ansible.limit = "test-host"
+        ansible.inventory_path = "hosts"
+        ansible.config_file = "/vagrant/ansible.cfg"
+        ansible.extra_vars = {
+          lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
+        }
+      end
+      # Test storage config
+      machine.vm.provision "ansible_local" do |ansible|
+        ansible.verbose = false
+        ansible.install = false
+        ansible.compatibility_mode = "2.0"
+        ansible.playbook = vagrant_config['test_yml']
+        ansible.limit = "test-host"
+        ansible.inventory_path = "hosts"
+        ansible.config_file = "/vagrant/ansible.cfg"
+        ansible.extra_vars = {
+          lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
+        }
+      end
+    end 
+
   end
 else
   puts "==> test: File does not exist: #{testcase_file}!"

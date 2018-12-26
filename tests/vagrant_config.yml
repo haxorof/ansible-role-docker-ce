@@ -91,7 +91,7 @@ tests:
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: fedora/29
+    skip_boxes: wheezy64,fedora/29
   -
     id: t_old_docker
     name: Old version of Docker

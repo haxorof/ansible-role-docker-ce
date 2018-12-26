@@ -1,4 +1,10 @@
 ---
+- name: Setup Python on host
+  import_playbook: setup_python.yml
+
+- name: Upgrade host
+  import_playbook: host_upgrade.yml
+
 - hosts: test-host
   tasks:
     - name: Print Ansible version
