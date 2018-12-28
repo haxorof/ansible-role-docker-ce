@@ -16,6 +16,7 @@
       package:
         name: git
         state: present
+      when: docker_bench_security is defined
 
     - name: Ensure Docker Bench Security is cloned
       git:

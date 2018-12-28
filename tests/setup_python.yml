@@ -8,14 +8,20 @@
       wait_for:
           host: "{{ hostvars[inventory_hostname]['ansible_ssh_host'] }}"
           port: 22
+          delay: 5
           state: drained
       delegate_to: 127.0.0.1
+      register: _connect_result
+      until: _connect_result|succeeded
 
     - name: Determine distribution
       raw: cat /etc/os-release | grep "^NAME=" | cut -d= -f2 | cut -d" " -f1 | sed 's/"//g'
       register: _distribution
+      until: _distribution|succeeded
+      changed_when: no
 
     - name: Print distribution information
+      become: yes
       debug:
         var: _distribution
       
