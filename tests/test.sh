@@ -247,12 +247,12 @@ StartTest() {
 
 EndTest() {
   local _testRunExitCode=$1
-  if [[ "$_testRunExitCode" == "0" ]]; then
-    if [[ "$ON_FAILURE_KEEP" != "1" ]]; then
-      VagrantDestroy $VAGRANT_TEST_VM_NAME
+  if [[ "$_testRunExitCode" != "0" ]]; then
+    if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
       return $?
     fi
   fi
+  VagrantDestroy $VAGRANT_TEST_VM_NAME
   return 0
 }
 

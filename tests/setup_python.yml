@@ -5,7 +5,11 @@
   become: yes
   tasks:
     - name: Wait for connection
-      wait_for_connection:
+      wait_for:
+          host: "{{ hostvars[inventory_hostname]['ansible_ssh_host'] }}"
+          port: 22
+          state: drained
+      delegate_to: 127.0.0.1
 
     - name: Determine distribution
       raw: cat /etc/os-release | grep "^NAME=" | cut -d= -f2 | sed 's/"//g'
