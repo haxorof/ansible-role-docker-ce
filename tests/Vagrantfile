@@ -20,7 +20,6 @@ if File.exist?(testcase_file)
       machine.vm.network "private_network", ip: "192.168.56.21"
       machine.vm.synced_folder ".", "/vagrant", disabled: true
       machine.vm.provider "virtualbox" do |vb|
-        vb.memory = "2048"
         docker_disk = 'extra_disk/docker_disk.vdi'
         unless File.exist?(docker_disk)
           vb.customize ['createhd', '--filename', docker_disk, '--size', 5 * 1024]
