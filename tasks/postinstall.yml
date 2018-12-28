@@ -165,6 +165,12 @@
 #       docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
 #   when: ansible_version.full is version_compare('2.7', '>=')
 
+- name: Stat /usr/bin/docker-compose
+  stat:
+    path: /usr/bin/docker-compose
+  register: _docker_compose_file
+  check_mode: no
+
 # Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
 - name: Install docker-compose
   block:
@@ -184,6 +190,7 @@
         state: link
   when:
     - docker_compose
+    - not _docker_compose_file.stat.exists
 
 - name: Uninstall docker-compose
   block:
