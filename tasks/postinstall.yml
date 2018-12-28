@@ -195,13 +195,13 @@
 - name: Uninstall docker-compose
   block:
   - name: Remove /usr/local/bin/docker-compose
+    become: true
     file:
-      become: true
       path: /usr/local/bin/docker-compose
       state: absent
   - name: Remove /usr/bin/docker-compose
+    become: true
     file:
-      become: true
       path: /usr/bin/docker-compose
       state: absent
   when:

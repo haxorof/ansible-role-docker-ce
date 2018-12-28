@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 #
+TEST_SUMMARY=()
+
 VAGRANT_TEST_VM_NAME=test-host
 VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
 
@@ -297,21 +299,52 @@ test_yml: ${tests__test_yml[$_test_index]}
 EOF
 }
 
+AddTestResult() {
+  if [[ "$3" == "" ]]; then
+    TEST_SUMMARY+=("$1 | $2")
+  else
+    TEST_SUMMARY+=("$1 | $2 - $3")
+  fi
+}
+
+AddTestResultPassed() {
+  AddTestResult "${BLDGRN}passed${TXTRST}" $1 $2
+}
+
+AddTestResultFailed() {
+  AddTestResult "${BLDRED}failed${TXTRST}" $1 $2
+}
+
+AddTestResultSkipped() {
+  AddTestResult "${BLDCYN}skipped${TXTRST}" $1 $2
+}
+
+PrintTestSummary() {
+  Info "Test Summary:"
+  for ((i = 0; i < ${#TEST_SUMMARY[@]}; i++)); do
+    Info "${TEST_SUMMARY[$i]}"
+  done
+}
+
 ExecuteTests() {
   BeforeTests
   Info "Starting tests..."
   local exitCode=0
   local do_skip=0
+  local finalExitCode=0
   for box_index in $(seq 0 `expr ${#boxes__box[@]} - 1`); do
     local box=${boxes__box[$box_index]}
     if [[ "$box" != *"$LIMIT_BOX"* ]]; then
       Skip "(code:1) Test: Skipping box [$box]"
+      AddTestResultSkipped $box
       continue
     fi
     SetupBox $box_index
     exitCode=$?
     if [[ "$exitCode" != "0" ]]; then
       Fail "Error when trying to create snapshot for box $box"
+      AddTestResultFailed $box
+      finalExitCode=$exitCode
       break
     fi
     Info "Box ready for testing: $box"
@@ -320,6 +353,7 @@ ExecuteTests() {
       Info "Starting test: $test_name"
       if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
         Skip "(code:2) Test: $test_name [$box]"
+        AddTestResultSkipped $box $test_name
         continue
       fi
       if [[ "${tests__skip_boxes[$index]}" != "" ]]; then
@@ -328,6 +362,7 @@ ExecuteTests() {
         do
           if [[ "$box" == *"$skip_box"* ]]; then
             Skip "(code:3) Test: $test_name [$box]"
+            AddTestResultSkipped $box $test_name
             do_skip=1
             break
           fi
@@ -343,9 +378,14 @@ ExecuteTests() {
       EndTest $exitCode
       if [[ "$exitCode" == "0" ]]; then
         Pass "Test: $test_name [$box]"
+        AddTestResultPassed $box $test_name        
       else
         Fail "Test: $test_name [$box]"
-        break
+        finalExitCode=$exitCode
+        AddTestResultFailed $box $test_name
+        if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
+          break
+        fi
       fi
     done
     TeardownBox $exitCode
@@ -353,9 +393,10 @@ ExecuteTests() {
       break
     fi
   done
-  AfterTests $exitCode
-  Info "Ended with exit code $exitCode"
-  return $exitCode
+  AfterTests $finalExitCode
+  PrintTestSummary
+  Info "Ended with exit code $finalExitCode"
+  return $finalExitCode
 }
 
 SetupYamlParser
