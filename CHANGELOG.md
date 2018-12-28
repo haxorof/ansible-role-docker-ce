@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improve use of --check ([#72](../../issues/72))
 - Add more advanced options to control PiP package installation ([#73](../../issues/73))
 
+### Fixed
+
+- Non-systemd environment variables are not correctly set since version 1.11.0 of this role ([#74](../../issues/74))
+- Some variables lives on between plays which cause unexpected behavior ([#75](../../issues/75))
+
 ### Internal
 
 - Refactored automated tests to now execute Ansible from separate node due to issues
