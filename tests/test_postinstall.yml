@@ -31,3 +31,12 @@
     docker_compose_no_pip: true
   roles:
     - haxorof.docker-ce
+  post_tasks:
+    - name: Test docker-compose (shell)
+      become: no
+      shell: docker-compose --version
+
+    - name: Test docker-compose with sudo (shell)
+      become: yes
+      shell: docker-compose --version
+

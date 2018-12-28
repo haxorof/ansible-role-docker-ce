@@ -166,12 +166,36 @@
 #   when: ansible_version.full is version_compare('2.7', '>=')
 
 # Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
-- name: Install docker-compose (Linux)
-  become: true
-  get_url:
-    url: "{{ _docker_compose_url }}"
-    checksum: "{{ _docker_compose_checksum }}"
-    dest: /usr/local/bin/docker-compose
-    mode: 0755
+- name: Install docker-compose
+  block:
+    - name: Install docker-compose (Linux)
+      become: true
+      get_url:
+        url: "{{ _docker_compose_url }}"
+        checksum: "{{ _docker_compose_checksum }}"
+        dest: /usr/local/bin/docker-compose
+        mode: 0755
+
+    - name: Create symlink for docker-compose to work with sudo in some distributions
+      become: true
+      file:
+        src: /usr/local/bin/docker-compose
+        dest: /usr/bin/docker-compose
+        state: link
   when:
     - docker_compose
+
+- name: Uninstall docker-compose
+  block:
+  - name: Remove /usr/local/bin/docker-compose
+    file:
+      become: true
+      path: /usr/local/bin/docker-compose
+      state: absent
+  - name: Remove /usr/bin/docker-compose
+    file:
+      become: true
+      path: /usr/bin/docker-compose
+      state: absent
+  when:
+    - not docker_compose

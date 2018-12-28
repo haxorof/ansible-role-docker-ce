@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Non-systemd environment variables are not correctly set since version 1.11.0 of this role ([#74](../../issues/74))
 - Some variables lives on between plays which cause unexpected behavior ([#75](../../issues/75))
+- docker-compose does not work with sudo ([#77](../../issues/77))
 
 ### Internal
 
