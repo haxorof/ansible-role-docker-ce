@@ -12,7 +12,7 @@
       delegate_to: 127.0.0.1
 
     - name: Determine distribution
-      raw: cat /etc/os-release | grep "^NAME=" | cut -d= -f2 | sed 's/"//g'
+      raw: cat /etc/os-release | grep "^NAME=" | cut -d= -f2 | cut -d" " -f1 | sed 's/"//g'
       register: _distribution
 
     - name: Print distribution information
