@@ -16,12 +16,7 @@
       docker_container:
         name: hello
         image: hello-world
-
-    - name: Test hello container with sudo
-      become: yes
-      docker_container:
-        name: hello
-        image: hello-world
+      ignore_errors: yes
 
     - name: Test hello service
       become: no
@@ -32,6 +27,13 @@
           services:
             hello:
               image: "hello-world"
+      ignore_errors: yes
+
+    - name: Test hello container with sudo
+      become: yes
+      docker_container:
+        name: hello
+        image: hello-world
 
     - name: Test hello service with sudo
       become: yes

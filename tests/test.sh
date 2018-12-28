@@ -390,7 +390,9 @@ ExecuteTests() {
     done
     TeardownBox $exitCode
     if [[ "$exitCode" != "0" ]]; then
-      break
+      if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
+        break
+      fi
     fi
   done
   AfterTests $finalExitCode
