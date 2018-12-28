@@ -17,7 +17,7 @@ if File.exist?(testcase_file)
       machine.vm.box_url = vagrant_config['box_url']
       machine.vbguest.auto_update = false
       machine.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
-      machine.vm.network "private_network", ip: "192.168.56.21"
+      machine.vm.network "private_network", ip: "192.168.56.21", virtualbox__intnet: true
       machine.vm.synced_folder ".", "/vagrant", disabled: true
       machine.vm.provider "virtualbox" do |vb|
         docker_disk = 'extra_disk/docker_disk.vdi'
@@ -64,7 +64,7 @@ if File.exist?(testcase_file)
       machine.vm.synced_folder ".", "/vagrant", :mount_options => ["ro"]
       machine.vm.synced_folder "../", "/mnt/ansible-role-docker-ce", :mount_options => ["ro"]
       machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
-      machine.vm.network "private_network", ip: "192.168.56.11"
+      machine.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: true
 
       # Prepare Ansible roles directory
       machine.vm.provision "shell",
