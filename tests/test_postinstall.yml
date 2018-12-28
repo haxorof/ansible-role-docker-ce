@@ -2,19 +2,38 @@
 - name: Test using PiP to install SDK, compose and stack
   hosts: test-host
   vars:
+    docker_users:
+      - vagrant
     docker_sdk: true
     docker_compose: true
     docker_stack: true
+    docker_pip_extra_args:
   roles:
     - haxorof.docker-ce
   post_tasks:
     - name: Test hello container
+      become: no
+      docker_container:
+        name: hello
+        image: hello-world
+
+    - name: Test hello container with sudo
       become: yes
       docker_container:
         name: hello
         image: hello-world
 
     - name: Test hello service
+      become: no
+      docker_service:
+        project_name: hello
+        definition:
+          version: '3'
+          services:
+            hello:
+              image: "hello-world"
+
+    - name: Test hello service with sudo
       become: yes
       docker_service:
         project_name: hello
