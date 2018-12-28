@@ -1,0 +1,27 @@
+- name: Create LVM thinpool for Docker according to Docker documentation
+  include_tasks: lvm-thinpool.yml
+  vars:
+    pool:
+      name: thinpool
+      volume_group: docker
+      physical_volumes: "{{ docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+') \
+        | list | regex_replace('dm.directlvm_device=\\s*(.+)', '\\1') }}"
+      metadata_size: "1%VG"
+      data_size: "95%VG"
+
+- name: Modify storage-opts to handle problems with thinpool on Debian 8
+  set_fact:
+    _modified_storage_config: "{{ (docker_daemon_config['storage-opts'] | difference(_exclusions)) + \
+      ['dm.thinpooldev=/dev/mapper/docker-thinpool-tpool'] }}"
+  vars:
+    _exclusions: "{{ docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+') | list }}"
+
+- name: Update Docker daemon configuration to handle consistency between distributions
+  set_fact:
+    docker_daemon_config: "{{ docker_daemon_config | combine(_updated_item, recursive=true) }}"
+  vars:
+    _updated_item: "{ 'storage-opts': {{ _modified_storage_config }} }"
+
+- name: Updated Docker daemon configuration
+  debug:
+    var: docker_daemon_config

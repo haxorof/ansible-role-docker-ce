@@ -88,7 +88,7 @@ docker_enable_audit: false
 docker_bug_usermod: false
 # Set `MountFlags=slave`
 #  https://github.com/haxorof/ansible-role-docker-ce/issues/34
-docker_enable_mount_flag_fix: yes
+docker_enable_mount_flag_fix: no
 
 ################################################################################
 # Postinstall related configuration
@@ -98,6 +98,7 @@ docker_sdk: false
 # Ensures dependencies are installed so that 'docker_service' Ansible module will work.
 docker_compose: false
 # Ensures that docker-compose is installed without pip, meaning 'docker_service' will NOT work.
+# Important! This only has any affect when 'docker_compose' is set to true.
 docker_compose_no_pip: false
 # Ensures dependencies are installed so that 'docker_stack' Ansible module will work.
 docker_stack: false
@@ -110,6 +111,10 @@ docker_additional_packages_os: []
 docker_pip_upgrade: false
 # Default python pip package to install if missing
 docker_pip_package: python-pip
+# PiP extra args
+docker_pip_extra_args: --user
+# PiP install packages using sudo
+docker_pip_sudo: true
 ```
 
 ## Dependencies

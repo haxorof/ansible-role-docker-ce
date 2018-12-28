@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improve use of --check ([#72](../../issues/72))
 - Add more advanced options to control PiP package installation ([#73](../../issues/73))
 
+### Changed
+
+- Docker 18.09 fails to create containers when MountFlags=slave is set ([#76](../../issues/76))
+
 ### Fixed
 
 - Non-systemd environment variables are not correctly set since version 1.11.0 of this role ([#74](../../issues/74))

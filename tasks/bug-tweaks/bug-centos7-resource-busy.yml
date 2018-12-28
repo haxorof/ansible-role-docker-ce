@@ -1,0 +1,53 @@
+- name: Stat /proc/sys/fs/may_detach_mounts (CentOS/RedHat)
+  stat:
+    path: /proc/sys/fs/may_detach_mounts
+  register: _may_detach_mounts
+  check_mode: no
+
+- name: Ensure fs.may_detach_mounts is set to avoid 'Device or resource busy' (CentOS/RedHat)
+  become: true
+  sysctl:
+    name: fs.may_detach_mounts
+    value: "1"
+    sysctl_file: /etc/sysctl.d/99-docker.conf
+    reload: yes
+  when:
+    - docker_enable_mount_flag_fix | bool
+    - _may_detach_mounts.stat.exists
+
+- name: Stat /etc/sysctl.d/99-docker.conf (CentOS/RedHat)
+  stat:
+    path: /etc/sysctl.d/99-docker.conf
+  register: _sysctl_docker
+  check_mode: no
+  when:
+    - not docker_enable_mount_flag_fix | bool
+
+- name: Unset fs.may_detach_mounts (CentOS/RedHat)
+  become: true
+  sysctl:
+    name: fs.may_detach_mounts
+    value: "0"
+    sysctl_file: /etc/sysctl.d/99-docker.conf
+    reload: yes
+  when:
+    - not docker_enable_mount_flag_fix | bool
+    - _sysctl_docker.stat.exists
+
+# Keep for compatibility reasons of this role. Now everything is in the same file.
+- name: Remove systemd drop-in for Docker Mount Flags slave configuration (CentOS/RedHat)
+  become: true
+  file:
+    path: /etc/systemd/system/docker.service.d/mountflags-slave.conf
+    state: absent
+  notify: restart docker
+
+- name: Set MountFlags option to "slave" to prevent "device busy" errors on CentOS/RedHat 7.3 kernels (CentOS/RedHat)
+  set_fact:
+    docker_systemd_service_config_tweaks: "{{ docker_systemd_service_config_tweaks + \
+      _systemd_service_config_tweaks }}"
+  vars:
+    _systemd_service_config_tweaks:
+      - 'MountFlags=slave'
+  when:
+    - docker_enable_mount_flag_fix | bool

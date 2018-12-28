@@ -22,19 +22,6 @@
     docker_systemd_service_config_tweaks: []
     docker_service_envs: {}
 
-# https://wiki.ubuntu.com/SystemdForUpstartUsers
-# Important! systemd is only fully supported in Ubuntu 15.04 and later releases
-- name: Determine usage of systemd
-  become: true
-  shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
-  changed_when: no
-  check_mode: no
-  register: _determine_systemd_usage
-
-- name: Set fact to indicate systemd is used or not
-  set_fact:
-    _docker_systemd_used: "{{ _determine_systemd_usage is defined and _determine_systemd_usage.stdout == 'systemd' }}"
-
 - name: Temporary handling of deprecated variable docker_enable_ce_edge (#54)
   set_fact:
     docker_channel: edge
@@ -65,16 +52,6 @@
 
 - name: Apply workarounds for bugs and/or tweaks
   include_tasks: bug-tweaks.yml
-  tags: ["configure"]
-
-- name: Configure systemd service
-  include_tasks: configure-systemd.yml
-  when: _docker_systemd_used | bool
-  tags: ["configure"]
-
-- name: Configure non-systemd service
-  include_tasks: configure-non-systemd.yml
-  when: not _docker_systemd_used | bool
   tags: ["configure"]
 
 - name: Configure Docker

@@ -6,10 +6,6 @@
   tasks:
     - name: Wait for connection
       wait_for_connection:
-        connect_timeout: 20
-        sleep: 2
-        delay: 5
-        timeout: 300
 
     - name: Determine distribution
       raw: cat /etc/os-release | grep "^NAME=" | cut -d= -f2 | sed 's/"//g'

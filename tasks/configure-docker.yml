@@ -1,4 +1,25 @@
 ---
+# https://wiki.ubuntu.com/SystemdForUpstartUsers
+# Important! systemd is only fully supported in Ubuntu 15.04 and later releases
+- name: Determine usage of systemd
+  become: true
+  shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
+  changed_when: no
+  check_mode: no
+  register: _determine_systemd_usage
+
+- name: Set fact to indicate systemd is used or not
+  set_fact:
+    _docker_systemd_used: "{{ _determine_systemd_usage is defined and _determine_systemd_usage.stdout == 'systemd' }}"
+
+- name: Configure systemd service
+  include_tasks: configure-docker/configure-systemd.yml
+  when: _docker_systemd_used | bool
+
+- name: Configure non-systemd service
+  include_tasks: configure-docker/configure-non-systemd.yml
+  when: not _docker_systemd_used | bool
+
 - name: Ensure /etc/docker directory exists
   become: true
   file:
