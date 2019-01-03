@@ -89,6 +89,8 @@ docker_bug_usermod: false
 # Set `MountFlags=slave`
 #  https://github.com/haxorof/ansible-role-docker-ce/issues/34
 docker_enable_mount_flag_fix: no
+# Do compatibility and distribution checks (can be disable for debugging etc if required)
+docker_do_checks: yes
 
 ################################################################################
 # Postinstall related configuration

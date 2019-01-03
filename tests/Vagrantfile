@@ -77,9 +77,8 @@ if File.exist?(testcase_file)
           curl https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant > /home/vagrant/.ssh/id_rsa && \
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
 
-      # Prepare box
+      # Prepare
       machine.vm.provision "ansible_local" do |ansible|
-        ansible.verbose = false
         ansible.install_mode = "pip"
         ansible.compatibility_mode = "2.0"
         ansible.version = "2.4.6.0"
@@ -87,13 +86,13 @@ if File.exist?(testcase_file)
         ansible.limit = "test-host"
         ansible.inventory_path = "hosts"
         ansible.config_file = "/vagrant/ansible.cfg"
+        #ansible.raw_arguments = ["-vvv"]
         ansible.extra_vars = {
           lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
         }
       end
-      # Test storage config
+      # Test
       machine.vm.provision "ansible_local" do |ansible|
-        ansible.verbose = false
         ansible.install = false
         ansible.compatibility_mode = "2.0"
         ansible.playbook = vagrant_config['test_yml']
@@ -101,6 +100,7 @@ if File.exist?(testcase_file)
         ansible.inventory_path = "hosts"
         ansible.config_file = "/vagrant/ansible.cfg"
         ansible.extra_vars = {
+          #docker_do_checks: "no",
           lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
         }
       end

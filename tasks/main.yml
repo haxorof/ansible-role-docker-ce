@@ -31,6 +31,7 @@
 
 - name: Compatibility and distribution checks
   include_tasks: checks.yml
+  when: docker_do_checks | bool
   tags: ["install", "configure"]
 
 - name: Setup Docker package repositories
