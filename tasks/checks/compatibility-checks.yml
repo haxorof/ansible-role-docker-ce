@@ -14,6 +14,7 @@
     - docker_daemon_config['live-restore']
 
 
+# Issues related to specified URL http://pypi.python.org/simple/ which now must be https.
 - name: Compatibility check - Fail if PiP is required due to issues getting it to work smooth in Debian Wheezy
   fail:
     msg: >

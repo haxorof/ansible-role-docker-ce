@@ -10,10 +10,12 @@
     - name: Test docker-compose (shell)
       become: no
       shell: docker-compose --version
+      ignore_errors: yes
 
     - name: Test docker-compose with sudo (shell)
       become: yes
       shell: docker-compose --version
+      ignore_errors: yes
 
 - name: Test using PiP to install SDK, compose and stack
   hosts: test-host
@@ -26,7 +28,17 @@
     docker_pip_extra_args:
   roles:
     - haxorof.docker-ce
-  post_tasks:
+
+- name: Test docker modules
+  hosts: test-host
+  tasks:
+    # Instead of "meta: reset_connection" which does not work so well before Ansible 2.6
+    - name: Reset SSH connection
+      file:
+        path: ~/.ansible/cp
+        state: absent
+      delegate_to: 127.0.0.1
+      
     - name: Test hello container
       become: no
       docker_container:
