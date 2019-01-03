@@ -201,17 +201,3 @@
     - docker_compose
     - not _docker_compose_file.stat.exists
 
-- name: Uninstall docker-compose
-  block:
-  - name: Remove /usr/local/bin/docker-compose
-    become: true
-    file:
-      path: /usr/local/bin/docker-compose
-      state: absent
-  - name: Remove /usr/bin/docker-compose
-    become: true
-    file:
-      path: /usr/bin/docker-compose
-      state: absent
-  when:
-    - not docker_compose
