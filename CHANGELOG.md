@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improve use of --check ([#72](../../issues/72))
 - Add more advanced options to control PiP package installation ([#73](../../issues/73))
 - Flag to disable compatibility and distribution checks
+- python-pip-whl is required in Debian 8 to install via PiP
 
 ### Changed
 
