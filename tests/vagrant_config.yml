@@ -23,7 +23,6 @@ boxes:
     storage_ctl: SCSI
     storage_port: 2
     vbguest_update: true
-  # Only possible to run using snapshots because of kernel upgrade
   -
     box: debian/wheezy64
     box_url: vagrantup

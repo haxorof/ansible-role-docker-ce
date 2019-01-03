@@ -1,16 +1,10 @@
 ---
-- name: Setup Python on host
-  import_playbook: setup_python.yml
-  
-- name: Upgrade host
-  import_playbook: host_upgrade.yml
+- name: Prepare host
+  import_playbook: prepare.yml
 
-- hosts: test-host
+- name: Prepare host with additional disk
+  hosts: test-host
   tasks:
-    - name: Print Ansible version
-      debug:
-        var: ansible_version.full
-
     - name: Ensure dependencies are installed (All)
       package:
         name: "{{ item }}"
@@ -18,7 +12,6 @@
       become: true
       with_items:
         - parted
-        - git
 
     - name: Ensure dependencies are installed (CentOS)
       package:
@@ -26,13 +19,6 @@
         state: present
       become: true
       when: ansible_distribution == "CentOS"
-
-    - name: Ensure Docker Bench Security is cloned
-      git:
-        repo: 'https://github.com/docker/docker-bench-security.git'
-        dest: /home/vagrant/docker-bench-security
-        version: master
-      when: docker_bench_security is defined
 
     - name: Create partition {{ lvm_device }}1
       parted:

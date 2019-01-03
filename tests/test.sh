@@ -163,49 +163,8 @@ VagrantBoxAdd() {
   return $exitCode
 }
 
-GenerateDoNothingConfig() {
-  local _box_index=$1
-  local _test_index=$2
-  cat << EOF > $VAGRANT_TESTCASE_FILE
-box: ${boxes__box[$_box_index]}
-storage_ctl: ${boxes__storage_ctl[$_box_index]}
-storage_port: ${boxes__storage_port[$_box_index]}
-vbguest_update: ${boxes__vbguest_update[$_box_index]}
-id: snapshot
-prep_yml: prepare_snapshot.yml
-test_yml: test_nothing.yml
-EOF
-}
-
-VagrantSaveSnapshot() {
-  GenerateDoNothingConfig $1
-  local _exitCode=0
-  Vagrant up
-  let "_exitCode += $?"
-  Vagrant halt
-  let "_exitCode += $?"
-  Vagrant snapshot save default base -f
-  let "_exitCode += $?"
-  if [[ "$_exitCode" != "0" ]]; then
-    if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
-      Info "VM is kept for debugging"
-    else
-      VagrantDestroy
-    fi
-  fi
-  return $_exitCode
-}
-
-VagrantRestoreSnapShot() {
-  Vagrant snapshot restore base
-}
-
-VagrantDeleteSnapshot() {
-  Vagrant snapshot delete base
-}
-
 BeforeTests() {
-  if [[ "$PRE_DOWNLOAD_BOXES" != "" ]]; then
+  if [[ "$PRE_DOWNLOAD_BOXES" == "1" ]]; then
     DownloadBoxes
     downloadResult=$?
     if [[ "$downloadResult" == "0" ]]; then
@@ -229,14 +188,6 @@ AfterTests() {
       VagrantDestroy
     fi
   fi
-  return 0
-}
-
-SetupBox() {
-  return 0
-}
-
-TeardownBox() {
   return 0
 }
 
@@ -339,15 +290,6 @@ ExecuteTests() {
       AddTestResultSkipped $box
       continue
     fi
-    SetupBox $box_index
-    exitCode=$?
-    if [[ "$exitCode" != "0" ]]; then
-      Fail "Error when trying to create snapshot for box $box"
-      AddTestResultFailed $box
-      finalExitCode=$exitCode
-      break
-    fi
-    Info "Box ready for testing: $box"
     for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
       local test_name=${tests__name[$index]}
       Info "Starting test: $test_name"
@@ -388,7 +330,6 @@ ExecuteTests() {
         fi
       fi
     done
-    TeardownBox $exitCode
     if [[ "$exitCode" != "0" ]]; then
       if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
         break

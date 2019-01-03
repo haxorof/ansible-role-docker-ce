@@ -30,4 +30,3 @@ Below is a table listing some environment variables you can set before running `
 | --- | --- | --- |
 | PRE_DOWNLOAD_BOXES | 1 | If you want to pre-download all the boxes specified in the `vagrant_config.yml` |
 | ON_FAILURE_KEEP | 1 | If test fails and you do not want it to destroy the VM |
-| SKIP_SNAPSHOT | 1 | To skip snapshotting if you for example only run one test on distributions |
