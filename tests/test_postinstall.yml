@@ -25,7 +25,6 @@
     docker_sdk: true
     docker_compose: true
     docker_stack: true
-    docker_pip_extra_args:
   roles:
     - haxorof.docker-ce
 
