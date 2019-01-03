@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.0.0](../../releases/tag/2.0.0) - 2019-01-03
+
 ### Added
 
 - Improve use of --check ([#72](../../issues/72))
