@@ -200,4 +200,3 @@
   when:
     - docker_compose
     - not _docker_compose_file.stat.exists
-
