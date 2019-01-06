@@ -41,6 +41,7 @@ No additional requirements.
 Variables related to this role are listed below:
 
 ```yaml
+---
 ################################################################################
 # Docker install configuration
 ################################################################################
@@ -54,6 +55,20 @@ docker_pkg_name: docker-ce
 docker_remove_pre_ce: false
 # Users to be part of the docker group
 docker_users: []
+# Docker plugins.
+# Item fields:
+# * type - Valid types: volumedriver,networkdriver,ipamdriver,authz,logdriver,metricscollector
+# * alias - Alias of plugin
+# * name - Name of plugin
+# * args - Plugin arguments
+#
+# Example:
+# docker_plugins:
+#   - type: authz
+#     alias: opa-docker-authz
+#     name: openpolicyagent/opa-docker-authz-v2:0.4
+#     args: opa_args="-policy-file /opa/policies/authz.rego"
+docker_plugins: []
 
 ################################################################################
 # Docker daemon configuration
@@ -181,20 +196,26 @@ However this configuration setup devicemapper in a certain way which will create
 
 ```yaml
 - hosts: docker
+  vars:
+    docker_plugins:
+      - type: authz
+        alias: opa-docker-authz
+        name: openpolicyagent/opa-docker-authz-v2:0.4
+        args: opa_args="-policy-file /opa/policies/authz.rego"
+    docker_enable_audit: yes
+    docker_daemon_config:
+      icc: false
+      log-driver: journald
+      userns-remap: default
+      disable-legacy-registry: true
+      live-restore: true
+      userland-proxy: false
+      no-new-privileges: true
+      storage-driver: devicemapper
+      storage-opts:
+        - "dm.directlvm_device=/dev/sdb2" 
   roles:
-    - role: haxorof.docker-ce
-      docker_enable_audit: true
-      docker_daemon_config:
-        icc: false
-        init: true
-        userns-remap: default
-        disable-legacy-registry: true
-        live-restore: true
-        userland-proxy: false
-        log-driver: journald
-        storage-driver: devicemapper
-        storage-opts:
-          - "dm.directlvm_device=/dev/sdb1"
+    - haxorof.docker-ce
 ```
 
 Because the configuration above requires Linux user namespaces to be enabled then additional GRUB arguments might be needed. Example below show one example what changes that might be needed and reboot of the host is required for the changes to take full affect.
@@ -220,6 +241,8 @@ Because the configuration above requires Linux user namespaces to be enabled the
         reload: yes
       become: yes
 ```
+
+For a more complete working example on CentOS 7 have a look [here](https://github.com/haxorof/ansible-role-docker-ce/blob/master/tests/experimental/cis).
 
 ## License
 

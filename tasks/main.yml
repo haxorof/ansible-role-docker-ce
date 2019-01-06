@@ -5,7 +5,7 @@
     _docker_os_dist_release: "{{ ansible_distribution_release }}"
     _docker_os_dist_major_version: "{{ ansible_distribution_major_version }}"
     _docker_os_dist_check: yes
-  tags: ["install", "configure"]
+  tags: ["always"]
 
 - name: Reinterpret distribution facts for Linux Mint 18
   set_fact:
@@ -15,12 +15,13 @@
   when:
     _docker_os_dist == "Linux Mint" and
     _docker_os_dist_major_version == "18"
-  tags: ["install", "configure"]
+  tags: ["always"]
 
 - name: Reset role variables
   set_fact:
     docker_systemd_service_config_tweaks: []
     docker_service_envs: {}
+  tags: ["always"]
 
 - name: Temporary handling of deprecated variable docker_enable_ce_edge (#54)
   set_fact:
@@ -28,11 +29,12 @@
   when:
     - docker_enable_ce_edge is defined
     - docker_enable_ce_edge
+  tags: ["always"]
 
 - name: Compatibility and distribution checks
   include_tasks: checks.yml
   when: docker_do_checks | bool
-  tags: ["install", "configure"]
+  tags: ["always"]
 
 - name: Setup Docker package repositories
   include_tasks: setup-repository.yml

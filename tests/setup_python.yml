@@ -2,7 +2,6 @@
 - name: Install Python on host
   hosts: test-host
   gather_facts: no
-  become: yes
   tasks:
     - name: Wait for connection
       wait_for:
@@ -30,6 +29,7 @@
     - name: Debian or Ubuntu
       block:
         - name: Install Python (Debian or Ubuntu)
+          become: yes
           raw: test -e /usr/bin/python || (apt-get update && apt-get -y install python-minimal)
           changed_when: no
       when:
@@ -38,6 +38,7 @@
     - name: CentOS or RedHat
       block:
         - name: Install Python (CentOS or RedHat)
+          become: yes
           raw: test -e /usr/bin/python || (yum -y install python)
           changed_when: no
       when:
@@ -46,6 +47,7 @@
     - name: Fedora
       block:
         - name: Install Python (Fedora)
+          become: yes
           raw: test -e /usr/bin/python || (dnf -y install python)
           changed_when: no
       when:

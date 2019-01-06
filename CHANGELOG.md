@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Initial support for installation of Docker plugins ([#78](../../issues/78))
+
 ## [2.0.0](../../releases/tag/2.0.0) - 2019-01-03
 
 ### Added

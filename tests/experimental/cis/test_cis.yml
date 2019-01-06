@@ -1,0 +1,81 @@
+- name: Prepare
+  import_playbook: ../../prepare_storage.yml
+  vars:
+    lvm_device: /dev/sdb
+    docker_mount_point_override: /var/lib/docker/500000.500000
+
+- name: Configure user namespaces
+  hosts: test-host
+  tasks:
+    - name: Enable user namespace
+      become: yes
+      include_role:
+        name: jtyr.grub_cmdline
+      vars:
+        grub_cmdline_add_args:
+          - namespace.unpriv_enable=1
+          - user_namespace.enable=1
+
+    - name: Set user.max_user_namespaces
+      become: yes
+      sysctl:
+        name: user.max_user_namespaces
+        value: 15000
+        sysctl_set: yes
+        state: present
+        reload: yes
+      register: _sysctl_usrns
+
+    - name: Reboot immediately
+      become: yes
+      shell: "sleep 5 && reboot"
+      async: 1
+      poll: 0
+      when: _sysctl_usrns|changed
+
+    - name: Wait for the reboot to complete
+      wait_for_connection:
+        connect_timeout: 20
+        sleep: 5
+        delay: 5
+        timeout: 300
+      when: _sysctl_usrns|changed    
+
+- name: Install and configure according to CIS
+  hosts: test-host
+  pre_tasks:
+    - name: Ensure /etc/docker/policies directory is present
+      become: yes
+      file:
+        path: /etc/docker/policies
+        state: directory
+    
+    - name: OPA policy file
+      become: yes
+      copy:
+        dest: /etc/docker/policies/authz.rego
+        content: |
+          package docker.authz
+
+          allow = true
+    - include_role:
+        name: haxorof.docker-ce
+      vars:
+        docker_plugins:
+          - type: authz
+            alias: opa-docker-authz
+            name: openpolicyagent/opa-docker-authz-v2:0.4
+            args: opa_args="-policy-file /opa/policies/authz.rego"
+        docker_enable_audit: yes
+        docker_users:
+          - vagrant
+        docker_daemon_config:
+          icc: false
+          log-driver: journald
+          userns-remap: default
+          live-restore: true
+          userland-proxy: false
+          no-new-privileges: true
+          storage-driver: devicemapper
+          storage-opts:
+            - "dm.directlvm_device=/dev/sdb2"      

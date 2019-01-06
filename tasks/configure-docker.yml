@@ -35,14 +35,26 @@
   notify: restart docker
   when: docker_daemon_config_file is defined
 
+- name: Fetch Docker daemon status
+  become: true
+  service:
+    name: docker
+  register: _docker_status_check
+  when: docker_plugins | length > 0
+
 - name: Configure Docker daemon (variables)
   become: true
   copy:
     content: "{{ docker_daemon_config | to_nice_json }}"
     dest: /etc/docker/daemon.json
   notify: restart docker
-  when: docker_daemon_config_file is not defined and
-        docker_daemon_config is defined
+  when:
+    - docker_daemon_config_file is not defined
+    - docker_daemon_config is defined
+    - _docker_status_check.status is not defined or
+      (_docker_status_check.status is defined and
+      _docker_status_check.status.SubState is defined and
+      _docker_status_check.status.SubState != "running")
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
   become: true
@@ -77,7 +89,6 @@
       register: _pkg_result
       until: _pkg_result|succeeded
 
-
     - name: Ensure thin-provisioning-tools is installed
       become: true
       package:
@@ -89,7 +100,6 @@
   when:
     - docker_daemon_config['storage-driver'] is defined
     - docker_daemon_config['storage-driver'] == 'devicemapper'
-
 
 - name: Enable Docker service
   become: true
@@ -105,3 +115,7 @@
   notify: restart docker
   changed_when: _docker_service.status.SubState != "running"
   when: _docker_service.status is defined and _docker_service.status.SubState is defined
+
+- name: Install and configure Docker plugins
+  include_tasks: configure-docker/configure-docker-plugins.yml
+  when: docker_plugins | length > 0

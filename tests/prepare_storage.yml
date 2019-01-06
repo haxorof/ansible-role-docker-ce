@@ -4,6 +4,8 @@
 
 - name: Prepare host with additional disk
   hosts: test-host
+  vars:
+    docker_mount_point: "{{ docker_mount_point_override|default('/var/lib/docker') }}"
   tasks:
     - name: Ensure dependencies are installed (All)
       package:
@@ -41,14 +43,14 @@
         fstype: ext4
         dev: "{{ lvm_device }}1"
       become: true
-    - name: Ensure /var/lib/docker directory exists
+    - name: Ensure {{ docker_mount_point }} directory exists
       file:
-        path: /var/lib/docker
+        path: "{{ docker_mount_point }}"
         state: directory
       become: true
-    - name: Ensure /var/lib/docker is mounted
+    - name: Ensure {{ docker_mount_point }} is mounted
       mount:
-        path: /var/lib/docker
+        path: "{{ docker_mount_point }}"
         src: "{{ lvm_device }}1"
         fstype: ext4
         state: mounted

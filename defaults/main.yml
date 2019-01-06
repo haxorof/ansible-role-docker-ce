@@ -12,6 +12,20 @@ docker_pkg_name: docker-ce
 docker_remove_pre_ce: false
 # Users to be part of the docker group
 docker_users: []
+# Docker plugins.
+# Item fields:
+# * type - Valid types: volumedriver,networkdriver,ipamdriver,authz,logdriver,metricscollector
+# * alias - Alias of plugin
+# * name - Name of plugin
+# * args - Plugin arguments
+#
+# Example:
+# docker_plugins:
+#   - type: authz
+#     alias: opa-docker-authz
+#     name: openpolicyagent/opa-docker-authz-v2:0.4
+#     args: opa_args="-policy-file /opa/policies/authz.rego"
+docker_plugins: []
 
 ################################################################################
 # Docker daemon configuration

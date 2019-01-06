@@ -8,6 +8,13 @@
     state: restarted
   tags: ["install", "configure"]
 
+- name: reload docker
+  become: yes
+  service:
+    name: docker
+    state: reloaded
+  tags: ["install", "configure"]
+
 # Workaround because systemd cannot be used: https://github.com/ansible/ansible/issues/22171
 - name: restart auditd
   become: yes
