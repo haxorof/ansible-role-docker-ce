@@ -211,9 +211,6 @@ However this configuration setup devicemapper in a certain way which will create
       live-restore: true
       userland-proxy: false
       no-new-privileges: true
-      storage-driver: devicemapper
-      storage-opts:
-        - "dm.directlvm_device=/dev/sdb2" 
   roles:
     - haxorof.docker-ce
 ```

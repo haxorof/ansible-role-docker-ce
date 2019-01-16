@@ -78,19 +78,19 @@ tests:
     name: Configurations
     prep_yml: prepare.yml
     test_yml: test_config.yml
-    skip_boxes: fedora/29
+    skip_boxes:
   -
     id: t_nightly_channel
     name: Nigthly channel configuration
     prep_yml: prepare.yml
     test_yml: test_config_nightly.yml
-    skip_boxes: centos,ubuntu,debian,fedora/25,fedora/26,fedora/27,fedora/28
+    skip_boxes: ubuntu,debian,fedora
   -
     id: t_postinstall
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: wheezy64,fedora/29
+    skip_boxes: wheezy64
   -
     id: t_old_docker
     name: Old version of Docker
@@ -98,8 +98,8 @@ tests:
     test_yml: test_old_version.yml
     skip_boxes: ubuntu,debian,fedora
   -
-    id: t_storage_config
-    name: Storage configuration
+    id: t_devicemapper_config
+    name: Devicemapper configuration
     prep_yml: prepare_storage.yml
-    test_yml: test_config_storage.yml
-    skip_boxes: ubuntu,debian,fedora/29
+    test_yml: test_config_devicemapper.yml
+    skip_boxes: ubuntu,debian,fedora

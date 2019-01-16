@@ -26,6 +26,7 @@
         reload: yes
       register: _sysctl_usrns
 
+    # Not using module reboot because it requires Ansible 2.7 or later
     - name: Reboot immediately
       become: yes
       shell: "sleep 5 && reboot"
@@ -76,6 +77,3 @@
           live-restore: true
           userland-proxy: false
           no-new-privileges: true
-          storage-driver: devicemapper
-          storage-opts:
-            - "dm.directlvm_device=/dev/sdb2"      
