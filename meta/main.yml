@@ -7,7 +7,6 @@ galaxy_info:
   platforms:
   - name: Fedora
     versions:
-      - 24
       - 25
       - 26
       - 27
@@ -22,12 +21,15 @@ galaxy_info:
       - wheezy
       - jessie
       - stretch
+      - buster
 
   - name: Ubuntu
     versions:
       - trusty
+      - artful
       - xenial
       - bionic
+      - cosmic
 
   galaxy_tags:
     - docker
