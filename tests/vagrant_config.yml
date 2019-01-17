@@ -24,6 +24,18 @@ boxes:
     storage_port: 2
     vbguest_update: true
   -
+    box: ubuntu/artful64
+    box_url: vagrantup
+    storage_ctl: SCSI
+    storage_port: 2
+    vbguest_update: true
+  -
+    box: ubuntu/cosmic64
+    box_url: vagrantup
+    storage_ctl: SCSI
+    storage_port: 2
+    vbguest_update: true
+  -
     box: debian/wheezy64
     box_url: vagrantup
     storage_ctl: SATA Controller
@@ -40,7 +52,7 @@ boxes:
     box_url: vagrantup
     storage_ctl: SATA Controller
     storage_port: 1
-    vbguest_update: true
+    vbguest_update: true    
   -
     box: fedora/25-cloud-base
     box_url: https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/25/CloudImages/x86_64/images/Fedora-Cloud-Base-Vagrant-25-1.3.x86_64.vagrant-virtualbox.box
