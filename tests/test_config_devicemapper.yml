@@ -2,6 +2,7 @@
 - hosts: test-host
   vars:
     docker_daemon_config:
+      # Deprecated since 18.09
       storage-driver: devicemapper
       storage-opts:
         - "dm.directlvm_device={{ lvm_device }}2"
