@@ -23,18 +23,24 @@ boxes:
     storage_ctl: SCSI
     storage_port: 2
     vbguest_update: true
-  -
-    box: ubuntu/artful64
-    box_url: vagrantup
-    storage_ctl: SCSI
-    storage_port: 2
-    vbguest_update: true
+  #-
+  #  box: ubuntu/artful64
+  #  box_url: vagrantup
+  #  storage_ctl: SCSI
+  #  storage_port: 2
+  #  vbguest_update: true
   -
     box: ubuntu/cosmic64
     box_url: vagrantup
     storage_ctl: SCSI
     storage_port: 2
     vbguest_update: true
+  #-
+  #  box: ubuntu/disco64
+  #  box_url: vagrantup
+  #  storage_ctl: SCSI
+  #  storage_port: 2
+  #  vbguest_update: true
   -
     box: debian/wheezy64
     box_url: vagrantup
