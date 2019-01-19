@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.1.0](../../releases/tag/2.1.0) - 2019-01-19
+
 ### Added
 
 - Initial support for installation of Docker plugins ([#78](../../issues/78))
+
+### Internal
+
+- Some adjustments to what is included in regression test suite
+- Devicemapper regression tests fail with Docker 18.09 ([#69](../../issues/69))
+- Docker CE matrix added to see distribution support
 
 ## [2.0.0](../../releases/tag/2.0.0) - 2019-01-03
 
