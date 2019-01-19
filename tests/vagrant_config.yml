@@ -41,12 +41,12 @@ boxes:
   #  storage_ctl: SCSI
   #  storage_port: 2
   #  vbguest_update: true
-  -
-    box: debian/wheezy64
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: true
+  # -
+  #   box: debian/wheezy64
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: true
   -
     box: debian/jessie64
     box_url: vagrantup
@@ -102,13 +102,13 @@ tests:
     name: Nigthly channel configuration
     prep_yml: prepare.yml
     test_yml: test_config_nightly.yml
-    skip_boxes: none
+    skip_boxes: trusty64,xenial64,bionic64,jessie64,fedora/25,fedora/26,fedora/27,fedora/28
   -
     id: t_postinstall
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: wheezy64
+    skip_boxes: none
   -
     id: t_old_docker
     name: Old version of Docker
