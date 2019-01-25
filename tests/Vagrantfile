@@ -15,7 +15,9 @@ if File.exist?(testcase_file)
     config.vm.define 'test-host' do |machine|
       machine.vm.box = vagrant_config['box']
       machine.vm.box_url = vagrant_config['box_url']
-      machine.vbguest.auto_update = false
+      machine.vagrant.plugins = "vagrant-vbguest"
+      machine.vbguest.no_remote = true
+      machine.vbguest.auto_update = vagrant_config['vbguest_update']
       machine.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
       machine.vm.network "private_network", ip: "192.168.56.21", virtualbox__intnet: true
       machine.vm.synced_folder ".", "/vagrant", disabled: true

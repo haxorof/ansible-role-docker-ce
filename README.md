@@ -9,6 +9,14 @@ This Ansible role installs and configures Docker CE (Community Edition) on sever
 user of this role to just care about how Docker shall be installed and configured and hide the differences that exists in the
 different distributions.
 
+## Features
+
+- One way to install and configure Docker CE across supported Linux distributions.
+- Support install of Docker SDK and Docker Compose.
+- Best effort support of installations of Docker plugins.
+- Do tweaks etc to avoid buggy or non-working configurations in some supported distributions.
+- Ease handling of setting up Docker according to Center of Internet Security (CIS) documentation.
+
 ## Supported Distributions
 
 - CentOS
