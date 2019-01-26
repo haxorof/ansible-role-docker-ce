@@ -7,6 +7,16 @@
 
 - hosts: test-host
   tasks:
+    - name: Print LSB information
+      debug:
+        var: ansible_lsb
+      when: ansible_lsb is defined
+
+    - name: Print Kernel version
+      debug:
+        var: ansible_kernel
+      when: ansible_kernel is defined
+
     - name: Print Ansible version
       debug:
         var: ansible_version.full
