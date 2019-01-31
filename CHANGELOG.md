@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Changing Docker repository channel does not work ([#79](../../issues/79))
+
 ## [2.1.0](../../releases/tag/2.1.0) - 2019-01-19
 
 ### Added

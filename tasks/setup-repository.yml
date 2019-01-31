@@ -53,7 +53,7 @@
     _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
     _docker_enable_channels: "{{ docker_channels | intersect(_docker_merged_channels) }}"
   vars:
-    _docker_mandatory_channel: [ 'stable' ]
+    _docker_mandatory_channel: []
     _docker_merged_channels: "{{ _docker_mandatory_channel }} + [ '{{ docker_channel }}' ]"
 
 - name: Add Docker CE repository with correct channels (Ubuntu/Debian)

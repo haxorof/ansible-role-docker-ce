@@ -1,8 +1,26 @@
 ---
-- hosts: test-host
+- name: Test to install Docker CE via nightly channel
+  hosts: test-host
   vars:
     docker_channel: nightly
     docker_users:
       - vagrant
   roles:
     - haxorof.docker-ce
+
+- name: Verify that Docker CE Engine is from nightly channel
+  hosts: test-host
+  tasks:
+    - name: Get Docker engine version
+      become: true
+      shell: "{{ _cmd }}"
+      register: _docker_version_cmd
+      vars:
+        _cmd: !unsafe 'docker version --format="{{ .Server.Version }}"'
+
+    - debug:
+        var: _docker_version_cmd
+
+    - fail:
+        msg: Docker Engine is not a nightly build
+      when: not _docker_version_cmd.stdout | search("0.0.0")

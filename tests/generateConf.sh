@@ -16,7 +16,7 @@ GenerateTestCaseConfig() {
   if [[ "${boxes__box_url[$_box_index]}" != "vagrantup" ]]; then
     _box_url=${boxes__box_url[$_box_index]}
   fi
-  echo "--> Generating config: box=[${boxes__box[$_box_index]}], box_url=[${_box_url}], test_yml=[${tests__test_yml[$_test_index]}]"
+  echo "==> Generating config: box=[${boxes__box[$_box_index]}], box_url=[${_box_url}], test_yml=[${tests__test_yml[$_test_index]}]"
   cat << EOF > $VAGRANT_TESTCASE_FILE
 box: ${boxes__box[$_box_index]}
 box_url: ${_box_url}
@@ -35,7 +35,7 @@ GenerateDoNothingConfig() {
   if [[ "${boxes__box_url[$_box_index]}" != "vagrantup" ]]; then
     _box_url=${boxes__box_url[$_box_index]}
   fi
-  echo "--> Generating 'Do Nothing' config: box=[${boxes__box[$_box_index]}], box_url=[${_box_url}]"
+  echo "==> Generating 'Do Nothing' config: box=[${boxes__box[$_box_index]}], box_url=[${_box_url}]"
   cat << EOF > $VAGRANT_TESTCASE_FILE
 box: ${boxes__box[$_box_index]}
 box_url: ${_box_url}
@@ -68,4 +68,4 @@ if [[ "$arg_1" == "--nop" ]]; then
 else
   GenerateTestCaseConfig $arg_1 $arg_2
 fi
-echo "--> Done!"
+echo "==> Done!"
