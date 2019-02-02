@@ -122,3 +122,9 @@ tests:
     prep_yml: prepare_storage.yml
     test_yml: test_config_devicemapper.yml
     skip_boxes: ubuntu,debian,fedora
+  -
+    id: t_uninstall
+    name: Uninstall
+    prep_yml: prepare.yml
+    test_yml: test_uninstall.yml
+    skip_boxes: centos,ubuntu,debian,fedora

@@ -36,31 +36,38 @@
   when: docker_do_checks | bool
   tags: ["always"]
 
-- name: Setup Docker package repositories
-  include_tasks: setup-repository.yml
-  tags: ["install"]
+- name: Install and configure Docker CE
+  block:
+    - name: Setup Docker package repositories
+      include_tasks: setup-repository.yml
+      tags: ["install"]
 
-- name: Remove Docker versions before Docker CE
-  include_tasks: remove-pre-docker-ce.yml
-  when: docker_remove_pre_ce | bool
-  tags: ["install"]
+    - name: Remove Docker versions before Docker CE
+      include_tasks: remove-pre-docker-ce.yml
+      when: docker_remove_pre_ce | bool
+      tags: ["install"]
 
-- name: Install Docker
-  include_tasks: install-docker.yml
-  tags: ["install"]
+    - name: Install Docker
+      include_tasks: install-docker.yml
+      tags: ["install"]
 
-- name: Configure audit logging
-  include_tasks: setup-audit.yml
-  tags: ["configure"]
+    - name: Configure audit logging
+      include_tasks: setup-audit.yml
+      tags: ["configure"]
 
-- name: Apply workarounds for bugs and/or tweaks
-  include_tasks: bug-tweaks.yml
-  tags: ["configure"]
+    - name: Apply workarounds for bugs and/or tweaks
+      include_tasks: bug-tweaks.yml
+      tags: ["configure"]
 
-- name: Configure Docker
-  include_tasks: configure-docker.yml
-  tags: ["configure"]
+    - name: Configure Docker
+      include_tasks: configure-docker.yml
+      tags: ["configure"]
 
-- name: Postinstall tasks
-  include_tasks: postinstall.yml
-  tags: ["install"]
+    - name: Postinstall tasks
+      include_tasks: postinstall.yml
+      tags: ["install"]
+  when: not docker_remove | bool
+
+- name: Remove Docker CE and related configuration
+  include_tasks: uninstall-docker.yml
+  when: docker_remove | bool

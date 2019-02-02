@@ -47,6 +47,13 @@ docker_envs_dir:
   Ubuntu: /etc/default
   Debian: /etc/default
 
+docker_packages:
+  versioned:
+    - docker-ce-cli
+    - docker-ce
+  dependencies:
+    - containerd.io
+
 docker_old_packages:
   CentOS:
     - docker
@@ -85,10 +92,14 @@ docker_old_packages:
     - docker
     - docker-engine
     - docker.io
+    - containerd
+    - runc
   Debian:
     - docker
     - docker-engine
     - docker.io
+    - containerd
+    - runc
 
 docker_predefined_packages_os: []
 

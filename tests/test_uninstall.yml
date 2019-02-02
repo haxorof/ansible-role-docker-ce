@@ -1,0 +1,43 @@
+---
+- name: Install Docker CE with default configuration
+  hosts: test-host
+  roles:
+    - haxorof.docker-ce
+  pre_tasks:
+    - name: Find files and diretories with docker in it (Before)
+      become: yes
+      shell: find / -name "docker*"
+      register: _files
+
+    - set_fact:
+        _files_before: "{{ _files.stdout_lines }}"
+
+- name: Test uninstall of Docker CE
+  hosts: test-host
+  vars:
+    docker_remove: true
+  roles:
+    - haxorof.docker-ce
+  tasks:
+    - name: Find files and diretories with docker in it (After)
+      become: yes
+      shell: find / -name "docker*"
+      register: _files
+
+    - set_fact:
+        _files_after_uninstall: "{{ _files.stdout_lines }}"
+        _files_difference: "{{ _files.stdout_lines | difference(_files_before) }}"
+
+    - name: Files before install
+      debug:
+        var: _files_before
+    - name: Files after uninstall
+      debug:
+        var: _files_after_uninstall
+    - name: Files difference
+      debug:
+        var: _files_difference
+
+    - fail:
+        msg: "Some files still remain after uninstall of Docker CE"
+      when: _files_difference | length > 0
