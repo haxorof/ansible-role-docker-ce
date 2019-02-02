@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Support removal of Docker CE packages and related configuration ([#82](../../issues/82))
 
+### Deprecated
+
+- Variable `docker_remove_pre_ce` will be removed in future major release ([#80](../../issues/80))
+
 ## [2.1.1](../../releases/tag/2.1.1) - 2019-02-01
 
 ### Fixed
@@ -122,7 +126,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add support to install Docker Ansible module dependencies ([#48](../../issues/48))
 - Add support to install packages after install via PiP or OS package manager ([#49](../../issues/49))
 
-### Itnernal
+### Internal
 
 - Testing: Improved structure in `vagrant_config.yml` for `test.sh`
 - Testing: Improved `test.sh` with better limit functionality
