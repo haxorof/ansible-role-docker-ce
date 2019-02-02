@@ -14,6 +14,7 @@ different distributions.
 - One way to install and configure Docker CE across supported Linux distributions.
 - Support install of Docker SDK and Docker Compose.
 - Best effort support of installations of Docker plugins.
+- Best effort uninstall of Docker CE and related configuration
 - Do tweaks etc to avoid buggy or non-working configurations in some supported distributions.
 - Ease handling of setting up Docker according to Center of Internet Security (CIS) documentation.
 
@@ -61,6 +62,9 @@ docker_latest_version: true
 docker_pkg_name: docker-ce
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 docker_remove_pre_ce: false
+# CAUTION! If below variable is set to true it will try to completely remove Docker CE
+# installation and all related files and configuation.
+docker_remove: false
 # Users to be part of the docker group
 docker_users: []
 # Docker plugins.
