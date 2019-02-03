@@ -1,14 +1,28 @@
 ---
-- name: Set docker-ce package state to latest
+- name: Set version string
+  set_fact:
+    _docker_version_string: "{{ docker_os_pkg_version_separator[_docker_os_dist] }}{{ docker_version }}"
+  when: docker_version != ''
+
+- name: Set packages state to latest
   set_fact:
     _docker_pkg_state: 'latest'
   when: docker_latest_version | bool
 
-- name: Ensure docker-ce is installed
+- name: Filter out packages to match older Docker CE versions
+  set_fact:
+    _docker_packages:
+      - docker-ce
+  when:
+    - docker_version != ''
+    - docker_version | match('17.') or docker_version | match('18.03') or docker_version | match('18.06')
+
+- name: Ensure Docker CE is installed
   become: true
   package:
-    name: "{{ docker_pkg_name }}"
+    name: "{{ (item | search('docker')) | ternary((item + _docker_version_string | default('')), item) }}"
     state: "{{ _docker_pkg_state | default('present') }}"
+  with_items: "{{ _docker_packages | default(docker_packages) }}"
   register: _pkg_result
   until: _pkg_result|succeeded
   notify: restart docker

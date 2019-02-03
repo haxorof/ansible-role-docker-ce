@@ -12,7 +12,7 @@
   package:
     name: "{{ item }}"
     state: absent
-  with_items: "{{ docker_packages.versioned + docker_packages.dependencies }}"
+  with_items: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result|succeeded
   when: _docker_os_dist != "Ubuntu" and
@@ -24,7 +24,7 @@
     name: "{{ item }}"
     state: absent
     purge: yes
-  with_items: "{{ docker_packages.versioned + docker_packages.dependencies }}"
+  with_items: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result|succeeded
   when: _docker_os_dist == "Ubuntu" or

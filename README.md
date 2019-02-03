@@ -59,8 +59,13 @@ docker_channel: stable
 # Always ensure latest version of Docker CE
 docker_latest_version: true
 # Docker package to install. Change this if you want a specific version of Docker
+# DEPRECATED! use docker_version instead
 docker_pkg_name: docker-ce
+# Docker version
+# ex. 18.06.1.ce-3.el7
+docker_version: ''
 # If below variable is set to true it will remove older Docker installation before Docker CE.
+# DEPRECATED! nothing replaces this feature
 docker_remove_pre_ce: false
 # CAUTION! If below variable is set to true it will try to completely remove Docker CE
 # installation and all related files and configuation.

@@ -48,11 +48,16 @@ docker_envs_dir:
   Debian: /etc/default
 
 docker_packages:
-  versioned:
-    - docker-ce-cli
-    - docker-ce
-  dependencies:
-    - containerd.io
+  - docker-ce-cli
+  - docker-ce
+  - containerd.io
+
+docker_os_pkg_version_separator:
+  CentOS: '-'
+  RedHat: '-'
+  Fedora: '-'
+  Ubuntu: '='
+  Debian: '='
 
 docker_old_packages:
   CentOS:

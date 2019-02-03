@@ -68,4 +68,3 @@ if [[ "$arg_1" == "--nop" ]]; then
 else
   GenerateTestCaseConfig $arg_1 $arg_2
 fi
-echo "==> Done!"

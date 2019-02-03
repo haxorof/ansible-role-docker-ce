@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Support removal of Docker CE packages and related configuration ([#82](../../issues/82))
+- Replace docker_pkg_name with docker_version ([#86](../../issues/86))
 
 ### Deprecated
 
 - Variable `docker_remove_pre_ce` will be removed in future major release ([#80](../../issues/80))
+- Variable `docker_pkg_name` will be removed in future major release ([#86](../../issues/86))
 
 ## [2.1.1](../../releases/tag/2.1.1) - 2019-02-01
 

@@ -8,19 +8,64 @@
   roles:
     - haxorof.docker-ce
 
-- name: Verify that Docker CE Engine is from nightly channel
+- name: Verify that Docker CE Engine and CLI is from nightly channel
   hosts: test-host
   tasks:
     - name: Get Docker engine version
       become: true
       shell: "{{ _cmd }}"
-      register: _docker_version_cmd
+      register: _docker_server_version_cmd
+      changed_when: no
       vars:
         _cmd: !unsafe 'docker version --format="{{ .Server.Version }}"'
 
-    - debug:
-        var: _docker_version_cmd
+    - name: Get Docker CLI version
+      become: true
+      shell: "{{ _cmd }}"
+      register: _docker_client_version_cmd
+      changed_when: no
+      vars:
+        _cmd: !unsafe 'docker version --format="{{ .Client.Version }}"'
 
     - fail:
-        msg: Docker Engine is not a nightly build
-      when: not _docker_version_cmd.stdout | search("0.0.0")
+        msg: "Expected nightly Docker Engine (Actual: {{ _docker_server_version_cmd.stdout }})"
+      when: not _docker_server_version_cmd.stdout | search("0.0.0")
+
+    - fail:
+        msg: "Expected nightly Docker CLI (Actual: {{ _docker_client_version_cmd.stdout }})"
+      when: not _docker_client_version_cmd.stdout | search("0.0.0")
+
+# - name: Test to install Docker CE switch back to stable channel
+#   hosts: test-host
+#   vars:
+#     docker_users:
+#       - vagrant
+#   roles:
+#     - haxorof.docker-ce
+
+# - name: Verify that Docker CE Engine and CLI is from stable channel
+#   hosts: test-host
+#   tasks:
+#     - name: Get Docker engine version
+#       become: true
+#       shell: "{{ _cmd }}"
+#       register: _docker_server_version_cmd
+#       changed_when: no
+#       vars:
+#         _cmd: !unsafe 'docker version --format="{{ .Server.Version }}"'
+
+#     - name: Get Docker CLI version
+#       become: true
+#       shell: "{{ _cmd }}"
+#       register: _docker_client_version_cmd
+#       changed_when: no
+#       vars:
+#         _cmd: !unsafe 'docker version --format="{{ .Client.Version }}"'
+
+#     - fail:
+#         msg: "Expected stable Docker Engine (Actual: {{ _docker_server_version_cmd.stdout }})"
+#       when: _docker_server_version_cmd.stdout | search("0.0.0")
+
+#     - fail:
+#         msg: "Expected stable Docker CLI (Actual: {{ _docker_client_version_cmd.stdout }})"
+#       when: _docker_client_version_cmd.stdout | search("0.0.0")

@@ -31,6 +31,12 @@
     - docker_enable_ce_edge
   tags: ["always"]
 
+- name: Temporary handling of deprecated variable docker_pkg_name
+  set_fact:
+    docker_version: "{{ docker_pkg_name | regex_replace('^docker-ce.(.+)$', '\\1') }}"
+  when: docker_pkg_name | match('docker-ce' + docker_os_pkg_version_separator[_docker_os_dist])
+  tags: ["always"]
+
 - name: Compatibility and distribution checks
   include_tasks: checks.yml
   when: docker_do_checks | bool
