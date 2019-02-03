@@ -17,6 +17,16 @@
     - docker_version != ''
     - docker_version | match('17.') or docker_version | match('18.03') or docker_version | match('18.06')
 
+- name: Ensure some kind of compatibility for no longer officially supported distributions since Docker CE 18.09
+  set_fact:
+    _docker_packages:
+      - docker-ce
+  when:
+    - _docker_packages is not defined
+    - (_docker_os_dist == "Debian" and _docker_os_dist_major_version < '9') or
+      (_docker_os_dist == "Fedora" and _docker_os_dist_major_version < '27') or
+      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version < '16')
+
 - name: Ensure Docker CE is installed
   become: true
   package:
