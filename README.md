@@ -67,9 +67,6 @@ docker_version: ''
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 # DEPRECATED! nothing replaces this feature
 docker_remove_pre_ce: false
-# CAUTION! If below variable is set to true it will try to completely remove Docker CE
-# installation and all related files and configuation.
-docker_remove: false
 # Users to be part of the docker group
 docker_users: []
 # Docker plugins.
@@ -149,6 +146,19 @@ docker_pip_package: python-pip
 docker_pip_extra_args:
 # PiP install packages using sudo
 docker_pip_sudo: true
+
+################################################################################
+# Docker removal configuration
+################################################################################
+# CAUTION! If below variable is set to true it will remove Docker CE
+# installation and all related configuation.
+docker_remove: false
+# CAUTION! If below variable and docker_remove is set to true it will also remove
+# everything under for example /var/lib/docker
+docker_remove_all: false
+# Additional files or directories to be remove if for example non-standard locations
+# was previously configured for data storage etc.
+docker_remove_additional: []
 ```
 
 ## Dependencies

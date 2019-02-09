@@ -75,5 +75,5 @@
   when: not docker_remove | bool
 
 - name: Remove Docker CE and related configuration
-  include_tasks: uninstall-docker.yml
+  include_tasks: remove-docker.yml
   when: docker_remove | bool

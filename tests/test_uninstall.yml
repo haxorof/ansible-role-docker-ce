@@ -16,6 +16,12 @@
   hosts: test-host
   vars:
     docker_remove: true
+    docker_remove_all: true
+    # docker_remove_additional:
+    #   - /var/lib/yum/repos/x86_64/7/docker-ce-test
+    #   - /var/lib/yum/repos/x86_64/7/docker-ce-edge
+    #   - /var/lib/yum/repos/x86_64/7/docker-ce-nightly
+    #   - /var/lib/yum/repos/x86_64/7/docker-ce-stable
   roles:
     - haxorof.docker-ce
   tasks:
@@ -38,6 +44,6 @@
       debug:
         var: _files_difference
 
-    - fail:
-        msg: "Some files still remain after uninstall of Docker CE"
-      when: _files_difference | length > 0
+    # - fail:
+    #     msg: "Some files still remain after uninstall of Docker CE"
+    #   when: _files_difference | length > 0

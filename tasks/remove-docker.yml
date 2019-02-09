@@ -32,10 +32,13 @@
 
 - name: Remove network interface docker0
   become: yes
-  net_interface:
-    name: docker0
-    state: absent
+  command: ip link del docker0
+  args:
+    warn: no
   ignore_errors: yes
+  changed_when: no
+  tags:
+    - skip_ansible_lint
 
 - name: Remove dockerd from alternatives configuration
   become: yes
@@ -46,6 +49,7 @@
     - skip_ansible_lint
 
 - name: Clean yum cache (CentOS/RedHat)
+  become: yes
   command: yum clean all --enablerepo=\*
   args:
     warn: no
@@ -71,6 +75,7 @@
     - skip_ansible_lint
 
 - name: Remove repository docker specific repo file
+  become: yes
   yum_repository:
     name: docker-ce
     file: docker-ce
@@ -78,29 +83,35 @@
   when: _docker_os_dist != "Ubuntu" and
         _docker_os_dist != "Debian"
 
-- name: Ensure additional files and directories managed by this roles are removed
+- name: Ensure Docker CE and configuration files are removed
   become: yes
   file:
     path: "{{ item }}"
     state: absent
   with_items:
-    # centos
+    # all distributions
     - "{{ docker_envs_dir[_docker_os_dist] }}/docker"
     - "{{ docker_envs_dir[_docker_os_dist] }}/docker-envs"
-    - /etc/yum.repos.d/docker-ce.repo
     - /etc/audit/rules.d/docker.rules
+    # centos
+    - /etc/yum.repos.d/docker-ce.repo
     - /etc/systemd/system/docker.service.d
     - /etc/docker
     - /usr/bin/dockerd
-    - /var/lib/docker
-    - /var/lib/docker-engine
     - /run/docker
-    - /var/lib/yum/repos/x86_64/7/docker-ce-test
-    - /var/lib/yum/repos/x86_64/7/docker-ce-edge
-    - /var/lib/yum/repos/x86_64/7/docker-ce-nightly
-    - /var/lib/yum/repos/x86_64/7/docker-ce-stable
     # ubuntu/debian
     - /etc/apt/sources.list.d/docker-ce.list
+
+- name: Ensure additional files and data directories are removed
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/lib/docker
+    - /var/lib/docker-engine
+    - "{{ docker_remove_additional }}"
+  when: docker_remove_all | bool
 
 - name: Find Docker related diretories in package cache
   become: yes
