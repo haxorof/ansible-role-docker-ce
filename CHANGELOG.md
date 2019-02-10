@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.2.0](../../releases/tag/2.2.0) - 2019-02-10
+
 ### Added
 
 - Support removal of Docker CE packages and related configuration ([#82](../../issues/82))
