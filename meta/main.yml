@@ -11,6 +11,7 @@ galaxy_info:
       - 26
       - 27
       - 28
+      - 29
 
   - name: EL
     versions:
@@ -34,6 +35,9 @@ galaxy_info:
   galaxy_tags:
     - docker
     - containers
+    - virtualization
+    - compose
+    - orchestration    
     - system
 
 dependencies: []
