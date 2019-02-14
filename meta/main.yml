@@ -37,7 +37,7 @@ galaxy_info:
     - containers
     - virtualization
     - compose
-    - orchestration    
+    - orchestration
     - system
 
 dependencies: []
