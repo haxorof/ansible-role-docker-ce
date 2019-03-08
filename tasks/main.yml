@@ -71,7 +71,7 @@
 
     - name: Postinstall tasks
       include_tasks: postinstall.yml
-      tags: ["install"]
+      tags: ["install", "postinstall"]
   when: not docker_remove | bool
 
 - name: Remove Docker CE and related configuration

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Added `postinstall` tag
+
 ## [2.2.0](../../releases/tag/2.2.0) - 2019-02-10
 
 ### Added
