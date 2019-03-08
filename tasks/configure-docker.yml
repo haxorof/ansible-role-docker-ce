@@ -7,6 +7,8 @@
   changed_when: no
   check_mode: no
   register: _determine_systemd_usage
+  tags:
+    - skip_ansible_lint
 
 - name: Set fact to indicate systemd is used or not
   set_fact:

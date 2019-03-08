@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added `postinstall` tag
 
+### Internal
+
+- Updated regression test baseline to Ansible 2.5
+
 ## [2.2.0](../../releases/tag/2.2.0) - 2019-02-10
 
 ### Added
