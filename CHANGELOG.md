@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Updated regression test baseline to Ansible 2.5
 - Refactored setup of repository to reduce number of skipped tasks
+- Refactored distribution check tasks
 
 ## [2.2.0](../../releases/tag/2.2.0) - 2019-02-10
 
