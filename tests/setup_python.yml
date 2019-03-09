@@ -11,12 +11,12 @@
           state: drained
       delegate_to: 127.0.0.1
       register: _connect_result
-      until: _connect_result|succeeded
+      until: _connect_result is succeeded
 
     - name: Determine distribution
       raw: cat /etc/os-release | grep "^NAME=" | cut -d= -f2 | cut -d" " -f1 | sed 's/"//g'
       register: _distribution
-      until: _distribution|succeeded
+      until: _distribution is succeeded
       retries: 10
       delay: 10     
       changed_when: no

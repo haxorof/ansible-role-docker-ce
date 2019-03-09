@@ -15,7 +15,7 @@
       - docker-ce
   when:
     - docker_version != ''
-    - docker_version | match('17.') or docker_version | match('18.03') or docker_version | match('18.06')
+    - docker_version is match('17.') or docker_version is match('18.03') or docker_version is match('18.06')
 
 - name: Ensure some kind of compatibility for no longer officially supported distributions since Docker CE 18.09
   set_fact:
@@ -30,9 +30,9 @@
 - name: Ensure Docker CE is installed
   become: true
   package:
-    name: "{{ (item | search('docker')) | ternary((item + _docker_version_string | default('')), item) }}"
+    name: "{{ (item is search('docker')) | ternary((item + _docker_version_string | default('')), item) }}"
     state: "{{ _docker_pkg_state | default('present') }}"
   with_items: "{{ _docker_packages | default(docker_packages) }}"
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   notify: restart docker

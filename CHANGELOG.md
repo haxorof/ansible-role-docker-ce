@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added `postinstall` tag
 
+### Changed
+
+- Deprecation warning about filters in Ansible 2.5 ([#40](../../issues/40))
+
 ### Internal
 
 - Updated regression test baseline to Ansible 2.5

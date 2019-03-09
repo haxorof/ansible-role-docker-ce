@@ -41,6 +41,6 @@
   systemd:
     daemon_reload: yes
   notify: restart docker
-  when: _systemd_docker_dropin|changed
+  when: _systemd_docker_dropin is changed
   tags:
     - skip_ansible_lint
