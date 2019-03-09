@@ -1,0 +1,38 @@
+---
+- name: Include tasks from setup of repositories for CentOS
+  include_tasks: setup-repository/setup-repository-CentOS.yml
+
+# disable rt-beta so we don't get a 403 error retrieving repomd.xml
+- name: Check if rhel-7-server-rt-beta-rpms Repository is enabled (RedHat)
+  become: true
+  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-rt-beta-rpms"
+  register: cmd_rhel_rt_beta_repo_enabled
+  changed_when: false
+  failed_when: cmd_rhel_rt_beta_repo_enabled.rc not in [ 0, 1 ]
+  tags:
+    - skip_ansible_lint
+
+- name: Disable rhel-7-server-rt-beta-rpms Repository (RedHat)
+  become: true
+  shell: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
+  when: cmd_rhel_rt_beta_repo_enabled.rc == 0
+  tags:
+    - skip_ansible_lint
+
+# container-selinux package wants this
+- name: Check if rhel-7-server-extras-rpms Repository is enabled (RedHat)
+  become: true
+  shell: "subscription-manager repos --list-enabled | grep rhel-7-server-extras-rpms"
+  register: cmd_rhel_extras_repo_enabled
+  when: _docker_os_dist == "RedHat"
+  changed_when: false
+  failed_when: cmd_rhel_extras_repo_enabled.rc not in [ 0, 1 ]
+  tags:
+    - skip_ansible_lint
+
+- name: Enable rhel-7-server-extras-rpms Repository (RedHat)
+  become: true
+  shell: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
+  when: cmd_rhel_extras_repo_enabled.rc == 1
+  tags:
+    - skip_ansible_lint

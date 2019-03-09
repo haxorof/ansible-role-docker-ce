@@ -1,0 +1,12 @@
+---
+- name: Include tasks from setup of repositories for Ubuntu
+  include_tasks: setup-repository/setup-repository-Ubuntu.yml
+
+# Backport is required but not documented by Docker: https://github.com/moby/moby/issues/16878
+- name: Add backport repository for Debian Wheezy
+  become: true
+  apt_repository:
+    repo: deb [arch=amd64] http://ftp.debian.org/debian wheezy-backports main
+    state: present
+    filename: 'debian-backport'
+  when: _docker_os_dist_major_version == '7'

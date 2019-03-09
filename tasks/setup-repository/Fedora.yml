@@ -1,0 +1,8 @@
+---
+- name: Ensure python and deps for Ansible modules
+  become: true
+  raw: dnf install -y python2 python2-dnf libselinux-python
+  changed_when: false
+
+- name: Include tasks from setup of repositories for CentOS
+  include_tasks: setup-repository/setup-repository-CentOS.yml
