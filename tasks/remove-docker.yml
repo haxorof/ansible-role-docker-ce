@@ -14,7 +14,7 @@
     state: absent
   with_items: "{{ docker_packages }}"
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when: _docker_os_dist != "Ubuntu" and
         _docker_os_dist != "Debian"
 
@@ -26,7 +26,7 @@
     purge: yes
   with_items: "{{ docker_packages }}"
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when: _docker_os_dist == "Ubuntu" or
         _docker_os_dist == "Debian"
 

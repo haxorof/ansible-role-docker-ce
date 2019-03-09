@@ -29,11 +29,11 @@
 
     - fail:
         msg: "Expected nightly Docker Engine (Actual: {{ _docker_server_version_cmd.stdout }})"
-      when: not _docker_server_version_cmd.stdout | search("0.0.0")
+      when: not _docker_server_version_cmd.stdout is search("0.0.0")
 
     - fail:
         msg: "Expected nightly Docker CLI (Actual: {{ _docker_client_version_cmd.stdout }})"
-      when: not _docker_client_version_cmd.stdout | search("0.0.0")
+      when: not _docker_client_version_cmd.stdout is search("0.0.0")
 
 # - name: Test to install Docker CE switch back to stable channel
 #   hosts: test-host
@@ -64,8 +64,8 @@
 
 #     - fail:
 #         msg: "Expected stable Docker Engine (Actual: {{ _docker_server_version_cmd.stdout }})"
-#       when: _docker_server_version_cmd.stdout | search("0.0.0")
+#       when: _docker_server_version_cmd.stdout is search("0.0.0")
 
 #     - fail:
 #         msg: "Expected stable Docker CLI (Actual: {{ _docker_client_version_cmd.stdout }})"
-#       when: _docker_client_version_cmd.stdout | search("0.0.0")
+#       when: _docker_client_version_cmd.stdout is search("0.0.0")

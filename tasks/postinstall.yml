@@ -70,7 +70,7 @@
     name: "epel-release"
     state: present
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when:
     - _docker_os_dist == "CentOS"
     - _docker_additional_packages_os | length > 0
@@ -83,7 +83,7 @@
   with_items:
     - "{{ _docker_additional_packages_os }}"
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when: _docker_additional_packages_os | length > 0
 
 - name: Upgrade PiP
@@ -92,7 +92,7 @@
     name: pip
     state: forcereinstall
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when: docker_pip_upgrade
 
 - name: Install additional packages (PiP)
@@ -104,7 +104,7 @@
   with_items:
     - "{{ _docker_additional_packages_pip }}"
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when: _docker_additional_packages_pip | length > 0
   environment:
     PYTHONWARNINGS: ignore

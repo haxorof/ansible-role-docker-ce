@@ -5,7 +5,7 @@
     name: auditd
     state: present
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when: docker_enable_audit and (_docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian")
 
 - name: Copy Docker audit rules

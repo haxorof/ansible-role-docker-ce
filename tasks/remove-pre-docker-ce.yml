@@ -9,7 +9,7 @@
 - name: Set fact if old Docker installation shall be removed
   set_fact:
     _remove_old_docker: "{{ docker_remove_pre_ce | bool }} and not \
-      {{ _cmd_docker_version.stdout_lines[0] | search('-ce') }}"
+      {{ _cmd_docker_version.stdout_lines[0] is search('-ce') }}"
   when: _cmd_docker_version.stdout_lines is defined and _cmd_docker_version.stdout_lines[0] is defined
 
 - name: Check if Docker is running
@@ -33,7 +33,7 @@
     name: "{{ item }}"
     state: absent
   register: _pkg_result
-  until: _pkg_result|succeeded
+  until: _pkg_result is succeeded
   when: _remove_old_docker | default(False) | bool
   with_items:
     - "{{ docker_old_packages[_docker_os_dist] }}"
