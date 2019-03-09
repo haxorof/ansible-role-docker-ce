@@ -1,6 +1,6 @@
 ---
 - name: Include tasks from setup of repositories for Ubuntu
-  include_tasks: setup-repository/setup-repository-Ubuntu.yml
+  include_tasks: setup-repository-Ubuntu.yml
 
 # Backport is required but not documented by Docker: https://github.com/moby/moby/issues/16878
 - name: Add backport repository for Debian Wheezy

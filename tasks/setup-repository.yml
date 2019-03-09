@@ -1,6 +1,6 @@
 ---
 - name: Include tasks for distribution {{ _docker_os_dist }} to setup repository
-  include_tasks: setup-repository/{{ _docker_os_dist }}.yml
+  include_tasks: setup-repository-{{ _docker_os_dist }}.yml
 
 - name: Update repository cache
   become: true

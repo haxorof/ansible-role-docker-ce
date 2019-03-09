@@ -5,4 +5,4 @@
   changed_when: false
 
 - name: Include tasks from setup of repositories for CentOS
-  include_tasks: setup-repository/setup-repository-CentOS.yml
+  include_tasks: setup-repository-CentOS.yml

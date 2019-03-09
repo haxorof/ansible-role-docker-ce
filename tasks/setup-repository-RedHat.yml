@@ -1,6 +1,6 @@
 ---
 - name: Include tasks from setup of repositories for CentOS
-  include_tasks: setup-repository/setup-repository-CentOS.yml
+  include_tasks: setup-repository-CentOS.yml
 
 # disable rt-beta so we don't get a 403 error retrieving repomd.xml
 - name: Check if rhel-7-server-rt-beta-rpms Repository is enabled (RedHat)
