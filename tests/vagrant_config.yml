@@ -23,30 +23,30 @@ boxes:
     storage_ctl: SCSI
     storage_port: 2
     vbguest_update: false
-  #-
-  #  box: ubuntu/artful64
-  #  box_url: vagrantup
-  #  storage_ctl: SCSI
-  #  storage_port: 2
-  #  vbguest_update: false
+  -
+    box: generic/ubuntu1710
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
   -
     box: ubuntu/cosmic64
     box_url: vagrantup
     storage_ctl: SCSI
     storage_port: 2
     vbguest_update: false
-  #-
-  #  box: ubuntu/disco64
-  #  box_url: vagrantup
-  #  storage_ctl: SCSI
-  #  storage_port: 2
-  #  vbguest_update: false
   # -
-  #   box: debian/wheezy64
+  #   box: ubuntu/disco64
   #   box_url: vagrantup
-  #   storage_ctl: SATA Controller
-  #   storage_port: 1
-  #   vbguest_update: true
+  #   storage_ctl: SCSI
+  #   storage_port: 2
+  #   vbguest_update: false
+  -
+    box: debian/wheezy64
+    box_url: vagrantup
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: true
   -
     box: debian/jessie64
     box_url: vagrantup
@@ -59,12 +59,12 @@ boxes:
     storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
-  # -
-  #   box: fujimakishouten/debian-buster64
-  #   box_url: vagrantup
-  #   storage_ctl: SATA Controller
-  #   storage_port: 1
-  #   vbguest_update: false
+  -
+    box: debian/buster64
+    box_url: vagrantup
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: false
   -
     box: fedora/25-cloud-base
     box_url: https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/25/CloudImages/x86_64/images/Fedora-Cloud-Base-Vagrant-25-1.3.x86_64.vagrant-virtualbox.box
@@ -102,35 +102,48 @@ tests:
     name: Configurations
     prep_yml: prepare.yml
     test_yml: test_config.yml
-    skip_boxes: none
+    skip_boxes: trusty64,artful64,wheezy64,disco64
+    only_boxes: none
   -
     id: t_nightly_channel
     name: Nigthly channel configuration
     prep_yml: prepare.yml
     test_yml: test_config_nightly.yml
-    skip_boxes: trusty64,xenial64,bionic64,jessie64,fedora/25,fedora/26,fedora/27,fedora/28
+    skip_boxes: none
+    only_boxes: centos/7,cosmic64,stretch64,fedora/29
   -
     id: t_postinstall
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: ubuntu/cosmic64
+    skip_boxes: ubuntu/cosmic64,trusty64,artful64,wheezy64,disco64
     # ubuntu/cosmic64 - https://github.com/docker/docker-py/issues/1502
+    only_boxes: none
   -
     id: t_old_docker
     name: Old version of Docker
     prep_yml: prepare.yml
     test_yml: test_old_version.yml
-    skip_boxes: ubuntu,debian,fedora
+    skip_boxes: none
+    only_boxes: centos/7
   -
     id: t_devicemapper_config
     name: Devicemapper configuration
     prep_yml: prepare_storage.yml
     test_yml: test_config_devicemapper.yml
-    skip_boxes: ubuntu,debian,fedora
+    skip_boxes: none
+    only_boxes: centos/7
   -
     id: t_uninstall
     name: Uninstall
     prep_yml: prepare.yml
     test_yml: test_uninstall.yml
     skip_boxes: centos,ubuntu,debian,fedora
+    only_boxes: none
+  -
+    id: t_docker_compatibility
+    name: Docker compatibility
+    prep_yml: prepare.yml
+    test_yml: test_docker_compatibility.yml
+    skip_boxes: none
+    only_boxes: trusty64,ubuntu1710,wheezy64

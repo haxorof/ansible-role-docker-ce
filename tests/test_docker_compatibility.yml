@@ -1,0 +1,22 @@
+---
+- hosts: test-host
+  vars:
+    docker_versions:
+      # Last working version for Ubuntu Trusty (https://github.com/docker/for-linux/issues/591)
+      Ubuntu14: 18.06.1~ce~3-0~ubuntu
+      Ubuntu17: 18.06.3~ce~3-0~ubuntu
+      Debian7: 18.03.1~ce-0~debian
+  tasks:
+    - debug:
+        msg: "{{ docker_versions[ansible_distribution + ansible_distribution_major_version] }}"
+
+    - name: Install Docker CE for {{ ansible_distribution }}{{ ansible_distribution_major_version }}
+      include_role:
+        name: haxorof.docker-ce
+      vars:
+        docker_version: "{{ docker_versions[ansible_distribution + ansible_distribution_major_version] }}"
+
+    - name: Run hello-world
+      become: yes
+      shell: docker run --rm hello-world
+      changed_when: false
