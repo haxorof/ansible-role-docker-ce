@@ -50,6 +50,6 @@
   become: true
   apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} \
-      {{ _docker_os_dist_release }} {{ _docker_enable_channels | join(' ') }}"
+      {{ ansible_lsb.codename }} {{ _docker_enable_channels | join(' ') }}"
     state: present
     filename: 'docker-ce'

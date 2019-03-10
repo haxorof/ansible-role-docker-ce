@@ -34,6 +34,8 @@
 - name: Disable Docker CE repository channels (Fedora/CentOS/RedHat)
   become: true
   shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
+  args:
+    warn: false
   with_items: "{{ _docker_disable_channels }}"
   changed_when: false
   vars:
@@ -47,6 +49,8 @@
 - name: Enable Docker CE repository channels (Fedora/CentOS/RedHat)
   become: true
   shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
+  args:
+    warn: false
   with_items: "{{ _docker_enable_channels }}"
   changed_when: false
   vars:

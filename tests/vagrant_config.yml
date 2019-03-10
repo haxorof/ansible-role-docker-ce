@@ -102,7 +102,7 @@ tests:
     name: Configurations
     prep_yml: prepare.yml
     test_yml: test_config.yml
-    skip_boxes: trusty64,artful64,wheezy64,disco64
+    skip_boxes: trusty64,artful64,wheezy64,disco64,ubuntu1710
     only_boxes: none
   -
     id: t_nightly_channel
@@ -116,7 +116,7 @@ tests:
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: ubuntu/cosmic64,trusty64,artful64,wheezy64,disco64
+    skip_boxes: ubuntu/cosmic64,trusty64,artful64,wheezy64,disco64,ubuntu1710
     # ubuntu/cosmic64 - https://github.com/docker/docker-py/issues/1502
     only_boxes: none
   -
