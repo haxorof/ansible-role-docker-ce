@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.3.0](../../releases/tag/2.3.0) - 2019-03-11
+
 ### Fixes
 
 - APT repository setup fails on Debian Buster 10 ([#88](../../issues/88))
