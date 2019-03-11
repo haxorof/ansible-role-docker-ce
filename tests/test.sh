@@ -259,15 +259,15 @@ AddTestResult() {
 }
 
 AddTestResultPassed() {
-  AddTestResult "${BLDGRN}passed${TXTRST}" $1 $2
+  AddTestResult "${BLDGRN}passed${TXTRST}" "$1" "$2"
 }
 
 AddTestResultFailed() {
-  AddTestResult "${BLDRED}failed${TXTRST}" $1 $2
+  AddTestResult "${BLDRED}failed${TXTRST}" "$1" "$2"
 }
 
 AddTestResultSkipped() {
-  AddTestResult "${BLDCYN}skipped${TXTRST}" $1 $2
+  AddTestResult "${BLDCYN}skipped${TXTRST}" "$1" "$2"
 }
 
 PrintTestSummary() {
@@ -295,24 +295,39 @@ ExecuteTests() {
       Info "Starting test: $test_name"
       if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
         Skip "(code:2) Test: $test_name [$box]"
-        AddTestResultSkipped $box $test_name
+        AddTestResultSkipped $box "$test_name"
         continue
       fi
-      if [[ "${tests__skip_boxes[$index]}" != "" ]]; then
+      if [[ "${tests__skip_boxes[$index]}" != "none" ]]; then
         do_skip=0
         for skip_box in ${tests__skip_boxes[$index]//,/ }
         do
           if [[ "$box" == *"$skip_box"* ]]; then
-            Skip "(code:3) Test: $test_name [$box]"
-            AddTestResultSkipped $box $test_name
             do_skip=1
             break
           fi
         done
         if [[ "$do_skip" == "1" ]]; then
+          Skip "(code:3) Test: $test_name [$box]"
+          AddTestResultSkipped $box "$test_name"
           continue
         fi
       fi
+      if [[ "${tests__only_boxes[$index]}" != "none" ]]; then
+        do_skip=1
+        for only_box in ${tests__only_boxes[$index]//,/ }
+        do
+          if [[ "$box" == *"$only_box"* ]]; then
+            do_skip=0
+            break
+          fi
+        done
+        if [[ "$do_skip" == "1" ]]; then
+          Skip "(code:4) Test: $test_name [$box]"
+          AddTestResultSkipped $box "$test_name"
+          continue
+        fi
+      fi      
       GenerateTestCaseConfig $box_index $index
       Info "Test: ${tests__name[$index]} [$box]"
       StartTest
@@ -320,11 +335,11 @@ ExecuteTests() {
       EndTest $exitCode
       if [[ "$exitCode" == "0" ]]; then
         Pass "Test: $test_name [$box]"
-        AddTestResultPassed $box $test_name        
+        AddTestResultPassed $box "$test_name"
       else
         Fail "Test: $test_name [$box]"
         finalExitCode=$exitCode
-        AddTestResultFailed $box $test_name
+        AddTestResultFailed $box "$test_name"
         if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
           break
         fi

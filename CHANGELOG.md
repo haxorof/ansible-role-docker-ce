@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixes
+
+- APT repository setup fails on Debian Buster 10 ([#88](../../issues/88))
+
 ### Added
 
 - Added `postinstall` tag
@@ -18,6 +22,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Internal
 
 - Updated regression test baseline to Ansible 2.5
+- Refactored setup of repository to reduce number of skipped tasks
+- Refactored distribution check tasks
+- Added regression tests
 
 ## [2.2.0](../../releases/tag/2.2.0) - 2019-02-10
 

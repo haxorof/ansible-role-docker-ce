@@ -1,0 +1,55 @@
+---
+- name: Update APT cache
+  become: true
+  apt:
+    update_cache: yes
+  changed_when: false
+  register: _pkg_result
+  until: _pkg_result is succeeded
+
+- name: Ensure packages are installed for repository setup
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ docker_repository_related_packages[_docker_os_dist] }}"
+  register: _pkg_result
+  until: _pkg_result is succeeded
+
+- name: Add Docker official GPG key
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/{{ _docker_os_dist|lower }}/gpg
+    state: present
+  register: _pkg_result
+  until: _pkg_result is succeeded
+  when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > '14') or
+        (_docker_os_dist == "Debian" and _docker_os_dist_major_version > '7')
+
+- name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
+  become: true
+  shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+  args:
+    warn: false
+  changed_when: false
+  when: (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == '14') or (_docker_os_dist == "Debian" and
+    _docker_os_dist_major_version == '7')
+  tags:
+    - skip_ansible_lint
+
+- name: Determine channels to be enabled and/or disabled
+  set_fact:
+    _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
+    _docker_enable_channels: "{{ docker_channels | intersect(_docker_merged_channels) }}"
+  vars:
+    _docker_mandatory_channel: []
+    _docker_merged_channels: "{{ _docker_mandatory_channel }} + [ '{{ docker_channel }}' ]"
+
+- name: Add Docker CE repository with correct channels (Ubuntu/Debian)
+  become: true
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} \
+      {{ ansible_lsb.codename }} {{ _docker_enable_channels | join(' ') }}"
+    state: present
+    filename: 'docker-ce'

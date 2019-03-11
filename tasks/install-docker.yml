@@ -7,7 +7,7 @@
 - name: Set packages state to latest
   set_fact:
     _docker_pkg_state: 'latest'
-  when: docker_latest_version | bool
+  when: docker_latest_version | bool and docker_version == ''
 
 - name: Filter out packages to match older Docker CE versions
   set_fact:

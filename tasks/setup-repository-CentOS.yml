@@ -1,0 +1,62 @@
+---
+- name: Ensure packages are installed for repository setup
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ docker_repository_related_packages[_docker_os_dist] }}"
+  register: _pkg_result
+  until: _pkg_result is succeeded
+  when: _docker_os_dist == "CentOS" or
+        _docker_os_dist == "RedHat"
+        
+- name: Determine channels to be enabled and/or disabled
+  set_fact:
+    _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
+    _docker_enable_channels: "{{ docker_channels | intersect(_docker_merged_channels) }}"
+  vars:
+    _docker_mandatory_channel: []
+    _docker_merged_channels: "{{ _docker_mandatory_channel }} + [ '{{ docker_channel }}' ]"
+
+- name: Add Docker CE repository (Fedora/CentOS/RedHat)
+  become: true
+  get_url:
+    url: "{{ docker_repository_url[_docker_os_dist] }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: 0644
+  register: _docker_repo
+  until: _docker_repo is succeeded
+  when: _docker_os_dist == "CentOS" or
+        _docker_os_dist == "Fedora" or
+        _docker_os_dist == "RedHat"
+
+- name: Disable Docker CE repository channels (Fedora/CentOS/RedHat)
+  become: true
+  shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
+  args:
+    warn: false
+  with_items: "{{ _docker_disable_channels }}"
+  changed_when: false
+  vars:
+    _item_enabled: false
+  when: _docker_os_dist == "CentOS" or
+        _docker_os_dist == "Fedora" or
+        _docker_os_dist == "RedHat"
+  tags:
+    - skip_ansible_lint
+
+- name: Enable Docker CE repository channels (Fedora/CentOS/RedHat)
+  become: true
+  shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
+  args:
+    warn: false
+  with_items: "{{ _docker_enable_channels }}"
+  changed_when: false
+  vars:
+    _item_enabled: true
+  when: _docker_os_dist == "CentOS" or
+        _docker_os_dist == "Fedora" or
+        _docker_os_dist == "RedHat"
+  tags:
+    - skip_ansible_lint
