@@ -1,11 +1,11 @@
-# ansible-role-docker-ce
+# Ansible Role for Docker CE (Community Edition)
 
 [![Ansible Role](https://img.shields.io/ansible/role/38776.svg?style=popout-square)](https://galaxy.ansible.com/haxorof/docker_ce/)
 [![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce.svg?style=popout-square)](https://github.com/haxorof/ansible-role-docker-ce)
 [![Ansible Quality](https://img.shields.io/ansible/quality/38776.svg?style=popout-square)](https://galaxy.ansible.com/haxorof/docker_ce/)
 [![Downloads](https://img.shields.io/ansible/role/d/38776.svg?style=popout-square)](https://galaxy.ansible.com/haxorof/docker_ce/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=popout-square)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
-[![Build Status](https://travis-ci.com/haxorof/ansible-role-docker-ce.svg?style=popout-square&branch=master)](https://travis-ci.com/haxorof/ansible-role-docker-ce)
+[![Build Status](https://img.shields.io/travis/com/haxorof/ansible-role-docker-ce/master.svg?style=popout-square)](https://travis-ci.com/haxorof/ansible-role-docker-ce)
 
 This Ansible role installs and configures Docker CE (Community Edition) on several different Linux distributions. The goal is to let the
 user of this role to just care about how Docker shall be installed and configured and hide the differences that exists in the
