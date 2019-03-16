@@ -1,6 +1,6 @@
 # ansible-role-docker-ce
 
-[![Ansible Role](https://img.shields.io/ansible/role/17533.svg)](https://galaxy.ansible.com/haxorof/docker-ce/)
+[![Ansible Role](https://img.shields.io/ansible/role/38776.svg)](https://galaxy.ansible.com/haxorof/docker_ce/)
 [![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce.svg)](https://github.com/haxorof/ansible-role-docker-ce)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/haxorof/ansible-role-docker-ce.svg?branch=master)](https://travis-ci.com/haxorof/ansible-role-docker-ce)
