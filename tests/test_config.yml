@@ -2,7 +2,7 @@
 - name: Test default configuration
   hosts: test-host
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 
 - name: Test configuration using file
   hosts: test-host
@@ -11,7 +11,7 @@
     docker_daemon_config:
       shall_skip_this: true
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 
 - name: Test configuration using variable
   hosts: test-host
@@ -27,7 +27,7 @@
     docker_users:
       - vagrant
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 
 - name: Test configuration for systemd and environment variables
   hosts: test-host
@@ -42,14 +42,14 @@
       HTTP_PROXY: http://localhost:3128/
       NO_PROXY: localhost,127.0.0.1,docker-registry.somecorporation.com
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 
 - name: Test issue https://github.com/haxorof/ansible-role-docker-ce/issues/42
   hosts: test-host
   tasks:
     - name: Test only for Ubuntu/Debian
       include_role:
-        name: haxorof.docker-ce
+        name: haxorof.docker_ce
       vars:
         docker_daemon_config:
           hosts:

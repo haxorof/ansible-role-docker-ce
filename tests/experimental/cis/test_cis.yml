@@ -60,7 +60,7 @@
 
           allow = true
     - include_role:
-        name: haxorof.docker-ce
+        name: haxorof.docker_ce
       vars:
         docker_plugins:
           - type: authz

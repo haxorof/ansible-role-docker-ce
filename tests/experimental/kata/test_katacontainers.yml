@@ -22,7 +22,7 @@
 
       - name: Install and configure Docker
         include_role:
-          name: haxorof.docker-ce
+          name: haxorof.docker_ce
         vars:
           #docker_daemon_opts: '-D --add-runtime kata-runtime=/usr/bin/kata-runtime --default-runtime=kata-runtime'
           docker_daemon_config:

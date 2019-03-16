@@ -176,7 +176,7 @@ Following sub sections show different kind of examples to illustrate what this r
 ```yaml
 - hosts: docker
   roles:
-    - role: haxorof.docker-ce
+    - role: haxorof.docker_ce
 ```
 
 ### Configure Docker daemon to use proxy
@@ -188,7 +188,7 @@ Following sub sections show different kind of examples to illustrate what this r
       HTTP_PROXY: http://localhost:3128/
       NO_PROXY: localhost,127.0.0.1,docker-registry.somecorporation.com
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 ```
 
 ### Ensure Ansible can use Docker modules after install
@@ -199,7 +199,7 @@ Following sub sections show different kind of examples to illustrate what this r
     docker_sdk: true
     docker_compose: true
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
   post_tasks:
     - name: Test hello container
       become: yes
@@ -241,7 +241,7 @@ However this configuration setup devicemapper in a certain way which will create
       userland-proxy: false
       no-new-privileges: true
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 ```
 
 Because the configuration above requires Linux user namespaces to be enabled then additional GRUB arguments might be needed. Example below show one example what changes that might be needed and reboot of the host is required for the changes to take full affect.

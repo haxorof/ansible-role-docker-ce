@@ -2,7 +2,7 @@
 - name: Install Docker CE with default configuration
   hosts: test-host
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
   pre_tasks:
     - name: Find files and diretories with docker in it (Before)
       become: yes
@@ -23,7 +23,7 @@
     #   - /var/lib/yum/repos/x86_64/7/docker-ce-nightly
     #   - /var/lib/yum/repos/x86_64/7/docker-ce-stable
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
   tasks:
     - name: Find files and diretories with docker in it (After)
       become: yes

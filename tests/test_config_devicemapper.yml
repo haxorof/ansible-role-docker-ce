@@ -7,4 +7,4 @@
       storage-opts:
         - "dm.directlvm_device={{ lvm_device }}2"
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce

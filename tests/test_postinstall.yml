@@ -5,7 +5,7 @@
     docker_compose: true
     docker_compose_no_pip: true
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
   post_tasks:
     - name: Test docker-compose (shell)
       become: no
@@ -26,7 +26,7 @@
     docker_compose: true
     docker_stack: true
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 
 - name: Test docker modules
   hosts: test-host

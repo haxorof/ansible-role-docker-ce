@@ -6,7 +6,7 @@
     docker_users:
       - vagrant
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
 
 - name: Verify that Docker CE Engine and CLI is from nightly channel
   hosts: test-host
@@ -41,7 +41,7 @@
 #     docker_users:
 #       - vagrant
 #   roles:
-#     - haxorof.docker-ce
+#     - haxorof.docker_ce
 
 # - name: Verify that Docker CE Engine and CLI is from stable channel
 #   hosts: test-host

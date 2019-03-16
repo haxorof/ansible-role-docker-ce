@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Changed
+
+- Role name changed due to automatic conversion of hyphen to underscore in Ansible Galaxy
+
 ## [2.3.0](../../releases/tag/2.3.0) - 2019-03-11
 
 ### Fixes

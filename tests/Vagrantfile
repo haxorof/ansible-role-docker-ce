@@ -70,9 +70,9 @@ if File.exist?(testcase_file)
 
       # Prepare Ansible roles directory
       machine.vm.provision "shell",
-        inline: "test -d /etc/ansible/roles/haxorof.docker-ce || \
+        inline: "test -d /etc/ansible/roles/haxorof.docker_ce || \
           (mkdir -p /etc/ansible/roles && \
-          ln -s /mnt/ansible-role-docker-ce /etc/ansible/roles/haxorof.docker-ce)"
+          ln -s /mnt/ansible-role-docker-ce /etc/ansible/roles/haxorof.docker_ce)"
 
       machine.vm.provision "shell",
         inline: "test -e /home/vagrant/.ssh/id_rsa || (mkdir -p /home/vagrant/.ssh && chmod 0700 /home/vagrant/.ssh && \
