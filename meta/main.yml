@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: docker-ce
   author: Bjorn Oscarsson
   company: none
   description: "Installs and configures Docker Community Edition (CE)"
