@@ -1,0 +1,5 @@
+---
+- name: Test default configuration
+  hosts: test-host
+  roles:
+    - haxorof.docker_ce

@@ -147,3 +147,10 @@ tests:
     test_yml: test_docker_compatibility.yml
     skip_boxes: none
     only_boxes: trusty64,ubuntu1710,wheezy64
+  -
+    id: t_default
+    name: Default no config
+    prep_yml: prepare.yml
+    test_yml: test_default.yml
+    skip_boxes: centos,ubuntu,debian,fedora
+    only_boxes: none

@@ -8,5 +8,8 @@
   args:
     warn: false
   changed_when: false
+  register: _result
+  until: _result is succeeded
+  when: docker_network_access
   tags:
     - skip_ansible_lint
