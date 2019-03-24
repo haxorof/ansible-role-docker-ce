@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Role name changed due to automatic conversion of hyphen to underscore in Ansible Galaxy
 
+### Internal
+
+- Preparations for doing automated tests with RHEL 7
+
 ## [2.3.0](../../releases/tag/2.3.0) - 2019-03-11
 
 ### Fixes
