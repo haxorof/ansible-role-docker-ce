@@ -8,15 +8,19 @@ testcase_file = "#{current_dir}/vagrant_testcase.yml"
 if File.exist?(testcase_file)
   vagrant_config = YAML.load_file("#{testcase_file}")
   vagrant_devs = ["/dev/sda", "/dev/sdb", "/dev/sdc"]
-  box_url = vagrant_config['box_url']
-  box_url = box_url.gsub(/local:\/\//, ENV['VAGRANT_BOXES_PATH'] + "/")
+  vagrant_box_url = vagrant_config['box_url']
+  if vagrant_config['local_boxes'] or vagrant_config['box_url'] === "local"
+    vagrant_url_local_base = ENV['VAGRANT_BOXES_URL'] ? ENV['VAGRANT_BOXES_URL'] : "file:///vagrant_boxes/"
+    vagrant_box_filename = "virtualbox-" + vagrant_config['box'].to_s.gsub(/\//, "-") + ".box"
+    vagrant_box_url = vagrant_url_local_base + vagrant_box_filename
+  end
   Vagrant.configure("2") do |config|
     config.vm.box_check_update = true
     config.ssh.insert_key = false
 
     config.vm.define 'test-host' do |machine|
       machine.vm.box = vagrant_config['box']
-      machine.vm.box_url = box_url
+      machine.vm.box_url = vagrant_box_url
       machine.vagrant.plugins = "vagrant-vbguest"
       machine.vbguest.no_remote = true
       machine.vbguest.auto_update = vagrant_config['vbguest_update']

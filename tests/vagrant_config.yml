@@ -97,7 +97,7 @@ boxes:
     vbguest_update: false
   - 
     box: redhat/7
-    box_url: "local://virtualbox-redhat7.box"
+    box_url: local
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
