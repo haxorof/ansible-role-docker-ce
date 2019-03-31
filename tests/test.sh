@@ -143,10 +143,15 @@ VagrantBoxRemove() {
 
 VagrantBoxAdd() {
   local cmdOutput=
-  if [[ "$2" == "vagrantup" ]]; then
-    cmdOutput=$(Vagrant box add --provider=virtualbox $1)
+  if [[ "$VAGRANT_LOCAL_BOXES" == "" ]]; then
+    if [[ "$2" == "vagrantup" ]]; then
+      cmdOutput=$(Vagrant box add --provider=virtualbox $1)
+    else
+      cmdOutput=$(Vagrant box add --provider=virtualbox --name $1 $2)
+    fi
   else
-    cmdOutput=$(Vagrant box add --provider=virtualbox --name $1 $2)
+    localUrl="${VAGRANT_LOCAL_BOXES}virtualbox-$(sed s/[\/]/-/g <<<$1).box"
+    cmdOutput=$(Vagrant box add --provider=virtualbox --name $1 $localUrl)
   fi
   local exitCode=$?
   if [[ "$cmdOutput" == *force* ]]; then
