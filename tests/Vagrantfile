@@ -18,6 +18,10 @@ if File.exist?(testcase_file)
     config.vm.box_check_update = true
     config.ssh.insert_key = false
 
+    if Vagrant.has_plugin?("vagrant-proxyconf")
+      config.proxy.enabled = false
+    end
+
     config.vm.define 'test-host' do |machine|
       machine.vm.box = vagrant_config['box']
       machine.vm.box_url = vagrant_box_url
@@ -62,6 +66,21 @@ if File.exist?(testcase_file)
         vb.customize ["modifyvm", :id, "--memory", mem]
         vb.customize ["modifyvm", :id, "--cpus", cpus]      
       end
+
+      if Vagrant.has_plugin?('vagrant-registration')
+        if vagrant_config['box'].include? "rhel"
+          machine.registration.name = "ansible-role-docker-ce"
+          if "#{ENV['RHSM_ACTIVATIONKEY']}" === ""
+            machine.registration.username = "#{ENV['RHSM_USERNAME']}" 
+            machine.registration.password = "#{ENV['RHSM_PASSWORD']}" 
+          else
+            machine.registration.org = "#{ENV['RHSM_ORG']}" 
+            machine.registration.activationkey = "#{ENV['RHSM_ACTIVATIONKEY']}"
+          end
+        else
+          machine.registration.skip = true
+        end
+      end      
     end
 
     config.vm.define 'controller' do |machine|
@@ -73,6 +92,10 @@ if File.exist?(testcase_file)
       machine.vm.synced_folder "../", "/mnt/ansible-role-docker-ce", :mount_options => ["ro"]
       machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
       machine.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: true
+
+      if Vagrant.has_plugin?('vagrant-registration')
+        machine.registration.skip = true
+      end
 
       # Prepare Ansible roles directory
       machine.vm.provision "shell",

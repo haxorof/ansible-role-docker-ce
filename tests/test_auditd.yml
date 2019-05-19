@@ -1,0 +1,6 @@
+- name: Test audit
+  hosts: test-host
+  vars:
+    docker_enable_audit: true
+  roles:
+    - haxorof.docker_ce

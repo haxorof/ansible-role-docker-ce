@@ -1,0 +1,36 @@
+---
+- hosts: test-host
+  tasks:
+    - name: Remove Docker 1.13 and install Docker CE (RedHat)
+      block:
+      - name: Enable rhel-7-server-extras-rpms Repository (RedHat)
+        become: true
+        shell: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
+        changed_when: false
+        tags:
+          - skip_ansible_lint
+
+      - name: Ensure Docker 1.13 is installed
+        become: true
+        package:
+          name: docker-latest
+          state: present
+        register: _pkg_result
+        until: _pkg_result is succeeded
+
+      - name: Remove Docker 1.13 and install Docker CE
+        include_role:
+          name: haxorof.docker_ce
+        vars:
+          docker_remove_pre_ce: true
+
+      - name: Force all notified handlers to run
+        meta: flush_handlers
+
+      - name: Removal of Docker 1.13 shall be skipped and install of Docker CE remains the same
+        include_role:
+          name: haxorof.docker_ce
+        vars:
+          docker_remove_pre_ce: true
+
+      when: ansible_distribution == "RedHat"

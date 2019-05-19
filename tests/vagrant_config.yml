@@ -96,7 +96,13 @@ boxes:
     storage_port: 1
     vbguest_update: false
   - 
-    box: redhat/7
+    box: rhel/7
+    box_url: local
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+  - 
+    box: rhel/8
     box_url: local
     storage_ctl: IDE Controller
     storage_port: 1
@@ -108,7 +114,7 @@ tests:
     name: Configurations
     prep_yml: prepare.yml
     test_yml: test_config.yml
-    skip_boxes: redhat,trusty64,artful64,wheezy64,disco64,ubuntu1710
+    skip_boxes: rhel,trusty64,artful64,wheezy64,disco64,ubuntu1710
     only_boxes: none
   -
     id: t_nightly_channel
@@ -122,7 +128,7 @@ tests:
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: redhat,ubuntu/cosmic64,trusty64,artful64,wheezy64,disco64,ubuntu1710
+    skip_boxes: rhel,ubuntu/cosmic64,trusty64,artful64,wheezy64,disco64,ubuntu1710
     # ubuntu/cosmic64 - https://github.com/docker/docker-py/issues/1502
     only_boxes: none
   -
@@ -144,7 +150,7 @@ tests:
     name: Uninstall
     prep_yml: prepare.yml
     test_yml: test_uninstall.yml
-    skip_boxes: redhat,centos,ubuntu,debian,fedora
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
     only_boxes: none
   -
     id: t_docker_compatibility
@@ -158,5 +164,26 @@ tests:
     name: Default no config
     prep_yml: prepare.yml
     test_yml: test_default.yml
-    skip_boxes: redhat,centos,ubuntu,debian,fedora
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
+    only_boxes: none
+  -
+    id: t_auditd
+    name: Auditd
+    prep_yml: prepare.yml
+    test_yml: test_auditd.yml
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
+    only_boxes: none
+  -
+    id: t_remove_pre_ce
+    name: Do nothing
+    prep_yml: prepare.yml
+    test_yml: test_remove_pre_ce.yml
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
+    only_boxes: none
+  -
+    id: t_nothing
+    name: Do nothing
+    prep_yml: prepare.yml
+    test_yml: test_nothing.yml
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
     only_boxes: none

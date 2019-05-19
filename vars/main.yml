@@ -82,6 +82,7 @@ docker_old_packages:
     - docker-selinux
     - docker-engine-selinux
     - docker-engine
+    - docker-rhel-*-plugin
   Fedora:
     - docker
     - docker-client
