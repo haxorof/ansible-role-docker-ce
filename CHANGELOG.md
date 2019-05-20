@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Role name changed due to automatic conversion of hyphen to underscore in Ansible Galaxy
 
+### Fixed
+
+- RHEL, role fails to remove "pre-docker-ce" packages ([#92](../../issues/92))
+
 ### Internal
 
 - Preparations for doing automated tests with RHEL 7
