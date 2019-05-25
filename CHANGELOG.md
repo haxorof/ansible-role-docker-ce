@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Internal
 
 - Preparations for doing automated tests with RHEL 7
+- Increase Ansible version to 2.6.16
+- Preparations for better handling of Python 3 in test suites
 
 ## [2.3.0](../../releases/tag/2.3.0) - 2019-03-11
 

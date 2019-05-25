@@ -48,10 +48,10 @@
       debug:
         msg: "Tasks requiring network access will be skipped!"
       when: not docker_network_access
-      
+
     - name: Remove Docker versions before Docker CE
       include_tasks: remove-pre-docker-ce.yml
-      when: 
+      when:
         - docker_remove_pre_ce | bool
         - docker_network_access
       tags: ["install"]

@@ -1,0 +1,18 @@
+---
+- name: Install Python on host
+  hosts: test-host
+  gather_facts: no
+  tasks:
+    - name: Determine Python interpreter
+      raw: (type python3 2>/dev/null || type python2 2>/dev/null || type python 2>/dev/null) | cut -d' ' -f3
+      changed_when: no
+      register: _distribution_interpreter
+
+    - name: Set fact for Ansible interpreter
+      set_fact:
+        ansible_python_interpreter: "{{ _distribution_interpreter.stdout_lines|join('') }}"
+
+    - name: Print Python interpreter
+      become: yes
+      debug:
+        var: ansible_python_interpreter

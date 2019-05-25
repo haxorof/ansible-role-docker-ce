@@ -6,7 +6,7 @@
     state: present
   register: _pkg_result
   until: _pkg_result is succeeded
-  when: 
+  when:
     - docker_enable_audit
     - docker_network_access
     - _docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian"

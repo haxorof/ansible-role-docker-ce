@@ -2,6 +2,9 @@
 - name: Setup Python on host
   import_playbook: setup_python.yml
 
+- name: Determine Python interpreter
+  import_playbook: determine_python_interpreter.yml
+
 - name: Upgrade host
   import_playbook: host_upgrade.yml
 

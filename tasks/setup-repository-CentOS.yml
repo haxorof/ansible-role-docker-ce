@@ -28,7 +28,7 @@
     mode: 0644
   register: _docker_repo
   until: _docker_repo is succeeded
-  when: 
+  when:
     - docker_network_access
     - _docker_os_dist == "CentOS" or
       _docker_os_dist == "Fedora" or

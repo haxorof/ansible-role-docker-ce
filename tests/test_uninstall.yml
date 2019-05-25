@@ -1,4 +1,7 @@
 ---
+- name: Determine Python interpreter
+  import_playbook: determine_python_interpreter.yml
+
 - name: Install Docker CE with default configuration
   hosts: test-host
   roles:

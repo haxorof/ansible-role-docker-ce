@@ -1,4 +1,7 @@
 ---
+- name: Determine Python interpreter
+  import_playbook: determine_python_interpreter.yml
+
 - hosts: test-host
   tasks:
     - name: Install Docker CE 17.06 (using docker_pkg_name)

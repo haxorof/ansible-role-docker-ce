@@ -1,4 +1,7 @@
 ---
+- name: Determine Python interpreter
+  import_playbook: determine_python_interpreter.yml
+
 - name: Test install of Docker compose not using PiP
   hosts: test-host
   vars:
