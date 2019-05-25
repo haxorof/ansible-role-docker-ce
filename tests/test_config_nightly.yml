@@ -1,4 +1,7 @@
 ---
+- name: Determine Python interpreter
+  import_playbook: determine_python_interpreter.yml
+
 - name: Test to install Docker CE via nightly channel
   hosts: test-host
   vars:
