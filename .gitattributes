@@ -4,3 +4,5 @@
 # Declare files that will always have LF line endings on checkout.
 *.sh text eol=lf
 *.yml text eol=lf
+*.json text eol=lf
+*.j2 text eol=lf
