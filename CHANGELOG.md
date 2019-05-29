@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Many deprecation warnings in Ansible 2.8 ([#94](../../issues/94))
 - Role name changed due to automatic conversion of hyphen to underscore in Ansible Galaxy
 
 ### Fixed

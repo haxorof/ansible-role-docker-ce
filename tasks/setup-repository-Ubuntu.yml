@@ -7,7 +7,7 @@
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
-    - docker_network_access
+    - docker_network_access | bool
 
 - name: Ensure packages are installed for repository setup
   become: true
@@ -19,7 +19,7 @@
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
-    - docker_network_access
+    - docker_network_access | bool
 
 - name: Add Docker official GPG key
   become: true
@@ -29,7 +29,7 @@
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
-    - docker_network_access
+    - docker_network_access | bool
     - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > '14') or
       (_docker_os_dist == "Debian" and _docker_os_dist_major_version > '7')
 
@@ -40,7 +40,7 @@
     warn: false
   changed_when: false
   when:
-    - docker_network_access
+    - docker_network_access | bool
     - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == '14') or
       (_docker_os_dist == "Debian" and  _docker_os_dist_major_version == '7')
   tags:

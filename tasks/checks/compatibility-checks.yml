@@ -9,7 +9,7 @@
       triggers a bug (https://github.com/moby/moby/issues/35873). For now,
       don't use both.
   when:
-    - docker_enable_mount_flag_fix
+    - docker_enable_mount_flag_fix | bool
     - docker_daemon_config['live-restore'] is defined
     - docker_daemon_config['live-restore']
 
@@ -23,8 +23,8 @@
   when:
     - _docker_os_dist == "Debian"
     - _docker_os_dist_major_version == '7'
-    - docker_stack|bool or
-      docker_sdk|bool or
-      docker_pip_upgrade|bool or
-      (docker_compose|bool and not docker_compose_no_pip|bool) or
+    - docker_stack | bool or
+      docker_sdk | bool or
+      docker_pip_upgrade | bool or
+      (docker_compose | bool and not docker_compose_no_pip | bool) or
       docker_additional_packages_pip|length > 0

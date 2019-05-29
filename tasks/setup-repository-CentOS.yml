@@ -9,7 +9,7 @@
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
-    - docker_network_access
+    - docker_network_access | bool
     - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
 
 - name: Determine channels to be enabled and/or disabled
@@ -29,7 +29,7 @@
   register: _docker_repo
   until: _docker_repo is succeeded
   when:
-    - docker_network_access
+    - docker_network_access | bool
     - _docker_os_dist == "CentOS" or
       _docker_os_dist == "Fedora" or
       _docker_os_dist == "RedHat"

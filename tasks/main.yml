@@ -47,13 +47,13 @@
     - name: Network access disabled
       debug:
         msg: "Tasks requiring network access will be skipped!"
-      when: not docker_network_access
+      when: not docker_network_access | bool
 
     - name: Remove Docker versions before Docker CE
       include_tasks: remove-pre-docker-ce.yml
       when:
         - docker_remove_pre_ce | bool
-        - docker_network_access
+        - docker_network_access | bool
       tags: ["install"]
 
     - name: Setup Docker package repositories
@@ -62,7 +62,7 @@
 
     - name: Install Docker
       include_tasks: install-docker.yml
-      when: docker_network_access
+      when: docker_network_access | bool
       tags: ["install"]
 
     - name: Configure audit logging
@@ -79,7 +79,7 @@
 
     - name: Postinstall tasks
       include_tasks: postinstall.yml
-      when: docker_network_access
+      when: docker_network_access | bool
       tags: ["install", "postinstall"]
   when: not docker_remove | bool
 

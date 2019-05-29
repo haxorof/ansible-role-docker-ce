@@ -32,7 +32,7 @@
   register: _docker_plugin_install
   changed_when: _docker_plugin_install.stdout_lines | last == 'installed'
   when:
-    - docker_network_access
+    - docker_network_access | bool
 
 - name: Reset list of authorization plugins
   set_fact:

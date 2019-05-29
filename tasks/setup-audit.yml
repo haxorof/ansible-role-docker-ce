@@ -7,8 +7,8 @@
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
-    - docker_enable_audit
-    - docker_network_access
+    - docker_enable_audit | bool
+    - docker_network_access | bool
     - _docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian"
 
 - name: Copy Docker audit rules
@@ -17,7 +17,7 @@
     src: files/etc/audit/rules.d/docker.rules
     dest: /etc/audit/rules.d/docker.rules
   notify: restart auditd
-  when: docker_enable_audit
+  when: docker_enable_audit | bool
 
 - name: Ensure Docker audit rules are removed
   become: yes
@@ -25,4 +25,4 @@
     path: /etc/audit/rules.d/docker.rules
     state: absent
   notify: restart auditd
-  when: not docker_enable_audit
+  when: not docker_enable_audit | bool
