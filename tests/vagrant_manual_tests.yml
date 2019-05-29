@@ -1,0 +1,29 @@
+tests:
+  -
+    id: t_uninstall
+    name: Uninstall
+    prep_yml: prepare.yml
+    test_yml: test_uninstall.yml
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
+    only_boxes: none
+  -
+    id: t_default
+    name: Default no config
+    prep_yml: prepare.yml
+    test_yml: test_default.yml
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
+    only_boxes: none
+  -
+    id: t_remove_pre_ce
+    name: Remove pre Docker CE
+    prep_yml: prepare.yml
+    test_yml: test_remove_pre_ce.yml
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
+    only_boxes: none
+  -
+    id: t_nothing
+    name: Do nothing
+    prep_yml: prepare.yml
+    test_yml: test_nothing.yml
+    skip_boxes: rhel,centos,ubuntu,debian,fedora
+    only_boxes: none

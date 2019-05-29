@@ -1,3 +1,7 @@
+ansible_version: "2.6.16"
+galaxy_role_name: haxorof.docker_ce
+role_dir: ansible-role-docker-ce
+
 boxes:
   -
     box: centos/7
@@ -95,6 +99,12 @@ boxes:
     storage_ctl: IDE
     storage_port: 1
     vbguest_update: false
+  # -
+  #   box: fedora/30-cloud-base
+  #   box_url: vagrantup
+  #   storage_ctl: IDE
+  #   storage_port: 1
+  #   vbguest_update: false
   - 
     box: rhel/7
     box_url: local
@@ -107,83 +117,3 @@ boxes:
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-
-tests:
-  -
-    id: t_config
-    name: Configurations
-    prep_yml: prepare.yml
-    test_yml: test_config.yml
-    skip_boxes: rhel,trusty64,artful64,wheezy64,disco64,ubuntu1710
-    only_boxes: none
-  -
-    id: t_nightly_channel
-    name: Nigthly channel configuration
-    prep_yml: prepare.yml
-    test_yml: test_config_nightly.yml
-    skip_boxes: none
-    only_boxes: centos/7,cosmic64,stretch64,fedora/29
-  -
-    id: t_postinstall
-    name: Postinstall
-    prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
-    skip_boxes: rhel,ubuntu/cosmic64,trusty64,artful64,wheezy64,disco64,ubuntu1710
-    # ubuntu/cosmic64 - https://github.com/docker/docker-py/issues/1502
-    only_boxes: none
-  -
-    id: t_old_docker
-    name: Old version of Docker
-    prep_yml: prepare.yml
-    test_yml: test_old_version.yml
-    skip_boxes: none
-    only_boxes: centos/7
-  -
-    id: t_devicemapper_config
-    name: Devicemapper configuration
-    prep_yml: prepare_storage.yml
-    test_yml: test_config_devicemapper.yml
-    skip_boxes: none
-    only_boxes: centos/7
-  -
-    id: t_uninstall
-    name: Uninstall
-    prep_yml: prepare.yml
-    test_yml: test_uninstall.yml
-    skip_boxes: rhel,centos,ubuntu,debian,fedora
-    only_boxes: none
-  -
-    id: t_docker_compatibility
-    name: Docker compatibility
-    prep_yml: prepare.yml
-    test_yml: test_docker_compatibility.yml
-    skip_boxes: none
-    only_boxes: trusty64,ubuntu1710,wheezy64
-  -
-    id: t_default
-    name: Default no config
-    prep_yml: prepare.yml
-    test_yml: test_default.yml
-    skip_boxes: rhel,centos,ubuntu,debian,fedora
-    only_boxes: none
-  -
-    id: t_auditd
-    name: Auditd
-    prep_yml: prepare.yml
-    test_yml: test_auditd.yml
-    skip_boxes: rhel,centos,ubuntu,debian,fedora
-    only_boxes: none
-  -
-    id: t_remove_pre_ce
-    name: Do nothing
-    prep_yml: prepare.yml
-    test_yml: test_remove_pre_ce.yml
-    skip_boxes: rhel,centos,ubuntu,debian,fedora
-    only_boxes: none
-  -
-    id: t_nothing
-    name: Do nothing
-    prep_yml: prepare.yml
-    test_yml: test_nothing.yml
-    skip_boxes: rhel,centos,ubuntu,debian,fedora
-    only_boxes: none

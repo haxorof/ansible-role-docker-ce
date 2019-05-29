@@ -8,3 +8,4 @@ tests/yaml.sh
 tests/yamlparser.sh.inc
 tests/test-dbg.sh
 tests/vagrant_testcase.yml
+tests/scripts/yamlparser.sh.inc

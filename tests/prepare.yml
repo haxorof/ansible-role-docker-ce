@@ -15,6 +15,10 @@
         var: ansible_lsb
       when: ansible_lsb is defined
 
+    - name: Print distribution
+      debug:
+        msg: "{{ ansible_distribution}}, {{ ansible_distribution_release }}, {{ ansible_distribution_major_version }}"
+
     - name: Print Kernel version
       debug:
         var: ansible_kernel

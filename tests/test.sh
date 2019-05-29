@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 #
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 TEST_SUMMARY=()
 
 VAGRANT_TEST_VM_NAME=test-host
 VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
+VAGRANT_TESTS_FILE=vagrant_tests.yml
 
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
@@ -35,15 +38,6 @@ RedText() {
 
 Info() {
   printf "%b\n" "${BLDBLU}[INFO]${TXTRST} $1"
-}
-
-SetupYamlParser() {
-  YAML_INC_FILE=yamlparser.sh.inc
-  if [[ ! -f "$YAML_INC_FILE" ]]; then
-    Info "Fetching YAML parsing script..."
-    wget -O $YAML_INC_FILE -q https://raw.githubusercontent.com/jasperes/bash-yaml/master/script/yaml.sh
-  fi
-  . $YAML_INC_FILE
 }
 
 DetectWSL() {
@@ -236,44 +230,28 @@ DownloadBoxes() {
   return $exitCode
 }
 
-GenerateTestCaseConfig() {
-  local _box_index=$1
-  local _test_index=$2
-  local _box_url=
-  if [[ "${boxes__box_url[$_box_index]}" != "vagrantup" ]]; then
-    _box_url=${boxes__box_url[$_box_index]}
-  fi
-          cat << EOF > $VAGRANT_TESTCASE_FILE
-box: ${boxes__box[$_box_index]}
-box_url: ${_box_url}
-storage_ctl: ${boxes__storage_ctl[$_box_index]}
-storage_port: ${boxes__storage_port[$_box_index]}
-vbguest_update: ${boxes__vbguest_update[$_box_index]}
-id: ${tests__id[$_test_index]}
-prep_yml: ${tests__prep_yml[$_test_index]}
-test_yml: ${tests__test_yml[$_test_index]}
-local_boxes: $VAGRANT_LOCAL_BOXES
-EOF
-}
-
 AddTestResult() {
   if [[ "$3" == "" ]]; then
     TEST_SUMMARY+=("$1 | $2")
   else
-    TEST_SUMMARY+=("$1 | $2 - $3")
+    if [[ "$4" == "" ]]; then
+      TEST_SUMMARY+=("$1 | $2 - $3")
+    else
+      TEST_SUMMARY+=("$1 | $2 - $3 [$4]")
+    fi
   fi
 }
 
 AddTestResultPassed() {
-  AddTestResult "${BLDGRN}passed${TXTRST}" "$1" "$2"
+  AddTestResult "${BLDGRN}passed${TXTRST}" "$1" "$2" "$3"
 }
 
 AddTestResultFailed() {
-  AddTestResult "${BLDRED}failed${TXTRST}" "$1" "$2"
+  AddTestResult "${BLDRED}failed${TXTRST}" "$1" "$2" "$3"
 }
 
 AddTestResultSkipped() {
-  AddTestResult "${BLDCYN}skipped${TXTRST}" "$1" "$2"
+  AddTestResult "${BLDCYN}skipped${TXTRST}" "$1" "$2" "$3"
 }
 
 PrintTestSummary() {
@@ -298,10 +276,11 @@ ExecuteTests() {
     fi
     for index in $(seq 0 `expr ${#tests__name[@]} - 1`); do
       local test_name=${tests__name[$index]}
+      local test_id=${tests__id[$index]}
       Info "Starting test: $test_name"
-      if [[ "${tests__id[$index]}" != *"$LIMIT_TEST"* ]]; then
+      if [[ "$test_id" != *"$LIMIT_TEST"* ]]; then
         Skip "(code:2) Test: $test_name [$box]"
-        AddTestResultSkipped $box "$test_name"
+        AddTestResultSkipped $box "$test_name" "$test_id"
         continue
       fi
       if [[ "${tests__skip_boxes[$index]}" != "none" ]]; then
@@ -315,7 +294,7 @@ ExecuteTests() {
         done
         if [[ "$do_skip" == "1" ]]; then
           Skip "(code:3) Test: $test_name [$box]"
-          AddTestResultSkipped $box "$test_name"
+          AddTestResultSkipped $box "$test_name" "$test_id"
           continue
         fi
       fi
@@ -330,22 +309,22 @@ ExecuteTests() {
         done
         if [[ "$do_skip" == "1" ]]; then
           Skip "(code:4) Test: $test_name [$box]"
-          AddTestResultSkipped $box "$test_name"
+          AddTestResultSkipped $box "$test_name" "$test_id"
           continue
         fi
-      fi      
-      GenerateTestCaseConfig $box_index $index
+      fi
+      $SCRIPT_DIR/scripts/generateConf.sh $box_index $index $VAGRANT_TESTS_FILE
       Info "Test: ${tests__name[$index]} [$box]"
       StartTest
       exitCode=$?
       EndTest $exitCode
       if [[ "$exitCode" == "0" ]]; then
         Pass "Test: $test_name [$box]"
-        AddTestResultPassed $box "$test_name"
+        AddTestResultPassed $box "$test_name" "$test_id"
       else
         Fail "Test: $test_name [$box]"
         finalExitCode=$exitCode
-        AddTestResultFailed $box "$test_name"
+        AddTestResultFailed $box "$test_name" "$test_id"
         if [[ "$ON_FAILURE_KEEP" == "1" ]]; then
           break
         fi
@@ -363,19 +342,24 @@ ExecuteTests() {
   return $finalExitCode
 }
 
-SetupYamlParser
+. $SCRIPT_DIR/scripts/fetchYamlParser.sh
 DetectWSL
-
-create_variables vagrant_config.yml
-if [[ "$DEBUG" != "" ]]; then
-  parse_yaml vagrant_config.yml
-fi
 
 if [[ "$1" != "" ]]; then
   LIMIT_TEST=$1
   if [[ "$2" != "" ]]; then
     LIMIT_BOX=$2
+    if [[ "$3" != "" ]]; then
+      VAGRANT_TESTS_FILE=$3
+    fi
   fi
+fi
+
+create_variables vagrant_boxes.yml
+create_variables $VAGRANT_TESTS_FILE
+if [[ "$DEBUG" != "" ]]; then
+  parse_yaml vagrant_boxes.yml
+  parse_yaml $VAGRANT_TESTS_FILE
 fi
 
 LogVagrantVersion

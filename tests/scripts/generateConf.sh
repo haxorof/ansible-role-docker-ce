@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
-VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-SetupYamlParser() {
-  YAML_INC_FILE=yamlparser.sh.inc
-  if [[ ! -f "$YAML_INC_FILE" ]]; then
-    wget -O $YAML_INC_FILE -q https://raw.githubusercontent.com/jasperes/bash-yaml/master/script/yaml.sh
-  fi
-  . $YAML_INC_FILE
-}
+VAGRANT_TESTCASE_FILE=$SCRIPT_DIR/../vagrant_testcase.yml
 
 GenerateTestCaseConfig() {
   local _box_index=$1
@@ -16,8 +10,11 @@ GenerateTestCaseConfig() {
   if [[ "${boxes__box_url[$_box_index]}" != "vagrantup" ]]; then
     _box_url=${boxes__box_url[$_box_index]}
   fi
-  echo "==> Generating config: box=[${boxes__box[$_box_index]}], box_url=[${_box_url}], test_yml=[${tests__test_yml[$_test_index]}]"
+  echo "==> Generating config: box=[${boxes__box[$_box_index]}], test_yml=[${tests__test_yml[$_test_index]}]"
   cat << EOF > $VAGRANT_TESTCASE_FILE
+ansible_version: ${ansible_version}
+galaxy_role_name: ${galaxy_role_name}
+role_dir: ${role_dir}
 box: ${boxes__box[$_box_index]}
 box_url: ${_box_url}
 storage_ctl: ${boxes__storage_ctl[$_box_index]}
@@ -38,6 +35,9 @@ GenerateDoNothingConfig() {
   fi
   echo "==> Generating 'Do Nothing' config: box=[${boxes__box[$_box_index]}], box_url=[${_box_url}]"
   cat << EOF > $VAGRANT_TESTCASE_FILE
+ansible_version: ${ansible_version}
+galaxy_role_name: ${galaxy_role_name}
+role_dir: ${role_dir}
 box: ${boxes__box[$_box_index]}
 box_url: ${_box_url}
 storage_ctl: ${boxes__storage_ctl[$_box_index]}
@@ -58,11 +58,14 @@ if [[ "$1" == "--help" ]]; then
   exit 0
 fi
 
-SetupYamlParser
-create_variables vagrant_config.yml
+. $SCRIPT_DIR/fetchYamlParser.sh
 
 arg_1=${1:-0}
 arg_2=${2:-0}
+arg_3=${3:-vagrant_tests.yml}
+
+create_variables vagrant_boxes.yml
+create_variables $arg_3
 
 if [[ "$arg_1" == "--nop" ]]; then
   GenerateDoNothingConfig $arg_2
