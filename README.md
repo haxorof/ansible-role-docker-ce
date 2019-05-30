@@ -37,7 +37,7 @@ See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/mast
 
 ## Ansible Compatibility
 
-- `2.5` or later
+- `2.6` or later
 
 For this role to support multiple Ansible versions it is not possible to avoid all Ansible deprecation warnings. Read Ansible documentation if you want to disable [deprecation warnings](http://docs.ansible.com/ansible/latest/reference_appendices/config.html#deprecation-warnings).
 
