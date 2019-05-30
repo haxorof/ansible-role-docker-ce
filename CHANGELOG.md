@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Many deprecation warnings in Ansible 2.8 ([#94](../../issues/94))
 - Improve handling of Python 3 ([#95](../../issues/95))
+- RHEL: handling repos NOT via subscription-manager ([#96](../../issues/96))
 - Role name changed due to automatic conversion of hyphen to underscore in Ansible Galaxy
 
 ### Fixed

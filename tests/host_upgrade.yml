@@ -11,7 +11,7 @@
       register: _kernel_upgrade
       when: ansible_distribution == "Debian" and ansible_distribution_major_version == '7'
 
-    - name: Upgrade all packages for RHEL
+    - name: Upgrade all packages (RedHat)
       become: true
       package:
         name: '*'

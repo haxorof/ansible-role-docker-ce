@@ -34,6 +34,19 @@ docker_users: []
 #     args: opa_args="-policy-file /opa/policies/authz.rego"
 docker_plugins: []
 
+# Repositories required to be enabled or disabled on RHEL
+#  id: <id of repo>
+#  state: enabled || disabled
+#  repo_manager: sm (subsription manager) || yum
+docker_rhel_repos:
+  - id: rhel-7-server-extras-rpms
+    repo_manager: sm
+    state: enabled
+  # disable rt-beta so we don't get a 403 error retrieving repomd.xml
+  - id: rhel-7-server-rt-beta-rpms
+    repo_manager: sm
+    state: disabled
+
 ################################################################################
 # Docker daemon configuration
 ################################################################################
