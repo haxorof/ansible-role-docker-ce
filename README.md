@@ -160,6 +160,33 @@ Because the configuration above requires Linux user namespaces to be enabled the
 
 For a more complete working example on CentOS 7 have a look [here](https://github.com/haxorof/ansible-role-docker-ce/blob/master/tests/experimental/cis).
 
+## Automated test matrix
+
+Here is the latest test results of the automated test which is located in the tests directory:
+
+2019-05-30
+
+| distributions/tests  | t_config | t_nightly_channel | t_postinstall | t_old_docker | t_devicemapper_config | t_auditd | t_docker_compatibility |
+|----------------------|----------|-------------------|---------------|--------------|-----------------------|----------|------------------------|
+| centos/7             | passed   | passed            | passed        | passed       | passed                | passed   | -                      |
+| ubuntu/trusty64      | -        | -                 | -             | -            | -                     | -        | passed                 |
+| ubuntu/xenial64      | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| ubuntu/bionic64      | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| generic/ubuntu1710   | -        | -                 | -             | -            | -                     | -        | passed                 |
+| ubuntu/cosmic64      | passed   | passed            | -             | -            | -                     | -        | -                      |
+| debian/jessie64      | passed   | -                 | -             | -            | -                     | -        | -                      |
+| debian/stretch64     | passed   | passed            | passed        | -            | -                     | -        | -                      |
+| debian/buster64      | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| fedora/25-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| fedora/26-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| fedora/27-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| fedora/28-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| fedora/29-cloud-base | passed   | passed            | passed        | -            | -                     | -        | -                      |
+| fedora/30-cloud-base | -        | -                 | -             | -            | -                     | -        | -                      |
+| rhel/7               | passed   | passed            | failed        | -            | passed                | passed   | -                      |
+| rhel/8               | failed   | -                 | -             | -            | -                     | -        | -                      |
+
+
 ## License
 
 This is an open source project under the [MIT](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE) license.
