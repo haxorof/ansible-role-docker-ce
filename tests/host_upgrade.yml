@@ -24,6 +24,7 @@
       shell: "sleep 5 && reboot"
       async: 1
       poll: 0
+      register: _reboot_host
       when: (_kernel_upgrade is defined and _kernel_upgrade is changed) or (_upgrade_all is defined and _upgrade_all is changed)
 
     - name: Wait for the reboot to complete
@@ -32,4 +33,4 @@
         sleep: 5
         delay: 5
         timeout: 300
-      when: _kernel_upgrade is defined and _kernel_upgrade is changed
+      when: _reboot_host is defined and _reboot_host is changed
