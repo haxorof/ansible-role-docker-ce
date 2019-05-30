@@ -7,6 +7,7 @@
   vars:
     docker_compose: true
     docker_compose_no_pip: true
+    docker_compose_no_pip_detect_version: false
   roles:
     - haxorof.docker_ce
   post_tasks:
@@ -28,6 +29,12 @@
     docker_sdk: true
     docker_compose: true
     docker_stack: true
+  pre_tasks:
+    - name: Enable experimental workarounds
+      set_fact:
+        docker_x_ssl_match_hostname: true
+      when:
+        - ansible_distribution == "Debian" and ansible_distribution_major_version == 'buster/sid'
   roles:
     - haxorof.docker_ce
 

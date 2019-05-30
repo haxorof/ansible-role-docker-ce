@@ -40,17 +40,19 @@ boxes:
     storage_port: 2
     vbguest_update: false
   # -
+  #   # 2019-05-30 - Cannot get the Vagrant box to boot correctly
   #   box: ubuntu/disco64
   #   box_url: vagrantup
   #   storage_ctl: SCSI
   #   storage_port: 2
   #   vbguest_update: false
-  -
-    box: debian/wheezy64
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: true
+  # -
+  #   # 2019-05-30 - No longer possibly to install Docker on Wheezy due to APT repository EOLs etc
+  #   box: debian/wheezy64
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
   -
     box: debian/jessie64
     box_url: vagrantup

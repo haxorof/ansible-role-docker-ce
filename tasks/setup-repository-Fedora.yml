@@ -4,7 +4,8 @@
   raw: dnf install -y python2 python2-dnf libselinux-python
   changed_when: false
   when:
-    - docker_network_access
+    - docker_network_access | bool
+    - ansible_python_version is version_compare('3', '<')
 
 - name: Include tasks from setup of repositories for CentOS
   include_tasks: setup-repository-CentOS.yml

@@ -14,10 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Many deprecation warnings in Ansible 2.8 ([#94](../../issues/94))
+- Improve handling of Python 3 ([#95](../../issues/95))
 - Role name changed due to automatic conversion of hyphen to underscore in Ansible Galaxy
 
 ### Fixed
 
+- api.github.com limits on number of requests causes the request to fail ([#87](../../issues/87))
 - RHEL, role fails to remove "pre-docker-ce" packages ([#92](../../issues/92))
 
 ### Internal
@@ -25,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Preparations for doing automated tests with RHEL 7
 - Increase Ansible version to 2.6.16
 - Preparations for better handling of Python 3 in test suites
+- Removed Debian 7 Wheezy from tests due to APT repository EOLs etc
 
 ## [2.3.0](../../releases/tag/2.3.0) - 2019-03-11
 

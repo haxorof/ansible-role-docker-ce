@@ -1,4 +1,6 @@
 ---
+# IMPORTANT! All variables with prefix 'docker_x_' is experimental and can be
+#            changed at any time.
 ################################################################################
 # Docker install configuration
 ################################################################################
@@ -79,6 +81,10 @@ docker_compose: false
 # Ensures that docker-compose is installed without pip, meaning 'docker_service' will NOT work.
 # Important! This only has any affect when 'docker_compose' is set to true.
 docker_compose_no_pip: false
+# Uses Github API to lookup latest version of docker compose
+docker_compose_no_pip_detect_version: true
+# Docker compose version to use if no automatic lookup is used
+docker_compose_no_pip_version: 1.24.0
 # Ensures dependencies are installed so that 'docker_stack' Ansible module will work.
 docker_stack: false
 # Additional PiP packages to install after Docker is configured and started.
@@ -90,10 +96,15 @@ docker_additional_packages_os: []
 docker_pip_upgrade: false
 # Default python pip package to install if missing
 docker_pip_package: python-pip
+docker_pip3_package: python3-pip
 # PiP extra args
 docker_pip_extra_args:
 # PiP install packages using sudo
 docker_pip_sudo: true
+
+# Workaround for - No module named ssl_match_hostname
+# https://github.com/docker/docker-py/issues/1502
+docker_x_ssl_match_hostname: false
 
 ################################################################################
 # Docker removal configuration

@@ -3,57 +3,86 @@
   set_fact:
     _docker_additional_packages_os: []
     _docker_additional_packages_pip: []
-    _docker_python_system: false
-
-- name: Do best effort detection and set fact to indicate system Python environment is used
-  set_fact:
-    _docker_python_system: true
-  when: ansible_python.executable | regex_search('^/bin') or ansible_python.executable | regex_search('^/usr/bin')
+    _docker_python3: "{{ ansible_python_version is version_compare('3', '>=') }}"
 
 - name: Set facts to install Docker SDK for Python
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist]['sdk'] }}"
   when:
-    - docker_sdk
+    - docker_sdk | bool
 
 - name: Set facts to install Docker Compose
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist]['compose'] }}"
   when:
-    - docker_compose and not docker_compose_no_pip
+    - docker_compose | bool and not docker_compose_no_pip | bool
 
 - name: Set facts to install Docker Stack dependencies ('docker_stack')
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist]['stack'] }}"
   when:
-    - docker_stack
+    - docker_stack | bool
 
 - name: Set facts with additional package to be installed
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_additional_packages_pip }}"
     _docker_additional_packages_os: "{{ _docker_additional_packages_os + docker_additional_packages_os }}"
 
-- name: Determine if pip exists in path
-  become: true
-  shell: type pip
-  register: _docker_pip_cmd
-  changed_when: false
-  failed_when: false
-  check_mode: no
-  tags:
-    - skip_ansible_lint
-  when:
-    - _docker_additional_packages_pip | length > 0
+- name: Ensure required OS packages will be installed for PiP
+  block:
+    - name: Determine if pip/pip3 exists in path
+      become: true
+      shell: type {{ _docker_python3 | ternary('pip3', 'pip') }}
+      register: _docker_pip_cmd
+      changed_when: false
+      failed_when: false
+      check_mode: no
+      tags:
+        - skip_ansible_lint
 
-- name: Set fact to install Python PiP
-  set_fact:
-    _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip_package] }}"
+    - name: Set fact to install Python 2 PiP
+      set_fact:
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip_package] }}"
+      when:
+        - not _docker_python3 | bool
+        - _docker_pip_cmd.rc != 0
+
+    - name: Set fact to install Python 3 PiP
+      set_fact:
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip3_package] }}"
+      when:
+        - _docker_python3 | bool
+        - _docker_pip_cmd.rc != 0
+
+    - name: Set fact to install build libraries (CentOS/Fedora/RedHat)
+      set_fact:
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['openssl-devel'] }}"
+      when:
+        - (_docker_os_dist == "CentOS" or _docker_os_dist == "Fedora" or _docker_os_dist == "RedHat")
+
+    - name: Set fact to install build libraries [General] (Fedora)
+      set_fact:
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['redhat-rpm-config','make','libffi-devel','gcc'] }}"
+      when:
+        - _docker_os_dist == "Fedora"
+
+    - name: Set fact to install build libraries [Python 3] (Fedora)
+      set_fact:
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python3-devel'] }}"
+      when:
+        - _docker_python3 | bool
+        - _docker_os_dist == "Fedora"
+
+    - name: Set fact to install build libraries (Debian/Ubuntu)
+      set_fact:
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['libffi-dev', 'libssl-dev'] }}"
+      when:
+        - (_docker_os_dist == "Debian" or _docker_os_dist == "Ubuntu")
   when:
     - _docker_additional_packages_pip | length > 0
-    - _docker_pip_cmd.rc != 0
 
 - name: Ensure python-pip-whl is present (Debian 8)
   set_fact:
@@ -93,7 +122,7 @@
     state: forcereinstall
   register: _pkg_result
   until: _pkg_result is succeeded
-  when: docker_pip_upgrade
+  when: docker_pip_upgrade | bool
 
 - name: Install additional packages (PiP)
   become: "{{ docker_pip_sudo | bool }}"
@@ -109,70 +138,14 @@
   environment:
     PYTHONWARNINGS: ignore
 
-# Not using github_release:  https://github.com/ansible/ansible/issues/45391
-- name: Get latest release of docker-compose
-  uri:
-    url: https://api.github.com/repos/docker/compose/releases/latest
-    body_format: json
-  register: _github_docker_compose
-  until: _github_docker_compose.status == 200
-  retries: 10
-  check_mode: no
-  when:
-    - docker_compose
-
-- name: Set common facts related to docker-compose
-  set_fact:
-    _docker_compose_shasum_url: "https://github.com/docker/compose/releases/download/\
-      {{ _github_docker_compose.json.tag_name }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
-    _docker_compose_url: "https://github.com/docker/compose/releases/download/\
-      {{ _github_docker_compose.json.tag_name }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
-  when:
-    - docker_compose
-
-- name: Fetch docker-compose SHA265 sum file
-  get_url:
-    url: "{{ _docker_compose_shasum_url }}"
-    dest: "/tmp/ansible.docker-compose-sha256"
-  register: _github_docker_compose_shasum_file
-  changed_when: false
-  until: _github_docker_compose_shasum_file.status_code == 200
-  retries: 10
-  check_mode: no
-  when:
-    - docker_compose
-
-- name: Dump SHA256 file contents to variable
-  command: cat /tmp/ansible.docker-compose-sha256
-  register: _github_docker_compose_shasum
-  changed_when: false
-  check_mode: no
-  when:
-    - docker_compose
-
-- name: Remove temporary file for SHA256 sum
-  file:
-    path: "/tmp/ansible.docker-compose-sha256"
-    state: absent
-  changed_when: false
-  check_mode: no
-  when:
-    - docker_compose
-
-- name: Set SHA256 facts related to docker-compose
-  set_fact:
-    _docker_compose_checksum: "sha256:{{ _github_docker_compose_shasum.stdout | \
-      regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
-  when:
-    - docker_compose
-
-# Use when moving to Ansible 2.7 as minimum version
-# - name: Set SHA256 facts related to docker-compose (Ansible >= 2.7)
-#   set_fact:
-#     _docker_compose_checksum: "sha256:https://github.com/docker/compose/releases/download/\
-#       {{ _github_docker_compose.json.tag_name }}/\
-#       docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
-#   when: ansible_version.full is version_compare('2.7', '>=')
+# https://github.com/docker/docker-py/issues/1502
+- name: Workaround for issue - No module named ssl_match_hostname (Python 2.7)
+  become: yes
+  command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
+  when: 
+    - docker_x_ssl_match_hostname | bool
+    - _docker_additional_packages_pip | length > 0
+    - not _docker_python3 | bool
 
 - name: Stat /usr/bin/docker-compose
   stat:
@@ -181,12 +154,75 @@
   check_mode: no
 
 # Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
-- name: Install docker-compose
+- name: Install docker-compose without PiP
   block:
-    - name: Install docker-compose (Linux)
+    # Not using github_release:  https://github.com/ansible/ansible/issues/45391
+    - name: Get latest release of docker-compose
+      uri:
+        url: https://api.github.com/repos/docker/compose/releases/latest
+        body_format: json
+      register: _github_docker_compose
+      until: _github_docker_compose.status == 200
+      retries: 10
+      check_mode: no
+      when:
+        - docker_compose_no_pip_detect_version | bool
+
+    - name: Set detected docker-compose version
+      set_fact:
+        _docker_compose_version: "{{ _github_docker_compose.json.tag_name }}"
+      when:
+        - _github_docker_compose is defined
+        - _github_docker_compose.json is defined
+
+    - name: Set fixed docker-compose version
+      set_fact:
+        _docker_compose_version: "{{ docker_compose_no_pip_version }}"
+      when:
+        - not docker_compose_no_pip_detect_version | bool
+
+    - name: Fetch docker-compose SHA265 sum file
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/\
+          {{ _docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+        dest: "/tmp/ansible.docker-compose-sha256"
+      register: _github_docker_compose_shasum_file
+      changed_when: false
+      until: _github_docker_compose_shasum_file.status_code == 200
+      retries: 10
+      check_mode: no
+
+    - name: Dump SHA256 file contents to variable
+      command: cat /tmp/ansible.docker-compose-sha256
+      register: _github_docker_compose_shasum
+      changed_when: false
+      check_mode: no
+
+    - name: Remove temporary file for SHA256 sum
+      file:
+        path: "/tmp/ansible.docker-compose-sha256"
+        state: absent
+      changed_when: false
+      check_mode: no
+
+    - name: Set SHA256 facts related to docker-compose
+      set_fact:
+        _docker_compose_checksum: "sha256:{{ _github_docker_compose_shasum.stdout | \
+          regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
+
+    # Use when moving to Ansible 2.7 as minimum version
+    # - name: Set SHA256 facts related to docker-compose (Ansible >= 2.7)
+    #   set_fact:
+    #     _docker_compose_checksum: "sha256:https://github.com/docker/compose/releases/download/\
+    #       {{ _github_docker_compose.json.tag_name }}/\
+    #       docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+    #   when: ansible_version.full is version_compare('2.7', '>=')
+    
+    - name: Install docker-compose {{ _docker_compose_version }} (Linux)
       become: true
       get_url:
-        url: "{{ _docker_compose_url }}"
+        url: "https://github.com/docker/compose/releases/download/\
+          {{ _docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
         checksum: "{{ _docker_compose_checksum }}"
         dest: /usr/local/bin/docker-compose
         mode: 0755
@@ -198,5 +234,6 @@
         dest: /usr/bin/docker-compose
         state: link
   when:
-    - docker_compose
+    - docker_compose | bool
+    - docker_compose_no_pip | bool
     - not _docker_compose_file.stat.exists
