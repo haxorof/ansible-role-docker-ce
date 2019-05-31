@@ -2,7 +2,8 @@
 - name: Determine Python interpreter
   import_playbook: determine_python_interpreter.yml
 
-- hosts: test-host
+- name: Test devicemapper support
+  hosts: test-host
   vars:
     docker_daemon_config:
       # Deprecated since 18.09
@@ -11,3 +12,11 @@
         - "dm.directlvm_device={{ lvm_device }}2"
   roles:
     - haxorof.docker_ce
+
+- name: Verify hello-world works with devicemapper
+  hosts: test-host
+  tasks:
+    - name: Run hello-world
+      become: yes
+      shell: docker run --rm hello-world
+      changed_when: false  

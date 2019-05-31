@@ -7,6 +7,7 @@ TEST_SUMMARY=()
 VAGRANT_TEST_VM_NAME=test-host
 VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
 VAGRANT_TESTS_FILE=vagrant_tests.yml
+TEST_LOG_FILE=test.log
 
 BLDRED='\033[1;31m'
 BLDGRN='\033[1;32m'
@@ -17,27 +18,27 @@ BLDCYN='\033[1;36m' # Cyan
 TXTRST='\033[0m'
 
 Done () {
-  printf "%b\n" "${BLDGRN}[DONE]${TXTRST} $1"
+  printf "%b\n" "${BLDGRN}[DONE]${TXTRST} $1" | tee -a $TEST_LOG_FILE
 }
 
 Pass () {
-  printf "%b\n" "${BLDGRN}[PASS]${TXTRST} $1"
+  printf "%b\n" "${BLDGRN}[PASS]${TXTRST} $1" | tee -a $TEST_LOG_FILE
 }
 
 Fail () {
-  printf "%b\n" "${BLDRED}[FAIL]${TXTRST} $1"
+  printf "%b\n" "${BLDRED}[FAIL]${TXTRST} $1" | tee -a $TEST_LOG_FILE
 }
 
 Skip() {
-  printf "%b\n" "${BLDCYN}[SKIP]${TXTRST} $1"
+  printf "%b\n" "${BLDCYN}[SKIP]${TXTRST} $1" | tee -a $TEST_LOG_FILE
 }
 
 RedText() {
-  printf "%b\n" "${BLDRED}$1${TXTRST}"
+  printf "%b\n" "${BLDRED}$1${TXTRST}" | tee -a $TEST_LOG_FILE
 }
 
 Info() {
-  printf "%b\n" "${BLDBLU}[INFO]${TXTRST} $1"
+  printf "%b\n" "${BLDBLU}[INFO]${TXTRST} $1" | tee -a $TEST_LOG_FILE
 }
 
 DetectWSL() {
@@ -78,8 +79,8 @@ Vagrant() {
     RedText "$VAGRANT_CMD not found!"
     exit 2
   fi
-  $VAGRANT_CMD $@ 2>&1
-  local _exitCode=$?
+  $VAGRANT_CMD $@ 2>&1 | tee -a $TEST_LOG_FILE
+  local _exitCode=${PIPESTATUS[0]}
   return $_exitCode
 }
 
@@ -288,7 +289,9 @@ ExecuteTests() {
         for skip_box in ${tests__skip_boxes[$index]//,/ }
         do
           if [[ "$box" == *"$skip_box"* ]]; then
-            do_skip=1
+            if [[ "$FORCE_TEST" == "" ]]; then
+              do_skip=1
+            fi
             break
           fi
         done
@@ -299,7 +302,11 @@ ExecuteTests() {
         fi
       fi
       if [[ "${tests__only_boxes[$index]}" != "none" ]]; then
-        do_skip=1
+        if [[ "$FORCE_TEST" == "" ]]; then
+          do_skip=1
+        else
+          do_skip=0
+        fi
         for only_box in ${tests__only_boxes[$index]//,/ }
         do
           if [[ "$box" == *"$only_box"* ]]; then
@@ -342,6 +349,7 @@ ExecuteTests() {
   return $finalExitCode
 }
 
+rm $TEST_LOG_FILE
 . $SCRIPT_DIR/scripts/fetchYamlParser.sh
 DetectWSL
 

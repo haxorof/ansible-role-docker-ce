@@ -164,28 +164,27 @@ For a more complete working example on CentOS 7 have a look [here](https://githu
 
 Here is the latest test results of the automated test which is located in the tests directory:
 
-2019-05-30
+2019-06-01 (Docker v18.09)
 
 | distributions/tests  | t_config | t_nightly_channel | t_postinstall | t_old_docker | t_devicemapper_config | t_auditd | t_docker_compatibility |
 |----------------------|----------|-------------------|---------------|--------------|-----------------------|----------|------------------------|
 | centos/7             | passed   | passed            | passed        | passed       | passed                | passed   | -                      |
 | ubuntu/trusty64      | -        | -                 | -             | -            | -                     | -        | passed                 |
-| ubuntu/xenial64      | passed   | -                 | passed        | -            | -                     | -        | -                      |
-| ubuntu/bionic64      | passed   | -                 | passed        | -            | -                     | -        | -                      |
+| ubuntu/xenial64      | passed   | passed            | passed        | -            | failed                | -        | -                      |
+| ubuntu/bionic64      | passed   | passed            | passed        | -            | failed                | -        | -                      |
 | generic/ubuntu1710   | -        | -                 | -             | -            | -                     | -        | passed                 |
-| ubuntu/cosmic64      | passed   | passed            | -             | -            | -                     | -        | -                      |
-| debian/jessie64      | passed   | -                 | -             | -            | -                     | -        | -                      |
-| debian/stretch64     | passed   | passed            | passed        | -            | -                     | -        | -                      |
-| debian/buster64      | passed   | -                 | passed        | -            | -                     | -        | -                      |
-| fedora/25-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
-| fedora/26-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
-| fedora/27-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
-| fedora/28-cloud-base | passed   | -                 | passed        | -            | -                     | -        | -                      |
-| fedora/29-cloud-base | passed   | passed            | passed        | -            | -                     | -        | -                      |
-| fedora/30-cloud-base | -        | -                 | -             | -            | -                     | -        | -                      |
+| ubuntu/cosmic64      | passed   | passed            | -             | -            | failed                | -        | -                      |
+| debian/jessie64      | passed   | failed            | -             | -            | passed                | -        | -                      |
+| debian/stretch64     | passed   | passed            | passed        | -            | failed                | -        | -                      |
+| debian/buster64      | passed   | passed            | passed        | -            | failed                | -        | -                      |
+| fedora/25-cloud-base | passed   | failed            | passed        | -            | passed                | -        | -                      |
+| fedora/26-cloud-base | passed   | failed            | passed        | -            | passed                | -        | -                      |
+| fedora/27-cloud-base | passed   | failed            | passed        | -            | passed                | -        | -                      |
+| fedora/28-cloud-base | passed   | passed            | passed        | -            | passed                | -        | -                      |
+| fedora/29-cloud-base | passed   | passed            | passed        | -            | passed                | -        | -                      |
+| fedora/30-cloud-base | failed   | failed            | failed        | -            | failed                | failed   | -                      |
 | rhel/7               | passed   | passed            | failed        | -            | passed                | passed   | -                      |
-| rhel/8               | failed   | -                 | -             | -            | -                     | -        | -                      |
-
+| rhel/8               | failed   | failed            | failed        | -            | -                     | failed   | -                      |
 
 ## License
 
