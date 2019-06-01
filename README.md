@@ -43,8 +43,6 @@ For this role to support multiple Ansible versions it is not possible to avoid a
 
 This role tries to support the lowest supported Ansible version to the most recent listed [here](https://docs.ansible.com/ansible/latest/reference_appendices/release_and_maintenance.html)
 
-If you are using Ansible version `2.3` you cannot go higher than version `1.5.0` of this role.
-
 ## Requirements
 
 No additional requirements.
@@ -166,25 +164,25 @@ Here is the latest test results of the automated test which is located in the te
 
 2019-06-01 (Docker v18.09)
 
-| distributions/tests  | t_config           | t_nightly_channel  | t_postinstall      | t_old_docker       | t_devicemapper_config | t_auditd           | :heavy_minus_sign: |
-|----------------------|--------------------|--------------------|--------------------|--------------------|-----------------------|--------------------|--------------------|
-| centos/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:    | :heavy_check_mark: | :heavy_minus_sign: |
-| ubuntu/trusty64      | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:    | :heavy_minus_sign: | :heavy_check_mark: |
-| ubuntu/xenial64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
-| ubuntu/bionic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
-| generic/ubuntu1710   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:    | :heavy_minus_sign: | :heavy_check_mark: |
-| ubuntu/cosmic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
-| debian/jessie64      | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
-| debian/stretch64     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
-| debian/buster64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
-| fedora/25-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
-| fedora/26-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
-| fedora/27-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
-| fedora/28-cloud-base | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
-| fedora/29-cloud-base | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
-| fedora/30-cloud-base | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                   | :x:                | :heavy_minus_sign: |
-| rhel/7               | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_check_mark: | :heavy_minus_sign: |
-| rhel/8               | :x:                | :x:                | :x:                | :heavy_minus_sign: | :heavy_minus_sign:    | :x:                | :heavy_minus_sign: |
+| distributions/tests  | t_config           | t_nightly_channel  | t_postinstall      | t_old_docker       | t_devicemapper_config | t_auditd           | t_docker_compatibility |
+|----------------------|--------------------|--------------------|--------------------|--------------------|-----------------------|--------------------|------------------------|
+| centos/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:    | :heavy_check_mark: | :heavy_minus_sign:     |
+| ubuntu/trusty64      | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:    | :heavy_minus_sign: | :heavy_check_mark:     |
+| ubuntu/xenial64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign:     |
+| ubuntu/bionic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign:     |
+| generic/ubuntu1710   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:    | :heavy_minus_sign: | :heavy_check_mark:     |
+| ubuntu/cosmic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign:     |
+| debian/jessie64      | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign:     |
+| debian/stretch64     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign:     |
+| debian/buster64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign:     |
+| fedora/25-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign:     |
+| fedora/26-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign:     |
+| fedora/27-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign:     |
+| fedora/28-cloud-base | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign:     |
+| fedora/29-cloud-base | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign:     |
+| fedora/30-cloud-base | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                   | :x:                | :heavy_minus_sign:     |
+| rhel/7               | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_check_mark: | :heavy_minus_sign:     |
+| rhel/8               | :x:                | :x:                | :x:                | :heavy_minus_sign: | :heavy_minus_sign:    | :x:                | :heavy_minus_sign:     |
 
 ## License
 
