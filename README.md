@@ -166,25 +166,25 @@ Here is the latest test results of the automated test which is located in the te
 
 2019-06-01 (Docker v18.09)
 
-| distributions/tests  | t_config | t_nightly_channel | t_postinstall | t_old_docker | t_devicemapper_config | t_auditd | t_docker_compatibility |
-|----------------------|----------|-------------------|---------------|--------------|-----------------------|----------|------------------------|
-| centos/7             | passed   | passed            | passed        | passed       | passed                | passed   | -                      |
-| ubuntu/trusty64      | -        | -                 | -             | -            | -                     | -        | passed                 |
-| ubuntu/xenial64      | passed   | passed            | passed        | -            | failed                | -        | -                      |
-| ubuntu/bionic64      | passed   | passed            | passed        | -            | failed                | -        | -                      |
-| generic/ubuntu1710   | -        | -                 | -             | -            | -                     | -        | passed                 |
-| ubuntu/cosmic64      | passed   | passed            | -             | -            | failed                | -        | -                      |
-| debian/jessie64      | passed   | failed            | -             | -            | passed                | -        | -                      |
-| debian/stretch64     | passed   | passed            | passed        | -            | failed                | -        | -                      |
-| debian/buster64      | passed   | passed            | passed        | -            | failed                | -        | -                      |
-| fedora/25-cloud-base | passed   | failed            | passed        | -            | passed                | -        | -                      |
-| fedora/26-cloud-base | passed   | failed            | passed        | -            | passed                | -        | -                      |
-| fedora/27-cloud-base | passed   | failed            | passed        | -            | passed                | -        | -                      |
-| fedora/28-cloud-base | passed   | passed            | passed        | -            | passed                | -        | -                      |
-| fedora/29-cloud-base | passed   | passed            | passed        | -            | passed                | -        | -                      |
-| fedora/30-cloud-base | failed   | failed            | failed        | -            | failed                | failed   | -                      |
-| rhel/7               | passed   | passed            | failed        | -            | passed                | passed   | -                      |
-| rhel/8               | failed   | failed            | failed        | -            | -                     | failed   | -                      |
+| distributions/tests  | t_config           | t_nightly_channel  | t_postinstall      | t_old_docker       | t_devicemapper_config | t_auditd           | :heavy_minus_sign: |
+|----------------------|--------------------|--------------------|--------------------|--------------------|-----------------------|--------------------|--------------------|
+| centos/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:    | :heavy_check_mark: | :heavy_minus_sign: |
+| ubuntu/trusty64      | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:    | :heavy_minus_sign: | :heavy_check_mark: |
+| ubuntu/xenial64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
+| ubuntu/bionic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
+| generic/ubuntu1710   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign:    | :heavy_minus_sign: | :heavy_check_mark: |
+| ubuntu/cosmic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
+| debian/jessie64      | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
+| debian/stretch64     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
+| debian/buster64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                   | :heavy_minus_sign: | :heavy_minus_sign: |
+| fedora/25-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
+| fedora/26-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
+| fedora/27-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
+| fedora/28-cloud-base | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
+| fedora/29-cloud-base | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_minus_sign: | :heavy_minus_sign: |
+| fedora/30-cloud-base | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                   | :x:                | :heavy_minus_sign: |
+| rhel/7               | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_check_mark:    | :heavy_check_mark: | :heavy_minus_sign: |
+| rhel/8               | :x:                | :x:                | :x:                | :heavy_minus_sign: | :heavy_minus_sign:    | :x:                | :heavy_minus_sign: |
 
 ## License
 
