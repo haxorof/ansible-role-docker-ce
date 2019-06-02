@@ -142,7 +142,7 @@
 - name: Workaround for issue - No module named ssl_match_hostname (Python 2.7)
   become: yes
   command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
-  when: 
+  when:
     - docker_x_ssl_match_hostname | bool
     - _docker_additional_packages_pip | length > 0
     - not _docker_python3 | bool
@@ -217,7 +217,7 @@
     #       {{ _github_docker_compose.json.tag_name }}/\
     #       docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
     #   when: ansible_version.full is version_compare('2.7', '>=')
-    
+
     - name: Install docker-compose {{ _docker_compose_version }} (Linux)
       become: true
       get_url:

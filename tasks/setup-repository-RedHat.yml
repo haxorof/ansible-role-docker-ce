@@ -5,7 +5,7 @@
 - name: RHEL 7 repositories
   block:
     - name: Set internal facts for repository handling
-      set_fact: 
+      set_fact:
         _rhel_repo_check_cmd:
           enabled:
             sm: subscription-manager repos --list-enabled
@@ -21,7 +21,7 @@
             sm: subscription-manager repos --disable=
             yum: "yum-config-manager --disable "
         _rhel_repos: "{{ docker_rhel_repos }}"
-    
+
     - name: Enable and disable repositories (RedHat)
       become: true
       shell: "{{ _rhel_repo_check_cmd[item.state][item.repo_manager]  }} \
@@ -30,7 +30,7 @@
         && exit 2"
       with_items: "{{ _rhel_repos }}"
       register: _cmd_rhel_repo_enabled_disabled
-      changed_when: _cmd_rhel_repo_enabled_disabled.rc == 2 
+      changed_when: _cmd_rhel_repo_enabled_disabled.rc == 2
       failed_when: _cmd_rhel_repo_enabled_disabled.rc not in [ 0, 2 ]
       tags:
         - skip_ansible_lint
