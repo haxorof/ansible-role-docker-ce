@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - api.github.com limits on number of requests causes the request to fail ([#87](../../issues/87))
 - RHEL, role fails to remove "pre-docker-ce" packages ([#92](../../issues/92))
+- Install of Docker SDK fails on RHEL (not supported by this role) ([#97](../../issues/97))
 
 ### Internal
 

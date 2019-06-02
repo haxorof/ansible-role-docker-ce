@@ -24,60 +24,69 @@
 - name: Test using PiP to install SDK, compose and stack
   hosts: test-host
   vars:
-    docker_users:
-      - vagrant
-    docker_sdk: true
-    docker_compose: true
-    docker_stack: true
-  pre_tasks:
-    - name: Enable experimental workarounds
+  tasks:
+    - name: Enable experimental workarounds (Debian Buster)
       set_fact:
         docker_x_ssl_match_hostname: true
       when:
         - ansible_distribution == "Debian" and ansible_distribution_major_version == 'buster/sid'
-  roles:
-    - haxorof.docker_ce
+
+    - name: Install Docker SDK using PiP
+      include_role:
+        name: haxorof.docker_ce
+      vars:
+        docker_users:
+          - vagrant
+        docker_sdk: true
+        docker_compose: true
+        docker_stack: true
+      when:
+        - ansible_distribution != "RedHat"
 
 - name: Test docker modules
   hosts: test-host
   tasks:
-    # Instead of "meta: reset_connection" which does not work so well before Ansible 2.6
-    - name: Reset SSH connection
-      file:
-        path: ~/.ansible/cp
-        state: absent
-      delegate_to: 127.0.0.1
-      
-    - name: Test hello container
-      become: no
-      docker_container:
-        name: hello
-        image: hello-world
-      ignore_errors: yes
+    - name: Verify Docker SDK
+      block:
+        # Instead of "meta: reset_connection" which does not work so well before Ansible 2.6
+        - name: Reset SSH connection
+          file:
+            path: ~/.ansible/cp
+            state: absent
+          delegate_to: 127.0.0.1
+          
+        - name: Test hello container
+          become: no
+          docker_container:
+            name: hello
+            image: hello-world
+          ignore_errors: yes
 
-    - name: Test hello service
-      become: no
-      docker_service:
-        project_name: hello
-        definition:
-          version: '3'
-          services:
-            hello:
-              image: "hello-world"
-      ignore_errors: yes
+        - name: Test hello service
+          become: no
+          docker_service:
+            project_name: hello
+            definition:
+              version: '3'
+              services:
+                hello:
+                  image: "hello-world"
+          ignore_errors: yes
 
-    - name: Test hello container with sudo
-      become: yes
-      docker_container:
-        name: hello
-        image: hello-world
+        - name: Test hello container with sudo
+          become: yes
+          docker_container:
+            name: hello
+            image: hello-world
 
-    - name: Test hello service with sudo
-      become: yes
-      docker_service:
-        project_name: hello
-        definition:
-          version: '3'
-          services:
-            hello:
-              image: "hello-world"
+        - name: Test hello service with sudo
+          become: yes
+          docker_service:
+            project_name: hello
+            definition:
+              version: '3'
+              services:
+                hello:
+                  image: "hello-world"
+      when:
+        - ansible_distribution != "RedHat"
