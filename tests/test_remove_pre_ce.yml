@@ -36,4 +36,7 @@
         vars:
           docker_remove_pre_ce: true
 
+      - name: Verify Docker function
+        import_playbook: verify_docker.yml
+        
       when: ansible_distribution == "RedHat"

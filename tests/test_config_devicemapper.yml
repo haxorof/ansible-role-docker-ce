@@ -13,10 +13,5 @@
   roles:
     - haxorof.docker_ce
 
-- name: Verify hello-world works with devicemapper
-  hosts: test-host
-  tasks:
-    - name: Run hello-world
-      become: yes
-      shell: docker run --rm hello-world
-      changed_when: false  
+- name: Verify Docker function
+  import_playbook: verify_docker.yml
