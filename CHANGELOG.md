@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.4.0](../../releases/tag/2.4.0) - 2019-06-05
+
 ### Added
 
-- Experimental configuration to not access network during run
+- Experimental configuration (`docker_network_access`) to not access network during run
 
 ### Changed
 

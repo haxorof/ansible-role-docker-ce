@@ -47,6 +47,11 @@ docker_rhel_repos:
     repo_manager: sm
     state: disabled
 
+# If Docker is installed this can stop the role from accessing network.
+# IMPORTANT! Role will fail is some external resource is necessary for some
+# tasks to run. Assumption is that this role has been run once before.
+docker_network_access: true
+
 ################################################################################
 # Docker daemon configuration
 ################################################################################
@@ -132,10 +137,3 @@ docker_remove_all: false
 # was previously configured for data storage etc.
 docker_remove_additional: []
 
-################################################################################
-# Experimental
-################################################################################
-# If Docker is installed this can stop the role from accessing network.
-# IMPORTANT! Role will fail is some external resource is necessary for some
-# tasks to run. Assumption is that this role has been run once before.
-docker_network_access: true
