@@ -35,4 +35,6 @@
       tags:
         - skip_ansible_lint
 
-  when: _docker_os_dist_major_version == '7'
+  when: 
+    - docker_network_access | bool
+    - _docker_os_dist_major_version == '7'
