@@ -1,0 +1,17 @@
+---
+- name: Determine Python interpreter
+  import_playbook: determine_python_interpreter.yml
+  
+- name: Install and configure Docker CE
+  hosts: test-host
+  roles:
+    - haxorof.docker_ce
+
+- name: No outbound network shall be required to reconfigure Docker CE
+  hosts: test-host
+  vars:
+    docker_network_access: false
+    docker_daemon_config:
+      icc: false    
+  roles:
+    - haxorof.docker_ce
