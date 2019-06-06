@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.4.1](../../releases/tag/2.4.1) - 2019-06-06
+
 ### Fixed
 
 - RHEL: subscription-manager uses network when docker_network_access is set to false ([#98](../../issues/98))
