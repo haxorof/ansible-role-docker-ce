@@ -64,7 +64,8 @@ if File.exist?(testcase_file)
         end
     
         vb.customize ["modifyvm", :id, "--memory", mem]
-        vb.customize ["modifyvm", :id, "--cpus", cpus]      
+        vb.customize ["modifyvm", :id, "--cpus", cpus]
+        vb.customize ["modifyvm", :id, "--audio", "none"]        
       end
 
       if Vagrant.has_plugin?('vagrant-registration')
@@ -92,6 +93,9 @@ if File.exist?(testcase_file)
       machine.vm.synced_folder "../", "/mnt/#{vagrant_config['role_dir']}", :mount_options => ["ro"]
       machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
       machine.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: true
+      machine.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--audio", "none"]        
+      end
 
       # Prepare Ansible roles directory
       machine.vm.provision "shell",
