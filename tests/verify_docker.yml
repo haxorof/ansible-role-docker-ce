@@ -9,11 +9,6 @@
         state: absent
       delegate_to: 127.0.0.1
         
-    - name: Run hello-world
-      become: yes
-      shell: docker run --rm hello-world
-      changed_when: false
-    
     - name: Docker info
       become: yes
       shell: docker info
@@ -24,3 +19,8 @@
       debug:
         var: _docker_info.stdout_lines
       when: _docker_info.stdout_lines is defined
+
+    - name: Run hello-world
+      become: yes
+      shell: docker run --rm hello-world
+      changed_when: false

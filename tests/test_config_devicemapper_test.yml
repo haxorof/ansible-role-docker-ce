@@ -5,6 +5,7 @@
 - name: Test devicemapper support
   hosts: test-host
   vars:
+    docker_channel: test
     docker_daemon_config:
       # Deprecated since 18.09
       storage-driver: devicemapper
