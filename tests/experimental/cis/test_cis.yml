@@ -1,3 +1,6 @@
+- name: Determine Python interpreter
+  import_playbook: ../../determine_python_interpreter.yml
+
 - name: Prepare
   import_playbook: ../../prepare_storage.yml
   vars:
@@ -12,6 +15,7 @@
       include_role:
         name: jtyr.grub_cmdline
       vars:
+        ansible_become: yes
         grub_cmdline_add_args:
           - namespace.unpriv_enable=1
           - user_namespace.enable=1
@@ -32,7 +36,7 @@
       shell: "sleep 5 && reboot"
       async: 1
       poll: 0
-      when: _sysctl_usrns|changed
+      when: _sysctl_usrns is changed
 
     - name: Wait for the reboot to complete
       wait_for_connection:
@@ -40,7 +44,7 @@
         sleep: 5
         delay: 5
         timeout: 300
-      when: _sysctl_usrns|changed    
+      when: _sysctl_usrns is changed    
 
 - name: Install and configure according to CIS
   hosts: test-host

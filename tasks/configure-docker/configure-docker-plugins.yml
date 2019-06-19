@@ -1,5 +1,5 @@
 - name: Fetch Docker daemon status
-  become: true
+  become: yes
   service:
     name: docker
   register: _docker_status
@@ -15,7 +15,7 @@
     - _docker_status.status.SubState != "running"
 
 - name: Wait for Docker daemon to started
-  become: true
+  become: yes
   shell: docker info
   register: _docker_info
   until: _docker_info.rc == 0
@@ -25,7 +25,7 @@
     - skip_ansible_lint
 
 - name: Install Docker plugins
-  become: true
+  become: yes
   shell: "(docker plugin install --grant-all-permissions --alias {{ item.alias | default(item.name) }} {{ item.name }} \
     && echo 'installed') || echo 'nop'"
   with_items: "{{ docker_plugins }}"
@@ -47,14 +47,14 @@
 
 - name: Update Docker daemon configuration with authorization plugins
   set_fact:
-    docker_daemon_config: "{{ docker_daemon_config | combine(_updated_item, recursive=true) }}"
+    _docker_daemon_config: "{{ docker_daemon_config | combine(_updated_item, recursive=true) }}"
   vars:
     _updated_item: "{ 'authorization-plugins': {{ _authz_plugins | list }} }"
 
 - name: Update Docker daemon (variables)
-  become: true
+  become: yes
   copy:
-    content: "{{ docker_daemon_config | to_nice_json }}"
+    content: "{{ _docker_daemon_config | to_nice_json }}"
     dest: /etc/docker/daemon.json
   notify: restart docker
   when:

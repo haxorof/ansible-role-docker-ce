@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Install of authz plugins does not update daemon config ([#99](../../issues/99))
+
+### Internal
+
+- Updated experimental CIS test.
+
 ## [2.4.1](../../releases/tag/2.4.1) - 2019-06-06
 
 ### Fixed
