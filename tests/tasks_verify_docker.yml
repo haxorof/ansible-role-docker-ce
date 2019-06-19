@@ -1,0 +1,22 @@
+# Instead of "meta: reset_connection" which does not work so well before Ansible 2.6
+- name: Reset SSH connection
+  file:
+    path: ~/.ansible/cp
+    state: absent
+  delegate_to: 127.0.0.1
+    
+- name: Docker info
+  become: yes
+  shell: docker info
+  register: _docker_info
+  changed_when: false
+
+- name: Print Docker info
+  debug:
+    var: _docker_info.stdout_lines
+  when: _docker_info.stdout_lines is defined
+
+- name: Run hello-world
+  become: yes
+  shell: docker run --rm hello-world
+  changed_when: false

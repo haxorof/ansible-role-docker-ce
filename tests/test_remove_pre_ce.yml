@@ -36,7 +36,7 @@
         vars:
           docker_remove_pre_ce: true
 
-      - name: Verify Docker function
-        import_playbook: verify_docker.yml
+      - name: Tasks to verify basic Docker function
+        include_tasks: tasks_verify_docker.yml
         
       when: ansible_distribution == "RedHat"

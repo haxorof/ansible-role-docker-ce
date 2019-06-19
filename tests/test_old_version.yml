@@ -22,5 +22,5 @@
       vars:
         docker_version: 18.06.1.ce-3.el7
 
-    - name: Verify Docker function
-      import_playbook: verify_docker.yml
+- name: Verify Docker function
+  import_playbook: verify_docker.yml
