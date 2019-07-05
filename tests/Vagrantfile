@@ -108,6 +108,20 @@ if File.exist?(testcase_file)
           curl https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant > /home/vagrant/.ssh/id_rsa && \
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
 
+      $script = <<-SCRIPT
+      type pip
+      if [[ $? > 0 ]]; then
+        . /etc/os-release  
+        if [[ "$ID" == "centos" ]]; then
+          echo "Install Python PiP"
+          sudo yum install -y epel-release
+          sudo yum makecache
+          sudo yum install -y python-pip
+        fi
+      fi
+      SCRIPT
+      machine.vm.provision "shell", inline: $script
+
       # Prepare
       machine.vm.provision "ansible_local" do |ansible|
         ansible.install_mode = "pip"
