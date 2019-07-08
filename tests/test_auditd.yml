@@ -8,3 +8,6 @@
     docker_enable_audit: true
   roles:
     - haxorof.docker_ce
+
+- name: Verify Docker function
+  import_playbook: verify_docker.yml

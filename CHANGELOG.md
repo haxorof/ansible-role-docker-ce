@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Added initial basic support for Raspbian
+
 ### Fixed
 
+- Migrating from with_X to loop ([#100](../../issues/100))
 - Install of authz plugins does not update daemon config ([#99](../../issues/99))
+- Failure on Fedora 30 ([#93](../../issues/93))
 
 ### Internal
 

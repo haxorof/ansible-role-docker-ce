@@ -5,6 +5,7 @@
   tasks:
     - name: OS release info
       raw: cat /etc/os-release
+      check_mode: no
       changed_when: no
       register: _os_release_info
 

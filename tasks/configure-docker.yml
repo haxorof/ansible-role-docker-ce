@@ -64,7 +64,7 @@
     path: "{{ item }}"
     regexp: '^dockremap'
     line: 'dockremap:500000:65536'
-  with_items:
+  loop:
     - /etc/subuid
     - /etc/subgid
   when: (_docker_os_dist == "CentOS" or _docker_os_dist == "RedHat") and
@@ -79,7 +79,7 @@
     name: "{{ item }}"
     groups: docker
     append: true
-  with_items: "{{ docker_users }}"
+  loop: "{{ docker_users }}"
 
 - name: Ensure devicemapper prerequisites are fulfilled
   block:

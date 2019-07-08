@@ -15,7 +15,7 @@
         yum:
           name: "{{ item }}"
           update_cache: yes
-        with_items:
+        loop:
           - kata-runtime
           - kata-proxy
           - kata-shim

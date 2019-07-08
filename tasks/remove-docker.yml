@@ -12,7 +12,7 @@
   package:
     name: "{{ item }}"
     state: absent
-  with_items: "{{ docker_packages }}"
+  loop: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   when: _docker_os_dist != "Ubuntu" and
@@ -24,7 +24,7 @@
     name: "{{ item }}"
     state: absent
     purge: yes
-  with_items: "{{ docker_packages }}"
+  loop: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   when: _docker_os_dist == "Ubuntu" or
@@ -88,7 +88,7 @@
   file:
     path: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     # all distributions
     - "{{ docker_envs_dir[_docker_os_dist] }}/docker"
     - "{{ docker_envs_dir[_docker_os_dist] }}/docker-envs"
@@ -107,7 +107,7 @@
   file:
     path: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     - /var/lib/docker
     - /var/lib/docker-engine
     - "{{ docker_remove_additional }}"
@@ -135,7 +135,7 @@
   file:
     path: "{{ item.path }}"
     state: absent
-  with_items: "{{ _remove_cache_dirs.files }}"
+  loop: "{{ _remove_cache_dirs.files }}"
   when: _docker_os_dist == "Fedora" or
         _docker_os_dist == "CentOS" or
         _docker_os_dist == "RedHat"

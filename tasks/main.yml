@@ -1,10 +1,12 @@
 ---
-- name: Set distribution facts
+- name: Set distribution and python facts
   set_fact:
     _docker_os_dist: "{{ ansible_distribution }}"
     _docker_os_dist_release: "{{ ansible_distribution_release }}"
     _docker_os_dist_major_version: "{{ ansible_distribution_major_version }}"
+    _docker_os_arch: "amd64"
     _docker_os_dist_check: yes
+    _docker_python3: "{{ ansible_python_version is version('3', '>=') }}"
   tags: ["always"]
 
 - name: Reinterpret distribution facts for Linux Mint 18
@@ -15,6 +17,20 @@
   when:
     _docker_os_dist == "Linux Mint" and
     _docker_os_dist_major_version == "18"
+  tags: ["always"]
+
+- name: OS release info
+  raw: cat /etc/os-release
+  check_mode: no
+  changed_when: no
+  register: _docker_os_release_info  
+  tags: ["always"]
+
+- name: Reinterpret distribution facts for Raspbian
+  set_fact:
+    _docker_os_arch: "armhf"
+  when:
+    - _os_release_info.stdout is search('raspbian')
   tags: ["always"]
 
 - name: Reset role variables
@@ -35,6 +51,12 @@
   set_fact:
     docker_version: "{{ docker_pkg_name | regex_replace('^docker-ce.(.+)$', '\\1') }}"
   when: docker_pkg_name is match('docker-ce' + docker_os_pkg_version_separator[_docker_os_dist])
+  tags: ["always"]
+
+- name: Print interpreted distribution information
+  debug:
+    msg: "distribution={{ _docker_os_dist }}, release={{ _docker_os_dist_release }}, major_version={{ _docker_os_dist_major_version }}"
+    verbosity: 1
   tags: ["always"]
 
 - name: Compatibility and distribution checks

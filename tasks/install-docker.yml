@@ -23,16 +23,16 @@
       - docker-ce
   when:
     - _docker_packages is not defined
-    - (_docker_os_dist == "Debian" and _docker_os_dist_major_version < '9') or
-      (_docker_os_dist == "Fedora" and _docker_os_dist_major_version < '27') or
-      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version < '16')
+    - (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int < 9) or
+      (_docker_os_dist == "Fedora" and _docker_os_dist_major_version | int < 27) or
+      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 16)
 
 - name: Ensure Docker CE is installed
   become: true
   package:
     name: "{{ (item is search('docker')) | ternary((item + _docker_version_string | default('')), item) }}"
     state: "{{ _docker_pkg_state | default('present') }}"
-  with_items: "{{ _docker_packages | default(docker_packages) }}"
+  loop: "{{ _docker_packages | default(docker_packages) }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   notify: restart docker

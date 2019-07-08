@@ -14,8 +14,7 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items:
-    - "{{ docker_repository_related_packages[_docker_os_dist] }}"
+  loop: "{{ docker_repository_related_packages[_docker_os_dist] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
@@ -30,8 +29,8 @@
   until: _pkg_result is succeeded
   when:
     - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > '14') or
-      (_docker_os_dist == "Debian" and _docker_os_dist_major_version > '7')
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > 14) or
+      (_docker_os_dist == "Debian" and _docker_os_dist_major_version > 7)
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
   become: true
@@ -41,8 +40,8 @@
   changed_when: false
   when:
     - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == '14') or
-      (_docker_os_dist == "Debian" and  _docker_os_dist_major_version == '7')
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == 14) or
+      (_docker_os_dist == "Debian" and  _docker_os_dist_major_version == 7)
   tags:
     - skip_ansible_lint
 
@@ -57,7 +56,7 @@
 - name: Add Docker CE repository with correct channels (Ubuntu/Debian)
   become: true
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/{{ _docker_os_dist|lower }} \
+    repo: "deb [arch={{ _docker_os_arch|lower }}] https://download.docker.com/linux/{{ _docker_os_dist|lower }} \
       {{ ansible_lsb.codename }} {{ _docker_enable_channels | join(' ') }}"
     state: present
     filename: 'docker-ce'

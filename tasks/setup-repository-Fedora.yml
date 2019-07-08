@@ -5,7 +5,7 @@
   changed_when: false
   when:
     - docker_network_access | bool
-    - ansible_python_version is version_compare('3', '<')
+    - not _docker_python3
 
 - name: Include tasks from setup of repositories for CentOS
   include_tasks: setup-repository-CentOS.yml

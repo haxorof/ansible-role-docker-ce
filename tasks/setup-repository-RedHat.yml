@@ -28,13 +28,13 @@
         | grep {{ item.id }} && exit 0 \
         || {{ _rhel_cmd_enable_disable_repo[item.state][item.repo_manager] }}{{ item.id }} \
         && exit 2"
-      with_items: "{{ _rhel_repos }}"
+      loop: "{{ _rhel_repos }}"
       register: _cmd_rhel_repo_enabled_disabled
       changed_when: _cmd_rhel_repo_enabled_disabled.rc == 2
       failed_when: _cmd_rhel_repo_enabled_disabled.rc not in [ 0, 2 ]
       tags:
         - skip_ansible_lint
 
-  when: 
+  when:
     - docker_network_access | bool
-    - _docker_os_dist_major_version == '7'
+    - _docker_os_dist_major_version | int == 7

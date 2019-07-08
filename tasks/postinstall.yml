@@ -3,7 +3,6 @@
   set_fact:
     _docker_additional_packages_os: []
     _docker_additional_packages_pip: []
-    _docker_python3: "{{ ansible_python_version is version_compare('3', '>=') }}"
 
 - name: Set facts to install Docker SDK for Python
   set_fact:
@@ -109,8 +108,7 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items:
-    - "{{ _docker_additional_packages_os }}"
+  loop: "{{ _docker_additional_packages_os }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   when: _docker_additional_packages_os | length > 0
@@ -130,8 +128,7 @@
     name: "{{ item }}"
     state: present
     extra_args: "{{ docker_pip_extra_args }}"
-  with_items:
-    - "{{ _docker_additional_packages_pip }}"
+  loop: "{{ _docker_additional_packages_pip }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   when: _docker_additional_packages_pip | length > 0

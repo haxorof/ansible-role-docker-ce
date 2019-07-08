@@ -4,8 +4,7 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items:
-    - "{{ docker_repository_related_packages[_docker_os_dist] }}"
+  loop: "{{ docker_repository_related_packages[_docker_os_dist] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
@@ -39,7 +38,7 @@
   shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
   args:
     warn: false
-  with_items: "{{ _docker_disable_channels }}"
+  loop: "{{ _docker_disable_channels }}"
   changed_when: false
   vars:
     _item_enabled: false
@@ -54,7 +53,7 @@
   shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
   args:
     warn: false
-  with_items: "{{ _docker_enable_channels }}"
+  loop: "{{ _docker_enable_channels }}"
   changed_when: false
   vars:
     _item_enabled: true

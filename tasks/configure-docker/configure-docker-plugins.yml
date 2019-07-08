@@ -28,7 +28,7 @@
   become: yes
   shell: "(docker plugin install --grant-all-permissions --alias {{ item.alias | default(item.name) }} {{ item.name }} \
     && echo 'installed') || echo 'nop'"
-  with_items: "{{ docker_plugins }}"
+  loop: "{{ docker_plugins }}"
   register: _docker_plugin_install
   changed_when: _docker_plugin_install.stdout_lines | last == 'installed'
   when:
@@ -41,7 +41,7 @@
 - name: Create list of authorization plugins
   set_fact:
     _authz_plugins: "{{ _authz_plugins + [item.alias | default(item.name)] }}"
-  with_items: "{{ docker_plugins }}"
+  loop: "{{ docker_plugins }}"
   when:
     - item.type == 'authz'
 

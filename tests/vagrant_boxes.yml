@@ -101,12 +101,12 @@ boxes:
     storage_ctl: IDE
     storage_port: 1
     vbguest_update: false
-  # -
-  #   box: fedora/30-cloud-base
-  #   box_url: vagrantup
-  #   storage_ctl: IDE
-  #   storage_port: 1
-  #   vbguest_update: false
+  -
+    box: fedora/30-cloud-base
+    box_url: vagrantup
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: false
   - 
     box: rhel/7
     box_url: local

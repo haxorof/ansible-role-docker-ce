@@ -12,7 +12,7 @@
         name: "{{ item }}"
         state: present
       become: true
-      with_items:
+      loop:
         - parted
 
     - name: Ensure dependencies are installed (CentOS)
