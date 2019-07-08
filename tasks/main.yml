@@ -23,7 +23,7 @@
   raw: cat /etc/os-release
   check_mode: no
   changed_when: no
-  register: _docker_os_release_info  
+  register: _docker_os_release_info
   tags: ["always"]
 
 - name: Reinterpret distribution facts for Raspbian
