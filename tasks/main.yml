@@ -30,7 +30,7 @@
   set_fact:
     _docker_os_arch: "armhf"
   when:
-    - _os_release_info.stdout is search('raspbian')
+    - _docker_os_release_info.stdout is search('raspbian')
   tags: ["always"]
 
 - name: Reset role variables
