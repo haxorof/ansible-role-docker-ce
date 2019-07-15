@@ -22,7 +22,7 @@
       this role on a host running Debian Wheezy.
   when:
     - _docker_os_dist == "Debian"
-    - _docker_os_dist_major_version == '7'
+    - _docker_os_dist_major_version | int == 7
     - docker_stack | bool or
       docker_sdk | bool or
       docker_pip_upgrade | bool or

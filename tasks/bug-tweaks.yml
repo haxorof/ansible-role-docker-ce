@@ -8,6 +8,6 @@
   include_tasks: bug-tweaks/tweak-debian8-directlvm.yml
   when:
     - _docker_os_dist == "Debian"
-    - _docker_os_dist_major_version == '8'
+    - _docker_os_dist_major_version | int == 8
     - docker_daemon_config['storage-opts'] is defined
     - docker_daemon_config['storage-opts'] | select('match', '^dm.directlvm_device.+')

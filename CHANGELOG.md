@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Major version comparison fails for some tasks due to non-numeric value ([#103](../../issues/103))
+- Docker compose fails on Debian 10 (Buster) ([#102](../../issues/102))
+
 ## [2.5.0](../../releases/tag/2.5.0) - 2019-07-14
 
 ### Added

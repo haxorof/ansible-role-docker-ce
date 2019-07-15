@@ -90,7 +90,17 @@
     - _docker_additional_packages_pip | length > 0
     - _docker_pip_cmd.rc != 0
     - _docker_os_dist == "Debian"
-    - _docker_os_dist_major_version == '8'
+    - _docker_os_dist_major_version | int == 8
+
+- name: Ensure python-backports.ssl-match-hostname is present (Debian 10)
+  set_fact:
+    _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-backports.ssl-match-hostname'] }}"
+  when:
+    - not _docker_python3 | bool
+    - _docker_additional_packages_pip | length > 0
+    - _docker_pip_cmd.rc != 0
+    - _docker_os_dist == "Debian"
+    - _docker_os_dist_major_version | int == 10
 
 - name: Ensure EPEL release repository is installed
   become: true

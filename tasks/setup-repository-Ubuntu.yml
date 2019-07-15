@@ -1,13 +1,26 @@
 ---
-- name: Update APT cache
-  become: true
-  apt:
-    update_cache: yes
-  changed_when: false
-  register: _pkg_result
-  until: _pkg_result is succeeded
-  when:
-    - docker_network_access | bool
+- name: Update APT cache block
+  block:
+    - name: Update APT cache
+      become: true
+      apt:
+        update_cache: yes
+      changed_when: false
+      register: _pkg_result
+      until: _pkg_result is succeeded
+      when:
+        - docker_network_access | bool
+  rescue:
+    - name: Retry APT cache update with allow-releaseinfo-change
+      become: true
+      command: apt-get update --allow-releaseinfo-change
+      args:
+        warn: false
+      changed_when: false
+      register: _pkg_result
+      until: _pkg_result is succeeded
+      when:
+        - docker_network_access | bool
 
 - name: Ensure packages are installed for repository setup
   become: true
@@ -29,8 +42,8 @@
   until: _pkg_result is succeeded
   when:
     - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version > 14) or
-      (_docker_os_dist == "Debian" and _docker_os_dist_major_version > 7)
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 14) or
+      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7)
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
   become: true
@@ -40,8 +53,8 @@
   changed_when: false
   when:
     - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version == 14) or
-      (_docker_os_dist == "Debian" and  _docker_os_dist_major_version == 7)
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 14) or
+      (_docker_os_dist == "Debian" and  _docker_os_dist_major_version | int == 7)
   tags:
     - skip_ansible_lint
 
