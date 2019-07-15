@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.5.1](../../releases/tag/2.5.1) - 2019-07-16
+
 ### Fixed
 
 - Major version comparison fails for some tasks due to non-numeric value ([#103](../../issues/103))
