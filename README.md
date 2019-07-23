@@ -165,7 +165,7 @@ Here is the latest test results of the automated test which is located in the te
 
 Note! All distributions listed in test matrix below does not provided the latest released Docker CE version.
 
-**Last run:** 2019-07-08
+**Last run:** 2019-07-08 (Latest release: Docker CE 18.09)
 
 ### Test Suites
 
