@@ -181,7 +181,7 @@ Note! All distributions listed in test matrix below does not provided the latest
 
 ### Test Matrix
 
-| #                    | test-1             | test-2             | test-3             | test-4             | test-5             | test-6             | test-7             |
+| #                    | s-1                | s-2                | s-3                | s-4                | s-5                | s-6                | s-7                |
 |----------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
 | centos/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | ubuntu/trusty64      | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: |
