@@ -25,7 +25,8 @@
     - _docker_packages is not defined
     - (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int < 9) or
       (_docker_os_dist == "Fedora" and _docker_os_dist_major_version | int < 27) or
-      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 16)
+      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 16) or
+      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 17) 
 
 - name: Ensure Docker CE is installed
   become: true
