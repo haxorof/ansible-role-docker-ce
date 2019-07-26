@@ -41,3 +41,36 @@
         dest: /home/vagrant/docker-bench-security
         version: master
       when: docker_bench_security is defined
+
+    # https://github.com/haxorof/ansible-role-docker-ce/issues/107
+    - name: Turn off SELinux otherwise Docker fails to run hello-world when Docker is not configured with selinux
+      become: yes
+      selinux:
+        policy: targeted
+        state: permissive
+      when:
+        - ansible_distribution == "Fedora"
+        - ansible_distribution_major_version | int == 28
+
+    - name: Check that /etc/systemd/resolved.conf exists
+      stat:
+        path: /etc/systemd/resolved.conf
+      register: _resolved_exists
+
+    - name: Turn off DNSSEC which can cause resolution problems during tests in Ubuntu
+      become: yes
+      replace:
+        path: /etc/systemd/resolved.conf
+        regexp: '^DNSSEC=yes\s*$'
+        replace: 'DNSSEC=no'
+      register: _resolved
+      when: _resolved_exists.stat.exists | bool
+
+    - name: Restart systemd-resolved
+      become: yes
+      service:
+        name: systemd-resolved
+        state: restarted
+      when:
+        - _resolved is defined
+        - _resolved is changed

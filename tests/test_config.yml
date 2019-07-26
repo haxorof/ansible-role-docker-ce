@@ -27,7 +27,6 @@
     docker_daemon_config:
       icc: false
       init: true
-      disable-legacy-registry: true
       live-restore: false
       userland-proxy: false
     docker_users:

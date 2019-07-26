@@ -5,10 +5,9 @@
 - hosts: test-host
   vars:
     docker_versions:
-      # Last working version for Ubuntu Trusty (https://github.com/docker/for-linux/issues/591)
-      Ubuntu14: 18.06.1~ce~3-0~ubuntu
-      Ubuntu17: 18.06.3~ce~3-0~ubuntu
-      Debian7: 18.03.1~ce-0~debian
+      Ubuntu: 18.06.3~ce~3-0~ubuntu
+      Debian: 18.03.1~ce-0~debian
+      CentOS: 18.09.8-3.el7
   tasks:
     - debug:
         msg: "{{ docker_versions[ansible_distribution + ansible_distribution_major_version] }}"
@@ -17,7 +16,7 @@
       include_role:
         name: haxorof.docker_ce
       vars:
-        docker_version: "{{ docker_versions[ansible_distribution + ansible_distribution_major_version] }}"
+        docker_version: "{{ docker_versions[ansible_distribution] }}"
 
     - name: Run hello-world
       become: yes

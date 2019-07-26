@@ -4,107 +4,101 @@ role_dir: ansible-role-docker-ce
 
 boxes:
   -
-    box: centos/7
+    box: generic/centos7
     box_url: vagrantup
-    storage_ctl: IDE
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: ubuntu/trusty64
+    # Xenial Xerus
+    box: generic/ubuntu1604
     box_url: vagrantup
-    storage_ctl: SATAController
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: ubuntu/xenial64
-    box_url: vagrantup
-    storage_ctl: SCSI
-    storage_port: 2
-    vbguest_update: false
-  -
-    box: ubuntu/bionic64
-    box_url: vagrantup
-    storage_ctl: SCSI
-    storage_port: 2
-    vbguest_update: false
-  -
+    # Artful Aardvark
     box: generic/ubuntu1710
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: ubuntu/cosmic64
+    # Bionic Beaver
+    box: generic/ubuntu1804
     box_url: vagrantup
-    storage_ctl: SCSI
-    storage_port: 2
-    vbguest_update: false
-  # -
-  #   # 2019-05-30 - Cannot get the Vagrant box to boot correctly
-  #   box: ubuntu/disco64
-  #   box_url: vagrantup
-  #   storage_ctl: SCSI
-  #   storage_port: 2
-  #   vbguest_update: false
-  # -
-  #   # 2019-05-30 - No longer possibly to install Docker on Wheezy due to APT repository EOLs etc
-  #   box: debian/wheezy64
-  #   box_url: vagrantup
-  #   storage_ctl: SATA Controller
-  #   storage_port: 1
-  #   vbguest_update: false
-  -
-    box: debian/jessie64
-    box_url: vagrantup
-    storage_ctl: SATA Controller
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: debian/stretch64
+    # Cosmic Cuttlefish
+    box: generic/ubuntu1810
     box_url: vagrantup
-    storage_ctl: SATA Controller
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: debian/buster64
+    # Disco Dingo
+    box: generic/ubuntu1904
     box_url: vagrantup
-    storage_ctl: SATA Controller
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: fedora/25-cloud-base
-    box_url: https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/25/CloudImages/x86_64/images/Fedora-Cloud-Base-Vagrant-25-1.3.x86_64.vagrant-virtualbox.box
-    storage_ctl: IDE
-    storage_port: 1
-    vbguest_update: false
-  -
-    box: fedora/26-cloud-base
-    box_url: https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/26/CloudImages/x86_64/images/Fedora-Cloud-Base-Vagrant-26-1.5.x86_64.vagrant-virtualbox.box
-    storage_ctl: IDE
-    storage_port: 1
-    vbguest_update: false
-  -
-    box: fedora/27-cloud-base
+    # Jessie
+    box: generic/debian8
     box_url: vagrantup
-    storage_ctl: IDE
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: fedora/28-cloud-base
+    # Stretch
+    box: generic/debian9
     box_url: vagrantup
-    storage_ctl: IDE
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: fedora/29-cloud-base
+    # Buster
+    box: generic/debian10
     box_url: vagrantup
-    storage_ctl: IDE
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   -
-    box: fedora/30-cloud-base
+    box: generic/fedora25
     box_url: vagrantup
-    storage_ctl: IDE
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+  -
+    box: generic/fedora26
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+  -
+    box: generic/fedora27
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+  -
+    box: generic/fedora28
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+  -
+    box: generic/fedora29
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+  -
+    box: generic/fedora30
+    box_url: vagrantup
+    storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
   - 

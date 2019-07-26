@@ -125,7 +125,6 @@ However this configuration setup devicemapper in a certain way which will create
       icc: false
       log-driver: journald
       userns-remap: default
-      disable-legacy-registry: true
       live-restore: true
       userland-proxy: false
       no-new-privileges: true
@@ -169,37 +168,37 @@ Note! All distributions listed in test matrix below does not provided the latest
 
 ### Test Suites
 
-| Suite | ID                     |
-|-------|------------------------|
-| s-1   | t_config               |
-| s-2   | t_nightly_channel      |
-| s-3   | t_postinstall          |
-| s-4   | t_old_docker           |
-| s-5   | t_devicemapper_config  |
-| s-6   | t_auditd               |
+| Suite | ID                     | Comment                                                                              |
+|-------|------------------------|--------------------------------------------------------------------------------------|
+| s-1   | t_config               |                                                                                      |
+| s-2   | t_channel              | These tests might fail because it might not be any nightly Docker CE build available |
+| s-3   | t_postinstall          |                                                                                      |
+| s-4   | t_old_docker           |                                                                                      |
+| s-5   | t_devicemapper_config  |                                                                                      |
+| s-6   | t_auditd               |                                                                                      |
 | s-7   | t_docker_compatibility |
 
 ### Test Matrix
 
-| #                    | s-1                | s-2                | s-3                | s-4                | s-5                | s-6                | s-7                |
-|----------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| centos/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| ubuntu/trusty64      | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: |
-| ubuntu/xenial64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                | :heavy_check_mark: | :heavy_minus_sign: |
-| ubuntu/bionic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                | :heavy_check_mark: | :heavy_minus_sign: |
-| generic/ubuntu1710   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :x:                | :heavy_check_mark: |
-| ubuntu/cosmic64      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                | :heavy_check_mark: | :heavy_minus_sign: |
-| debian/jessie64      | :heavy_check_mark: | :x:                | :x:                | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| debian/stretch64     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :x:                | :heavy_check_mark: | :heavy_minus_sign: |
-| debian/buster64      | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :x:                | :heavy_check_mark: | :heavy_minus_sign: |
-| fedora/25-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| fedora/26-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| fedora/27-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| fedora/28-cloud-base | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
-| fedora/29-cloud-base | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| fedora/30-cloud-base | :x:                | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
-| rhel/7               | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| rhel/8               | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
+| #                  | s-1                | s-2                | s-3                | s-4                | s-5                | s-6                | s-7                |
+|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :x:                |
+| generic/ubuntu1710 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/ubuntu1804 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/ubuntu1810 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/ubuntu1904 | :heavy_check_mark: | :x:                | :heavy_check_mark: |                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/debian8    | :heavy_check_mark: | :x:                | :x:                | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/debian9    | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/debian10   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/fedora25   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/fedora26   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/fedora27   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/fedora28   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/fedora29   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/fedora30   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
+| rhel/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| rhel/8             | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
 
 ## License
 

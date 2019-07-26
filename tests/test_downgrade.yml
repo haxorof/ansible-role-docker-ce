@@ -1,0 +1,49 @@
+---
+- name: Determine Python interpreter
+  import_playbook: determine_python_interpreter.yml
+
+- hosts: test-host
+  tasks:
+    - name: Install latest Docker CE
+      include_role:
+        name: haxorof.docker_ce
+      when: ansible_distribution == "CentOS"
+
+- hosts: test-host
+  tasks:
+    - name: Downgrade to Docker CE 18.09
+      include_role:
+        name: haxorof.docker_ce
+      vars:
+        docker_version: 18.09.8-3.el7
+      when: ansible_distribution == "CentOS"
+
+- name: Verify that Docker CE Engine and CLI is 18.09.8
+  hosts: test-host
+  tasks:
+    - name: Only verify on CentOS
+      block:
+        - name: Get Docker engine version
+          become: true
+          shell: "{{ _cmd }}"
+          register: _docker_server_version_cmd
+          changed_when: no
+          vars:
+            _cmd: !unsafe 'docker version --format="{{ .Server.Version }}"'
+
+        - name: Get Docker CLI version
+          become: true
+          shell: "{{ _cmd }}"
+          register: _docker_client_version_cmd
+          changed_when: no
+          vars:
+            _cmd: !unsafe 'docker version --format="{{ .Client.Version }}"'
+
+        - fail:
+            msg: "Expected Docker Engine 18.09.8 (Actual: {{ _docker_server_version_cmd.stdout }})"
+          when: not _docker_server_version_cmd.stdout is search("18.09.8")
+
+        - fail:
+            msg: "Expected Docker CLI 18.09.8 (Actual: {{ _docker_client_version_cmd.stdout }})"
+          when: not _docker_client_version_cmd.stdout is search("18.09.8")
+      when: ansible_distribution == "CentOS"

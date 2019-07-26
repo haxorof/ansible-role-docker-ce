@@ -4,28 +4,21 @@ about: Let us know if some behavior or feature that exists should be changed.
 labels: change
 
 ---
-
 <!--
 Hi,
 
 Thank you for opening an issue. Try to fill in the information below as best you can.
 -->
 
-### Ansible Version
+### Version Information
 <!---
 ansible --version
 -->
-```
-...
-```
-
-### Role Version
+Ansible: `...`
 <!---
-If you are not using the latest version of this Ansible role, please try upgrading to see if what you are looking for already is implemented.
+If you are not using the latest version of this Ansible role, please try upgrading because your issue may have already been fixed.
 -->
-```
-...
-```
+Role: `...`
 
 ### Actual Behavior
 <!--
@@ -36,7 +29,6 @@ What actually happened?
 <!--
 What do you want to happen?
 -->
-
 
 ### References
 <!--

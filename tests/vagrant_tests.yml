@@ -4,23 +4,21 @@ tests:
     name: Configurations
     prep_yml: prepare.yml
     test_yml: test_config.yml
-    skip_boxes: trusty64,artful64,ubuntu1710
+    skip_boxes: rhel/8
     only_boxes: none
   -
-    id: t_nightly_channel
-    name: Nigthly channel configuration
+    id: t_channel
+    name: Channel configuration
     prep_yml: prepare.yml
-    test_yml: test_config_nightly.yml
-    skip_boxes: none
-    only_boxes: centos/7,cosmic64,stretch64,fedora/29,rhel/7
+    test_yml: test_config_channel.yml
+    skip_boxes: rhel/8
+    only_boxes: none
   -
     id: t_postinstall
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: test_postinstall.yml
-    skip_boxes: ubuntu/cosmic64,trusty64,artful64,ubuntu1710,jessie64
-    # debian/jessie64 - problem with dependencies on 
-    # ubuntu/cosmic64 - https://github.com/docker/docker-py/issues/1502
+    skip_boxes: rhel/8
     only_boxes: none
   -
     id: t_old_docker
@@ -34,14 +32,14 @@ tests:
     name: Devicemapper configuration
     prep_yml: prepare_storage.yml
     test_yml: test_config_devicemapper.yml
-    skip_boxes: none
-    only_boxes: centos/7,rhel/7
+    skip_boxes: rhel/8
+    only_boxes: none
   -
     id: t_auditd
     name: Auditd
     prep_yml: prepare.yml
     test_yml: test_auditd.yml
-    skip_boxes: ubuntu,debian,fedora
+    skip_boxes: rhel/8
     only_boxes: none
   -
     id: t_docker_compatibility
@@ -49,4 +47,4 @@ tests:
     prep_yml: prepare.yml
     test_yml: test_docker_compatibility.yml
     skip_boxes: none
-    only_boxes: trusty64,ubuntu1710,wheezy64
+    only_boxes: ubuntu1604

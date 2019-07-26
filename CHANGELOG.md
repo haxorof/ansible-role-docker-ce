@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Error in apt_repository on Ubuntu 19.04 (Disco Dingo) ([#108](../../issues/108))
+- 19.03 fails on Fedora 28 - write /proc/self/attr/keycreate: permission denied ([#107](../../issues/107))
+- Ubuntu 17.10 Artful is not handled correctly ([#104](../../issues/104))
+- Updated default value for docker-compose version to 1.24.1
+
+### Internal
+
+- Added automated test for Ubuntu 19.04 Disco Dingo
+- Removed Ubuntu 14.04 Trusty Tahr from automated tests
+- Updated tests to not use deprecated configuration which was now removed in 19.03 ([#105](../../issues/105))
+
 ## [2.5.1](../../releases/tag/2.5.1) - 2019-07-16
 
 ### Fixed

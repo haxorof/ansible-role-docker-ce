@@ -14,6 +14,13 @@ tests:
     skip_boxes: none
     only_boxes: none
   -
+    id: t_downgrade
+    name: Downgrade
+    prep_yml: prepare.yml
+    test_yml: test_downgrade.yml
+    skip_boxes: none
+    only_boxes: none
+  -
     id: t_uninstall
     name: Uninstall
     prep_yml: prepare.yml
