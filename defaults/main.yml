@@ -12,7 +12,12 @@ docker_latest_version: true
 # DEPRECATED! use docker_version instead
 docker_pkg_name: docker-ce
 # Docker version
-# ex. 18.06.1.ce-3.el7
+# Relation with other variables:
+# - If docker_version is set to a non-empty value (e.g. 18.06.1.ce-3.el7) then that is used.
+# - If docker_version is empty (default) and docker_latest_version is set to true (default)
+#   then latest version will be installed and if older version is installed it will be upgraded.
+# - If docker_version is empty (default) and docker_latest_version is set to false then it 
+#   will only install latest version if not some Docker version is already installed.
 docker_version: ''
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 # DEPRECATED! nothing replaces this feature
