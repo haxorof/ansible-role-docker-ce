@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.5.2](../../releases/tag/2.5.2) - 2019-08-02
+
 ### Fixed
 
 - Error in apt_repository on Ubuntu 19.04 (Disco Dingo) ([#108](../../issues/108))
