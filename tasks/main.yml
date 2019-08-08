@@ -105,6 +105,7 @@
 
     - name: Setup Docker package repositories
       include_tasks: setup-repository.yml
+      when: docker_setup_repos | bool
       tags: ["install"]
 
     - name: Install Docker

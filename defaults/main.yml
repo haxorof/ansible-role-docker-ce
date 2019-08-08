@@ -39,6 +39,8 @@ docker_users: []
 #     args: opa_args="-policy-file /opa/policies/authz.rego"
 docker_plugins: []
 
+# Setup Docker CE apt/dnf/yum repos or assume it has already been done
+docker_setup_repos: true
 # Repositories required to be enabled or disabled on RHEL
 #  id: <id of repo>
 #  state: enabled || disabled
