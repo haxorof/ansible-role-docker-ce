@@ -9,10 +9,7 @@
       Debian: 18.03.1~ce-0~debian
       CentOS: 18.09.8-3.el7
   tasks:
-    - debug:
-        msg: "{{ docker_versions[ansible_distribution + ansible_distribution_major_version] }}"
-
-    - name: Install Docker CE for {{ ansible_distribution }}{{ ansible_distribution_major_version }}
+    - name: Install Docker CE for {{ ansible_distribution }}
       include_role:
         name: haxorof.docker_ce
       vars:
