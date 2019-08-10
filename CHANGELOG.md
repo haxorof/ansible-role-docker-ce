@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.6.0](../../releases/tag/2.6.0) - 2019-08-10
+
 ### Added
 
 - Add support to disable setup of apt/dnf/apt repos ([#109](../../issues/109))
