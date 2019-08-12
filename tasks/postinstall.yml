@@ -110,6 +110,7 @@
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
+    - docker_setup_repos | bool
     - _docker_os_dist == "CentOS"
     - _docker_additional_packages_os | length > 0
 
