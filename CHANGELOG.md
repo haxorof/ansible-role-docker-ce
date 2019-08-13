@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.6.1](../../releases/tag/2.6.1) - 2019-08-13
+
+### Fixed
+
+- EPEL repo shall not be installed when docker_setup_repos is false
+
 ## [2.6.0](../../releases/tag/2.6.0) - 2019-08-10
 
 ### Added
