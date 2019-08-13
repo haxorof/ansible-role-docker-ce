@@ -1,12 +1,10 @@
+if: tag IS present
 language: python
 python: '2.7'
 addons:
   apt:
     packages:
     - python-pip
-branches:
-  only:
-    - ^(\d*\.)+\d*$    
 install:
 - pip install ansible
 - ansible --version
