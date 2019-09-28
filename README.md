@@ -183,6 +183,7 @@ Note! All distributions listed in test matrix below does not provided the latest
 | #                  | s-1                | s-2                | s-3                | s-4                | s-5                | s-6                | s-7                |
 |--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
 | centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| centos/8           | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
 | generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | generic/ubuntu1710 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/ubuntu1804 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |

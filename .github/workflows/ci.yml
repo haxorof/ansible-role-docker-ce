@@ -5,5 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Ansible lint
+    - name: Ansible linting
       run: docker run --rm -v ${PWD}:/mnt:ro haxorof/ansible-lint .

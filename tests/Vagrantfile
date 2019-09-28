@@ -131,7 +131,7 @@ if File.exist?(testcase_file)
         ansible.limit = "test-host"
         ansible.inventory_path = "hosts"
         ansible.config_file = "/vagrant/ansible.cfg"
-        #ansible.raw_arguments = ["-vvv"]
+        ansible.raw_arguments = ["#{ENV['ANSIBLE_ARG_0']}"]
         ansible.extra_vars = {
           lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
         }
@@ -144,8 +144,8 @@ if File.exist?(testcase_file)
         ansible.limit = "test-host"
         ansible.inventory_path = "hosts"
         ansible.config_file = "/vagrant/ansible.cfg"
+        ansible.raw_arguments = ["#{ENV['ANSIBLE_ARG_0']}"]
         ansible.extra_vars = {
-          #docker_do_checks: "no",
           lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
         }
       end
