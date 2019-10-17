@@ -34,7 +34,7 @@ docker_cmd_enable_disable_edge_repo:
   Fedora: dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled','disabled') }} docker-ce-{{ item }}
 
 docker_cmd_update_repo_cache:
-  CentOS: yum makecache fast
+  CentOS: yum makecache
   RedHat: yum makecache
   Fedora: dnf makecache
   Ubuntu: apt-get update

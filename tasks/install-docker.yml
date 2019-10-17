@@ -28,6 +28,17 @@
       (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 16) or
       (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 17)
 
+- name: Do workaround to handle CentOS/RHEL 8 installation issues
+  set_fact:
+    _docker_packages:
+      - "https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.10-3.2.el7.x86_64.rpm"
+      - docker-ce-cli
+      - docker-ce
+  when:
+    - _docker_packages is not defined
+    - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
+    - _docker_os_dist_major_version | int > 7
+
 - name: Ensure Docker CE is installed
   become: true
   package:

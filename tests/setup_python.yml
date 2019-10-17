@@ -53,12 +53,19 @@
       when:
         - _distribution.stdout_lines|join('') is search("Debian") or _distribution.stdout_lines|join('') is search("Ubuntu")
 
-    - name: Install Python (CentOS or RHEL)
+    - name: Install Python (CentOS 7 or RHEL)
       become: yes
       raw: type python3 || type python2 || type python || (yum -y install python)
       changed_when: no
       when:
-        - _distribution.stdout_lines|join('') is search("CentOS") or _distribution.stdout_lines|join('') is search("Red")
+        - _distribution.stdout_lines|join('') is search("centos:7") or _distribution.stdout_lines|join('') is search("Red")
+
+    - name: Install Python (CentOS 8)
+      become: yes
+      raw: type python3 || type python2 || type python || (dnf -y install python3)
+      changed_when: no
+      when:
+        - _distribution.stdout_lines|join('') is search("centos:8")
 
     - name: Install Python (Fedora)
       become: yes
