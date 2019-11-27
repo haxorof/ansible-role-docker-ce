@@ -236,7 +236,7 @@ ExecuteTests() {
           continue
         fi
       fi
-      $SCRIPT_DIR/scripts/generateConf.sh $box_index $index $VAGRANT_TESTS_FILE
+      bash $SCRIPT_DIR/scripts/generateConf.sh $box_index $index $VAGRANT_TESTS_FILE
       Info "Test: ${tests__name[$index]} [$box]"
       StartTest
       exitCode=$?
