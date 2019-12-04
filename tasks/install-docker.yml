@@ -6,7 +6,7 @@
 
 - name: Set packages state to latest
   set_fact:
-    _docker_pkg_state: 'latest'
+    _docker_pkg_state: "latest"
   when: docker_latest_version | bool and docker_version == ''
 
 - name: Filter out packages to match older Docker CE versions
@@ -36,6 +36,7 @@
       - docker-ce
   when:
     - _docker_packages is not defined
+    - docker_x_redhat_centos_8_workaround | bool
     - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
     - _docker_os_dist_major_version | int > 7
 

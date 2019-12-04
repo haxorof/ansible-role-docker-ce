@@ -16,9 +16,9 @@ docker_pkg_name: docker-ce
 # - If docker_version is set to a non-empty value (e.g. 18.06.1.ce-3.el7) then that is used.
 # - If docker_version is empty (default) and docker_latest_version is set to true (default)
 #   then latest version will be installed and if older version is installed it will be upgraded.
-# - If docker_version is empty (default) and docker_latest_version is set to false then it 
+# - If docker_version is empty (default) and docker_latest_version is set to false then it
 #   will only install latest version if not some Docker version is already installed.
-docker_version: ''
+docker_version: ""
 # If below variable is set to true it will remove older Docker installation before Docker CE.
 # DEPRECATED! nothing replaces this feature
 docker_remove_pre_ce: false
@@ -59,6 +59,10 @@ docker_rhel_repos:
 # tasks to run. Assumption is that this role has been run once before.
 docker_network_access: true
 
+# Workaround for RHEL/CentOS 8
+# Reason: Fails to install because YUM cannot find a good candidate for the  library containerd.
+docker_x_redhat_centos_8_workaround: yes
+
 ################################################################################
 # Docker daemon configuration
 ################################################################################
@@ -72,7 +76,7 @@ docker_daemon_envs: {}
 # Docker daemon options
 #  Docker daemon is configured with '-H fd://' by default in Ubuntu/Debian which cause problems.
 #  https://github.com/moby/moby/issues/25471
-docker_daemon_opts: ''
+docker_daemon_opts: ""
 # List of additional service configuration options for systemd
 # Important! Configuring this can cause Docker to not start at all.
 docker_systemd_service_config: []
