@@ -28,6 +28,12 @@
       debug:
         var: ansible_version.full
 
+    - name: Ensure haveged is installed
+      become: true
+      package:
+        name: haveged
+        state: present
+
     - name: Ensure git is installed
       become: true
       package:
@@ -37,7 +43,7 @@
 
     - name: Ensure Docker Bench Security is cloned
       git:
-        repo: 'https://github.com/docker/docker-bench-security.git'
+        repo: "https://github.com/docker/docker-bench-security.git"
         dest: /home/vagrant/docker-bench-security
         version: master
       when: docker_bench_security is defined
@@ -62,7 +68,7 @@
       replace:
         path: /etc/systemd/resolved.conf
         regexp: '^DNSSEC=yes\s*$'
-        replace: 'DNSSEC=no'
+        replace: "DNSSEC=no"
       register: _resolved
       when: _resolved_exists.stat.exists | bool
 

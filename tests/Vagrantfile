@@ -117,6 +117,7 @@ if File.exist?(testcase_file)
           sudo yum install -y epel-release
           sudo yum makecache
           sudo yum install -y python-pip
+          sudo yum install -y haveged
         fi
       fi
       SCRIPT
