@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.6.2](../../releases/tag/2.6.2) - 2019-12-04
+
 ### Fixed
 
 - Docker CE package fails to install on CentOS 8 ([#110](../../issues/110))
