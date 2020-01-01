@@ -1,4 +1,11 @@
 ---
+- name: Collect distribution facts if not already done
+  setup:
+    gather_subset:
+      - min
+  when: not ansible_distribution_major_version is defined
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
+
 - name: Set distribution and python facts
   set_fact:
     _docker_os_dist: "{{ ansible_distribution }}"
@@ -7,17 +14,15 @@
     _docker_os_arch: "amd64"
     _docker_os_dist_check: yes
     _docker_python3: "{{ ansible_python_version is version('3', '>=') }}"
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Linux Mint 18
   set_fact:
     _docker_os_dist: "Ubuntu"
     _docker_os_dist_release: "xenial"
     _docker_os_dist_major_version: 16
-  when:
-    _docker_os_dist == "Linux Mint" and
-    _docker_os_dist_major_version | int == 18
-  tags: ["always"]
+  when: _docker_os_dist == "Linux Mint" and _docker_os_dist_major_version | int == 18
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Debian 10 (Buster) due to bug
   set_fact:
@@ -27,21 +32,21 @@
   when:
     - _docker_os_dist == "Debian"
     - _docker_os_dist_release == "buster" or (ansible_lsb is defined
-        and ansible_lsb.codename is defined and ansible_lsb.codename == "buster")
-  tags: ["always"]
+      and ansible_lsb.codename is defined and ansible_lsb.codename == "buster")
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: OS release info
   raw: cat /etc/os-release
   check_mode: no
   changed_when: no
   register: _docker_os_release_info
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print OS release information
   debug:
     var: _docker_os_release_info
     verbosity: 1
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print LSB information
   debug:
@@ -49,20 +54,20 @@
     verbosity: 1
   when:
     - ansible_lsb is defined
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Raspbian
   set_fact:
     _docker_os_arch: "armhf"
   when:
     - _docker_os_release_info.stdout is search('raspbian')
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reset role variables
   set_fact:
     docker_systemd_service_config_tweaks: []
     docker_service_envs: {}
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Temporary handling of deprecated variable docker_enable_ce_edge (#54)
   set_fact:
@@ -70,24 +75,24 @@
   when:
     - docker_enable_ce_edge is defined
     - docker_enable_ce_edge
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Temporary handling of deprecated variable docker_pkg_name
   set_fact:
     docker_version: "{{ docker_pkg_name | regex_replace('^docker-ce.(.+)$', '\\1') }}"
   when: docker_pkg_name is match('docker-ce' + docker_os_pkg_version_separator[_docker_os_dist])
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print interpreted distribution information
   debug:
     msg: "distribution={{ _docker_os_dist }}, release={{ _docker_os_dist_release }}, major_version={{ _docker_os_dist_major_version }}"
     verbosity: 1
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Compatibility and distribution checks
   include_tasks: checks.yml
   when: docker_do_checks | bool
-  tags: ["always"]
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Install and configure Docker CE
   block:
@@ -101,34 +106,34 @@
       when:
         - docker_remove_pre_ce | bool
         - docker_network_access | bool
-      tags: ["install"]
+      tags: ["install", "docker_install"]
 
     - name: Setup Docker package repositories
       include_tasks: setup-repository.yml
       when: docker_setup_repos | bool
-      tags: ["install"]
+      tags: ["install", "docker_install"]
 
     - name: Install Docker
       include_tasks: install-docker.yml
       when: docker_network_access | bool
-      tags: ["install"]
+      tags: ["install", "docker_install"]
 
     - name: Configure audit logging
       include_tasks: setup-audit.yml
-      tags: ["configure"]
+      tags: ["configure", "docker_configure"]
 
     - name: Apply workarounds for bugs and/or tweaks
       include_tasks: bug-tweaks.yml
-      tags: ["configure"]
+      tags: ["configure", "docker_configure"]
 
     - name: Configure Docker
       include_tasks: configure-docker.yml
-      tags: ["configure"]
+      tags: ["configure", "docker_configure"]
 
     - name: Postinstall tasks
       include_tasks: postinstall.yml
       when: docker_network_access | bool
-      tags: ["install", "postinstall"]
+      tags: ["install", "postinstall", "docker_install", "docker_postinstall"]
   when: not docker_remove | bool
 
 - name: Remove Docker CE and related configuration
