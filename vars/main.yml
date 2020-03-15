@@ -53,11 +53,11 @@ docker_packages:
   - containerd.io
 
 docker_os_pkg_version_separator:
-  CentOS: '-'
-  RedHat: '-'
-  Fedora: '-'
-  Ubuntu: '='
-  Debian: '='
+  CentOS: "-"
+  RedHat: "-"
+  Fedora: "-"
+  Ubuntu: "="
+  Debian: "="
 
 docker_old_packages:
   CentOS:
@@ -106,6 +106,46 @@ docker_old_packages:
     - docker.io
     - containerd
     - runc
+
+docker_python2_build_os_pkgs:
+  CentOS:
+    - python-devel
+    - openssl-devel
+  Debian:
+    - python-dev
+    - libffi-dev
+    - libssl-dev
+  Fedora:
+    - python-devel
+    - openssl-devel
+    - redhat-rpm-config
+    - libffi-devel
+  RedHat:
+    - python-devel
+    - openssl-devel
+  Ubuntu:
+    - python-dev
+    - libffi-dev
+    - libssl-dev
+
+docker_python3_build_os_pkgs:
+  CentOS:
+    - python3-devel
+    - openssl-devel
+  Debian:
+    - libffi-dev
+    - libssl-dev
+  Fedora:
+    - python3-devel
+    - openssl-devel
+    - redhat-rpm-config
+    - libffi-devel
+  RedHat:
+    - python3-devel
+    - openssl-devel
+  Ubuntu:
+    - libffi-dev
+    - libssl-dev
 
 docker_predefined_packages_os: []
 

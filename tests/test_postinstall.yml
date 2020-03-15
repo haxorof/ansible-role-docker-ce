@@ -13,12 +13,12 @@
   post_tasks:
     - name: Test docker-compose (shell)
       become: no
-      shell: docker-compose --version
+      shell: /usr/bin/docker-compose --version
       ignore_errors: yes
 
     - name: Test docker-compose with sudo (shell)
       become: yes
-      shell: docker-compose --version
+      shell: /usr/bin/docker-compose --version
       ignore_errors: yes
 
 - name: Test using PiP to install SDK, compose and stack
@@ -54,7 +54,7 @@
             path: ~/.ansible/cp
             state: absent
           delegate_to: 127.0.0.1
-          
+
         - name: Test hello container
           become: no
           docker_container:
@@ -64,10 +64,10 @@
 
         - name: Test hello service
           become: no
-          docker_service:
+          docker_compose:
             project_name: hello
             definition:
-              version: '3'
+              version: "3"
               services:
                 hello:
                   image: "hello-world"
@@ -81,10 +81,10 @@
 
         - name: Test hello service with sudo
           become: yes
-          docker_service:
+          docker_compose:
             project_name: hello
             definition:
-              version: '3'
+              version: "3"
               services:
                 hello:
                   image: "hello-world"

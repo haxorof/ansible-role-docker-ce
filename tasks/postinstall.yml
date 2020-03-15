@@ -42,65 +42,39 @@
       tags:
         - skip_ansible_lint
 
-    - name: Set fact to install Python 2 PiP
+    - name: Set fact to install Python 2 PiP and build dependencies
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip_package] }}"
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip_package] + [docker_python2_build_os_pkgs[_docker_os_dist]] }}"
       when:
         - not _docker_python3 | bool
         - _docker_pip_cmd.rc != 0
 
-    - name: Set fact to install Python 3 PiP
+    - name: Set fact to install Python 3 PiP and build dependencies
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip3_package] }}"
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip3_package] + [docker_python2_build_os_pkgs[_docker_os_dist]] }}"
       when:
         - _docker_python3 | bool
         - _docker_pip_cmd.rc != 0
 
-    - name: Set fact to install build libraries (CentOS/Fedora/RedHat)
+    - name: Ensure python-pip-whl is present (Debian 8)
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['openssl-devel'] }}"
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-pip-whl'] }}"
       when:
-        - (_docker_os_dist == "CentOS" or _docker_os_dist == "Fedora" or _docker_os_dist == "RedHat")
+        - _docker_pip_cmd.rc != 0
+        - _docker_os_dist == "Debian"
+        - _docker_os_dist_major_version | int == 8
 
-    - name: Set fact to install build libraries [General] (Fedora)
+    - name: Ensure python-backports.ssl-match-hostname is present (Debian 10)
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['redhat-rpm-config','make','libffi-devel','gcc'] }}"
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-backports.ssl-match-hostname'] }}"
       when:
-        - _docker_os_dist == "Fedora"
+        - not _docker_python3 | bool
+        - _docker_pip_cmd.rc != 0
+        - _docker_os_dist == "Debian"
+        - _docker_os_dist_major_version | int == 10
 
-    - name: Set fact to install build libraries [Python 3] (Fedora)
-      set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python3-devel'] }}"
-      when:
-        - _docker_python3 | bool
-        - _docker_os_dist == "Fedora"
-
-    - name: Set fact to install build libraries (Debian/Ubuntu)
-      set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['libffi-dev', 'libssl-dev'] }}"
-      when:
-        - (_docker_os_dist == "Debian" or _docker_os_dist == "Ubuntu")
   when:
     - _docker_additional_packages_pip | length > 0
-
-- name: Ensure python-pip-whl is present (Debian 8)
-  set_fact:
-    _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-pip-whl'] }}"
-  when:
-    - _docker_additional_packages_pip | length > 0
-    - _docker_pip_cmd.rc != 0
-    - _docker_os_dist == "Debian"
-    - _docker_os_dist_major_version | int == 8
-
-- name: Ensure python-backports.ssl-match-hostname is present (Debian 10)
-  set_fact:
-    _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-backports.ssl-match-hostname'] }}"
-  when:
-    - not _docker_python3 | bool
-    - _docker_additional_packages_pip | length > 0
-    - _docker_pip_cmd.rc != 0
-    - _docker_os_dist == "Debian"
-    - _docker_os_dist_major_version | int == 10
 
 - name: Ensure EPEL release repository is installed
   become: true
@@ -131,7 +105,9 @@
     state: forcereinstall
   register: _pkg_result
   until: _pkg_result is succeeded
-  when: docker_pip_upgrade | bool
+  when:
+    - _docker_additional_packages_pip | length > 0
+    - docker_pip_upgrade | bool
 
 - name: Install additional packages (PiP)
   become: "{{ docker_pip_sudo | bool }}"
