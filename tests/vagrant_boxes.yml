@@ -1,121 +1,81 @@
-ansible_version: "2.6.20"
+ansible_version: "2.8.10"
 galaxy_role_name: haxorof.docker_ce
 role_dir: ansible-role-docker-ce
 
 boxes:
-  -
-    box: generic/centos7
+  # Testing only supported releases: https://www.centosblog.com/centos-eol-dates/
+  - box: generic/centos7
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    box: generic/centos8
+    reboot: false
+  - box: generic/centos8
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    # Xenial Xerus
+    reboot: false
+  # Testing only supported releases: https://wiki.ubuntu.com/Releases
+  - # Xenial Xerus
     box: generic/ubuntu1604
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    # Artful Aardvark
-    box: generic/ubuntu1710
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-  -
-    # Bionic Beaver
+    reboot: false
+  - # Bionic Beaver
     box: generic/ubuntu1804
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    # Cosmic Cuttlefish
-    box: generic/ubuntu1810
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-  -
-    # Disco Dingo
-    box: generic/ubuntu1904
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-  -
-    # Jessie
+    reboot: false
+    # Testing only supported releases: https://wiki.debian.org/sv/DebianReleases
+  - # Jessie
     box: generic/debian8
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    # Stretch
+    reboot: false
+  - # Stretch
     box: generic/debian9
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    # Buster
+    reboot: false
+  - # Buster
     box: generic/debian10
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    box: generic/fedora25
+    reboot: false
+  # Testing only supported releases: https://fedoraproject.org/wiki/End_of_life
+  - box: generic/fedora30
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    box: generic/fedora26
+    reboot: false
+  - box: generic/fedora31
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    box: generic/fedora27
+    reboot: true
+  # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
+  - box: generic/rhel7
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    box: generic/fedora28
+    reboot: true
+  - box: generic/rhel8
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
-  -
-    box: generic/fedora29
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-  -
-    box: generic/fedora30
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-  - 
-    box: rhel/7
-    box_url: local
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-  - 
-    box: rhel/8
-    box_url: local
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
+    reboot: true

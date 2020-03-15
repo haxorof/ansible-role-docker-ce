@@ -1,0 +1,9 @@
+---
+- name: Test
+  hosts: test-host
+  roles:
+    - role: haxorof.docker_ce
+      tags: do_docker
+
+    - role: haxorof.docker_ce
+      tags: do_other_role

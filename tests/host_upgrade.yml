@@ -14,23 +14,21 @@
     - name: Upgrade all packages (RedHat)
       become: true
       package:
-        name: '*'
-        state: latest      
+        name: "*"
+        state: latest
       register: _upgrade_all
       when: ansible_distribution == "RedHat"
-
-    - name: Reboot immediately
-      become: true
-      shell: "sleep 5 && reboot"
-      async: 1
-      poll: 0
-      register: _reboot_host
-      when: (_kernel_upgrade is defined and _kernel_upgrade is changed) or (_upgrade_all is defined and _upgrade_all is changed)
-
-    - name: Wait for the reboot to complete
-      wait_for_connection:
-        connect_timeout: 20
-        sleep: 5
-        delay: 5
-        timeout: 300
-      when: _reboot_host is defined and _reboot_host is changed
+    # - name: Reboot immediately
+    #   become: true
+    #   shell: "sleep 5 && reboot"
+    #   async: 1
+    #   poll: 0
+    #   register: _reboot_host
+    #   when: (_kernel_upgrade is defined and _kernel_upgrade is changed) or (_upgrade_all is defined and _upgrade_all is changed)
+    # - name: Wait for the reboot to complete
+    #   wait_for_connection:
+    #     connect_timeout: 20
+    #     sleep: 5
+    #     delay: 5
+    #     timeout: 300
+    #   when: _reboot_host is defined and _reboot_host is changed

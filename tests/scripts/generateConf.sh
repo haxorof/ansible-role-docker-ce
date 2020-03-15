@@ -24,6 +24,7 @@ id: ${tests__id[$_test_index]}
 prep_yml: ${tests__prep_yml[$_test_index]}
 test_yml: ${tests__test_yml[$_test_index]}
 local_boxes: $VAGRANT_LOCAL_BOXES
+reboot: ${boxes__reboot[$_box_index]}
 EOF
 }
 

@@ -25,7 +25,7 @@ if File.exist?(testcase_file)
     config.vm.define 'test-host' do |machine|
       machine.vm.box = vagrant_config['box']
       machine.vm.box_url = vagrant_box_url
-      machine.vagrant.plugins = "vagrant-vbguest"
+      machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-registration"]
       machine.vbguest.no_remote = true
       machine.vbguest.auto_update = vagrant_config['vbguest_update']
       machine.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
@@ -65,7 +65,7 @@ if File.exist?(testcase_file)
     
         vb.customize ["modifyvm", :id, "--memory", mem]
         vb.customize ["modifyvm", :id, "--cpus", cpus]
-        vb.customize ["modifyvm", :id, "--audio", "none"]        
+        vb.customize ["modifyvm", :id, "--audio", "none"]
       end
 
       if Vagrant.has_plugin?('vagrant-registration')
@@ -84,9 +84,9 @@ if File.exist?(testcase_file)
       end      
     end
 
-    config.vm.define 'controller' do |machine|
+    config.vm.define 'controller', primary: true do |machine|
       machine.vm.box = "centos/7"
-      machine.vagrant.plugins = "vagrant-vbguest"
+      machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
       machine.vbguest.auto_update = true
       machine.vbguest.no_remote = true
       machine.vm.synced_folder ".", "/vagrant", :mount_options => ["ro"]
@@ -108,6 +108,11 @@ if File.exist?(testcase_file)
           curl https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant > /home/vagrant/.ssh/id_rsa && \
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
 
+      # machine.vm.provision "shell",
+      #   inline: "curl -L --output mitogen.tar.gz -q https://networkgenomics.com/try/mitogen-0.2.9.tar.gz \
+      #     && tar -zxf mitogen.tar.gz mitogen-0.2.9 \
+      #     && rm mitogen.tar.gz"
+
       $script = <<-SCRIPT
       type pip
       if [[ $? > 0 ]]; then
@@ -128,6 +133,7 @@ if File.exist?(testcase_file)
         ansible.install_mode = "pip"
         ansible.compatibility_mode = "2.0"
         ansible.version = "#{vagrant_config['ansible_version']}"
+        ansible.galaxy_role_file  = "requirements.yml"
         ansible.playbook = vagrant_config['prep_yml']
         ansible.limit = "test-host"
         ansible.inventory_path = "hosts"
@@ -136,6 +142,13 @@ if File.exist?(testcase_file)
         ansible.extra_vars = {
           lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
         }
+      end
+
+      # Cannot trigger reboot via Ansible since Vagrant do network changes
+      if vagrant_config['reboot'] === true
+        machine.vm.provision :host_shell do |host_shell|
+          host_shell.inline = 'vagrant reload test-host'
+        end
       end
       # Test
       machine.vm.provision "ansible_local" do |ansible|

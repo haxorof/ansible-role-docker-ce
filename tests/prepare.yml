@@ -8,6 +8,9 @@
 - name: Upgrade host
   import_playbook: host_upgrade.yml
 
+- name: Grub changes
+  import_playbook: grub_changes.yml
+
 - hosts: test-host
   tasks:
     - name: Print LSB information
@@ -27,12 +30,6 @@
     - name: Print Ansible version
       debug:
         var: ansible_version.full
-
-    - name: Ensure haveged is installed
-      become: true
-      package:
-        name: haveged
-        state: present
 
     - name: Ensure git is installed
       become: true
