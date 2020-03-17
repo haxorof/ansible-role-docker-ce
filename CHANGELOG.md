@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Internal
 
 - Improved testing to get it more stable when reboots are required
+- Docker run throws error on Fedora 31 ([#116](../../issues/116))
 
 ## [2.6.2](../../releases/tag/2.6.2) - 2019-12-04
 
