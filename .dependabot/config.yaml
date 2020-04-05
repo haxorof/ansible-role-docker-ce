@@ -1,0 +1,7 @@
+version: 1
+update_configs:
+  - package_manager: "python"
+    directory: "/.github/actions-config/ansible-lint/"
+    update_schedule: "live"
+    default_assignees:
+      - "haxorof"

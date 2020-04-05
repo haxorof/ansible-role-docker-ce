@@ -1,0 +1,23 @@
+name: Ansible Lint # feel free to pick your own name
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Ansible List deps from file
+        run: export ANSIBLE_LINT_DEPS=$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)
+
+      - name: Lint Ansible role
+        uses: ansible/ansible-lint-action@master
+        with:
+          targets: ""
+          override-deps: "${ANSIBLE_LINT_DEPS}"
+          # |
+          #   ansible==2.9
+          #   ansible-lint==4.2.0
+          args: ""
