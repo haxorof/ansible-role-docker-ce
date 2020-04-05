@@ -11,10 +11,10 @@ jobs:
 
       - name: Set Ansible List deps from file
         run: |
-          ANSIBLE_LINT_DEPS=$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)
+          ANSIBLE_LINT_DEPS_OVERRIDES=$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)
           # Removes newlines and convert into spaces
-          ANSIBLE_LINT_DEPS=$(echo $ANSIBLE_LINT_DEPS)
-          echo "::set-env name=ANSIBLE_LINT_DEPS::$ANSIBLE_LINT_DEPS"
+          ANSIBLE_LINT_DEPS_OVERRIDES=$(echo $ANSIBLE_LINT_DEPS_OVERRIDES)
+          echo "::set-env name=ANSIBLE_LINT_DEPS_OVERRIDES::$ANSIBLE_LINT_DEPS_OVERRIDES"
 
       - name: Print env
         run: env
@@ -23,7 +23,7 @@ jobs:
         uses: ansible/ansible-lint-action@master
         with:
           targets: ""
-          override-deps: "${ANSIBLE_LINT_DEPS}"
+          override-deps: "${ANSIBLE_LINT_DEPS_OVERRIDES}"
           # |
           #   ansible==2.9
           #   ansible-lint==4.2.0
