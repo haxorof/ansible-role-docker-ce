@@ -48,3 +48,10 @@ tests:
     test_yml: test_config_devicemapper_test.yml
     skip_boxes: none
     only_boxes: none
+  - 
+    id: t_tags
+    name: Tags
+    prep_yml: prepare.yml
+    test_yml: test_tags.yml
+    skip_boxes: none
+    only_boxes: none
