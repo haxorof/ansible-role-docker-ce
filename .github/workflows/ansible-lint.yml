@@ -12,7 +12,8 @@ jobs:
       - name: Set Ansible List deps from file
         run: |
           ANSIBLE_LINT_DEPS=$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)
-          echo "ANSIBLE_LINT_DEPS=$ANSIBLE_LINT_DEPS"
+          # Removes newlines and convert into spaces
+          ANSIBLE_LINT_DEPS=$(echo $ANSIBLE_LINT_DEPS)
           echo "::set-env name=ANSIBLE_LINT_DEPS::$ANSIBLE_LINT_DEPS"
 
       - name: Print env
