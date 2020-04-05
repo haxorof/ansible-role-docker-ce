@@ -9,16 +9,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set Ansible Lint version from file
-        run: |
-          ANSIBLE_LINT_DEPS_OVERRIDES=$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)
-          # Removes newlines and convert into spaces
-          ANSIBLE_LINT_DEPS_OVERRIDES=$(echo $ANSIBLE_LINT_DEPS_OVERRIDES)
-          echo "::set-env name=ANSIBLE_LINT_DEPS_OVERRIDES::$ANSIBLE_LINT_DEPS_OVERRIDES"
+      # - name: Set Ansible Lint version from file
+      #   run: |
+      #     ANSIBLE_LINT_DEPS_OVERRIDES=$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)
+      #     # Removes newlines and convert into spaces
+      #     ANSIBLE_LINT_DEPS_OVERRIDES=$(echo $ANSIBLE_LINT_DEPS_OVERRIDES)
+      #     echo "::set-env name=ANSIBLE_LINT_DEPS_OVERRIDES::$ANSIBLE_LINT_DEPS_OVERRIDES"
 
       - name: Lint Ansible role
         uses: ansible/ansible-lint-action@master
         with:
           targets: ""
-          override-deps: "${ANSIBLE_LINT_DEPS_OVERRIDES}"
+          # override-deps: "${ANSIBLE_LINT_DEPS_OVERRIDES}"
           args: ""
