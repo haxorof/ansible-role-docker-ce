@@ -10,7 +10,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set Ansible List deps from file
-        run: export ANSIBLE_LINT_DEPS=$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)
+        run: echo "::set-env name=ANSIBLE_LINT_DEPS::$(cat ${GITHUB_WORKSPACE}/.github/actions-config/ansible-lint/requirements.txt)"
+
+      - name: Print env"
+        run: env
 
       - name: Lint Ansible role
         uses: ansible/ansible-lint-action@master
