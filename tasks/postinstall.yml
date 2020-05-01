@@ -51,7 +51,7 @@
 
     - name: Set fact to install Python 3 PiP and build dependencies
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip3_package] + [docker_python2_build_os_pkgs[_docker_os_dist]] }}"
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip3_package] + [docker_python3_build_os_pkgs[_docker_os_dist]] }}"
       when:
         - _docker_python3 | bool
         - _docker_pip_cmd.rc != 0
