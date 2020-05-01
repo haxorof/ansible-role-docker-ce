@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update default docker-compose version to 1.25.4 ([#114](../../issues/114))
 - Improve/Refactor handling related to postinstall steps and PiP ([#115](../../issues/115))
 
+### Fixed
+
+- Fix python3 reference in tasks/postinstall.yml ([#117](../../issues/117))
+
 ### Internal
 
 - Improved testing to get it more stable when reboots are required
