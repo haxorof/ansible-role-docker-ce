@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.6.3](../../releases/tag/2.6.3) - 2020-05-02
+
 ### Changed
 
-- Update default docker-compose version to 1.25.4 ([#114](../../issues/114))
+- Minimum supported Ansible version increased to 2.8.
+- Update default docker-compose version to 1.25.5 ([#114](../../issues/114))
 - Improve/Refactor handling related to postinstall steps and PiP ([#115](../../issues/115))
 
 ### Fixed
