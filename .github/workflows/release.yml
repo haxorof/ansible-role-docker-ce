@@ -4,16 +4,8 @@ on:
     tags:
       - '*'
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Lint Ansible role
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt:ro haxorof/ansible-lint -v --force-color .
   release:
     runs-on: ubuntu-latest
-    needs: validate
     steps:
       - name: Import role
         run: ansible-galaxy role import --api-key ${ANSIBLE_GALAXY_API_KEY} ${GITHUB_REPOSITORY%/*} ${GITHUB_REPOSITORY#*/}
