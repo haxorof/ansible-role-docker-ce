@@ -31,6 +31,13 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
+  # - # Focal Fossa
+  #   box: generic/ubuntu2004
+  #   box_url: vagrantup
+  #   storage_ctl: IDE Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: false
     # Testing only supported releases: https://wiki.debian.org/sv/DebianReleases
   - # Jessie
     box: generic/debian8
@@ -66,6 +73,12 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: true
+  # - box: generic/fedora32
+  #   box_url: vagrantup
+  #   storage_ctl: IDE Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: true
   # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
   - box: generic/rhel7
     box_url: vagrantup

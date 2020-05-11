@@ -192,7 +192,7 @@ Note! All distributions listed in test matrix below does not provided the latest
 | generic/fedora30   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/fedora31   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | rhel/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| rhel/8             | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
+| rhel/8             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 
 ## License
 
