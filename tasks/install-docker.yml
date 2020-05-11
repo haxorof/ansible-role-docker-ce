@@ -31,7 +31,7 @@
 - name: Do workaround to handle CentOS/RHEL 8 installation issues
   set_fact:
     _docker_packages:
-      - "https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.10-3.2.el7.x86_64.rpm"
+      - "https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.13-3.1.el7.x86_64.rpm"
       - docker-ce-cli
       - docker-ce
   when:
