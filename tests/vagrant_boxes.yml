@@ -1,16 +1,18 @@
-ansible_version: "2.8.10"
+ansible_version: "2.8.12"
 galaxy_role_name: haxorof.docker_ce
 role_dir: ansible-role-docker-ce
 
 boxes:
   # Testing only supported releases: https://www.centosblog.com/centos-eol-dates/
-  - box: generic/centos7
+  - # CentOS 7
+    box: generic/centos7
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
-  - box: generic/centos8
+  - # CentOS 8
+    box: generic/centos8
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
@@ -31,13 +33,13 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-  # - # Focal Fossa
-  #   box: generic/ubuntu2004
-  #   box_url: vagrantup
-  #   storage_ctl: IDE Controller
-  #   storage_port: 1
-  #   vbguest_update: false
-  #   reboot: false
+  - # Focal Fossa
+    box: generic/ubuntu2004
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
     # Testing only supported releases: https://wiki.debian.org/sv/DebianReleases
   - # Jessie
     box: generic/debian8
@@ -61,32 +63,37 @@ boxes:
     vbguest_update: false
     reboot: false
   # Testing only supported releases: https://fedoraproject.org/wiki/End_of_life
-  - box: generic/fedora30
+  - # F30
+    box: generic/fedora30
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
-  - box: generic/fedora31
+  - # F31
+    box: generic/fedora31
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
-  # - box: generic/fedora32
-  #   box_url: vagrantup
-  #   storage_ctl: IDE Controller
-  #   storage_port: 1
-  #   vbguest_update: false
-  #   reboot: true
+  - # F32
+    box: generic/fedora32
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: true
   # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
-  - box: generic/rhel7
+  - # RHEL7
+    box: generic/rhel7
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
-  - box: generic/rhel8
+  - # RHEL8
+    box: generic/rhel8
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
