@@ -1,0 +1,12 @@
+ansible_version: "2.8.12"
+galaxy_role_name: haxorof.docker_ce
+role_dir: ansible-role-docker-ce
+
+boxes:
+  - # F32
+    box: generic/fedora32
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: true

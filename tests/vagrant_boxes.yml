@@ -77,13 +77,6 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: true
-  - # F32
-    box: generic/fedora32
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: true
   # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
   - # RHEL7
     box: generic/rhel7

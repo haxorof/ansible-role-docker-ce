@@ -180,12 +180,19 @@ Note! All distributions listed in test matrix below does not provided the latest
 
 ### Test Matrix
 
+| Symbol | Definition |
+| --- | --- |
+| :heavy_check_mark: |  All tests passed |
+| :x: | At least one test failed |
+| :heavy_minus_sign: | No test done / Not yet tested |
+
 | #                  | s-1                | s-2                | s-3                | s-4                | s-5                | s-6                | s-7                |
 |--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
 | centos/7           | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | centos/8           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/ubuntu2004 | :heavy_check_mark: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
 | generic/debian8    | :heavy_check_mark: | :x:                | :x:                | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/debian9    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
