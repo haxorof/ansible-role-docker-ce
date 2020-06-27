@@ -1,10 +1,10 @@
 # Ansible Role for Docker CE (Community Edition)
 
-[![Ansible Role](https://img.shields.io/ansible/role/38776.svg?style=popout-square)](https://galaxy.ansible.com/haxorof/docker_ce/)
-[![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce.svg?style=popout-square)](https://github.com/haxorof/ansible-role-docker-ce)
-[![Ansible Quality](https://img.shields.io/ansible/quality/38776.svg?style=popout-square)](https://galaxy.ansible.com/haxorof/docker_ce/)
-[![Downloads](https://img.shields.io/ansible/role/d/38776.svg?style=popout-square)](https://galaxy.ansible.com/haxorof/docker_ce/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=popout-square)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
+[![Ansible Role](https://img.shields.io/ansible/role/38776)](https://galaxy.ansible.com/haxorof/docker_ce/)
+[![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce)](https://github.com/haxorof/ansible-role-docker-ce)
+[![Ansible Quality](https://img.shields.io/ansible/quality/38776)](https://galaxy.ansible.com/haxorof/docker_ce/)
+[![Downloads](https://img.shields.io/ansible/role/d/38776)](https://galaxy.ansible.com/haxorof/docker_ce/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
 [![Build Status](https://github.com/haxorof/ansible-role-docker-ce/workflows/CI/badge.svg?branch=master)](https://github.com/haxorof/ansible-role-docker-ce/actions?query=workflow%3ACI)
 
 This Ansible role installs and configures Docker CE (Community Edition) on several different Linux distributions. The goal is to let the
