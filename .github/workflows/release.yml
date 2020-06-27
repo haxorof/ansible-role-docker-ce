@@ -15,6 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
+      - name: Get version from GITHUB_REF
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -24,6 +28,6 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/${{ github.ref }}/CHANGELOG.md)
+            See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/${{ steps.get_version.outputs.VERSION }}/CHANGELOG.md)
           draft: false
           prerelease: false      
