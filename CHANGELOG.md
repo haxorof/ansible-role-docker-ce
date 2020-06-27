@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+- Update default docker-compose version to 1.26.0
+
 ## [2.6.3](../../releases/tag/2.6.3) - 2020-05-02
 
 ### Changed
