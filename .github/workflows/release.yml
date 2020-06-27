@@ -11,3 +11,19 @@ jobs:
         run: ansible-galaxy role import --api-key ${ANSIBLE_GALAXY_API_KEY} ${GITHUB_REPOSITORY%/*} ${GITHUB_REPOSITORY#*/}
         env:
           ANSIBLE_GALAXY_API_KEY: ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/${{ github.ref }}/CHANGELOG.md)
+          draft: false
+          prerelease: false      
