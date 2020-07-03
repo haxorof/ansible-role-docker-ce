@@ -32,9 +32,13 @@
 
 - name: Ensure required OS packages will be installed for PiP
   block:
+    - name: Set fact for path test of pip/pip3
+      set_fact:
+        _docker_pip_or_pip3: "{{ _docker_python3 | ternary('pip3', 'pip') }}"
+    
     - name: Determine if pip/pip3 exists in path
       become: true
-      shell: type {{ _docker_python3 | ternary('pip3', 'pip') }}
+      shell: type {{ _docker_pip_or_pip3 }}
       register: _docker_pip_cmd
       changed_when: false
       failed_when: false
@@ -44,23 +48,20 @@
 
     - name: Set fact to install Python 2 PiP and build dependencies
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip_package] + [docker_python2_build_os_pkgs[_docker_os_dist]] }}"
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [((_docker_pip_cmd.rc == 0) | ternary('', docker_pip_package))] + [docker_python2_build_os_pkgs[_docker_os_dist]] }}"
       when:
         - not _docker_python3 | bool
-        - _docker_pip_cmd.rc != 0
 
     - name: Set fact to install Python 3 PiP and build dependencies
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [docker_pip3_package] + [docker_python3_build_os_pkgs[_docker_os_dist]] }}"
+        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [((_docker_pip_cmd.rc == 0) | ternary('', docker_pip3_package))] + [docker_python3_build_os_pkgs[_docker_os_dist]] }}"
       when:
         - _docker_python3 | bool
-        - _docker_pip_cmd.rc != 0
 
     - name: Ensure python-pip-whl is present (Debian 8)
       set_fact:
         _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-pip-whl'] }}"
       when:
-        - _docker_pip_cmd.rc != 0
         - _docker_os_dist == "Debian"
         - _docker_os_dist_major_version | int == 8
 
@@ -69,7 +70,6 @@
         _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-backports.ssl-match-hostname'] }}"
       when:
         - not _docker_python3 | bool
-        - _docker_pip_cmd.rc != 0
         - _docker_os_dist == "Debian"
         - _docker_os_dist_major_version | int == 10
 
@@ -98,10 +98,31 @@
   until: _pkg_result is succeeded
   when: _docker_additional_packages_os | length > 0
 
-- name: Upgrade PiP
+# https://github.com/haxorof/ansible-role-docker-ce/issues/112
+- name: Best effort workaround to avoid 'No module named zipp'
+  block:
+    - name: Fetch install PiP version
+      become: "{{ docker_pip_sudo | bool }}"
+      shell: "{{ _docker_pip_or_pip3 }} --version"
+      changed_when: no
+      check_mode: no
+      register: _pip_version
+
+    - name: Set PiP to be upgraded due to too old PiP version (< 9.0.0)
+      set_fact:
+        docker_pip_upgrade: true
+      when:
+        - _pip_version is defined
+        - _pip_version.stdout_lines[0] is defined
+        - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+\.\d+).+$', '\\1')) is version('9.0.0', '<')
+  when:
+    - _docker_additional_packages_pip | length > 0
+    - docker_x_fix_no_zipp_module
+
+- name: Upgrade/Reinstall PiP
   become: "{{ docker_pip_sudo | bool }}"
   pip:
-    name: pip
+    name: "{{ docker_pip_package_pip }}"
     state: forcereinstall
   register: _pkg_result
   until: _pkg_result is succeeded

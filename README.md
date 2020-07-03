@@ -164,7 +164,7 @@ Here is the latest test results of the automated test which is located in the te
 
 Note! All distributions listed in test matrix below does not provided the latest released Docker CE version.
 
-**Last run:** 2020-03-14 (Latest possible Docker CE release 19.03.8, Run with Ansible 2.8.10)
+**Last run:** 2020-07-03 (Latest possible Docker CE release 19.03.9, Run with Ansible 2.8.12)
 
 ### Test Suites
 
@@ -188,12 +188,12 @@ Note! All distributions listed in test matrix below does not provided the latest
 
 | #                  | s-1                | s-2                | s-3                | s-4                | s-5                | s-6                | s-7                |
 |--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | centos/8           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
-| generic/debian8    | :heavy_check_mark: | :x:                | :x:                | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
+| generic/debian8    | :x:                | :x:                | :x:                | :heavy_minus_sign: | :x:                | :x:                | :heavy_minus_sign: |
 | generic/debian9    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |
 | generic/fedora30   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: | :heavy_check_mark: | :heavy_check_mark: | :heavy_minus_sign: |

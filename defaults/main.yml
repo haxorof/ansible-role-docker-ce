@@ -123,6 +123,9 @@ docker_additional_packages_os: []
 # Ensure PiP is upgraded before further use.
 # IMPORTANT! Be carful to set this because it might cause dependecy problems.
 docker_pip_upgrade: false
+# This variable is used when docker_pip_upgrade is true to upgrade/reinstall pip.
+# Override if you want older version than latest during upgrade, e.g. pip==19.3.1
+docker_pip_package_pip: pip
 # Default python pip package to install if missing
 docker_pip_package: python-pip
 docker_pip3_package: python3-pip
@@ -134,6 +137,9 @@ docker_pip_sudo: true
 # Workaround for - No module named ssl_match_hostname
 # https://github.com/docker/docker-py/issues/1502
 docker_x_ssl_match_hostname: false
+# Workaround for - No module named zipp
+# https://github.com/haxorof/ansible-role-docker-ce/issues/112
+docker_x_fix_no_zipp_module: true
 
 ################################################################################
 # Docker removal configuration
