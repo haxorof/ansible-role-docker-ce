@@ -18,7 +18,6 @@ galaxy_info:
 
   - name: Debian
     versions:
-      - jessie
       - stretch
       - buster
 
@@ -26,6 +25,7 @@ galaxy_info:
     versions:
       - xenial
       - bionic
+      - focal
 
   galaxy_tags:
     - docker
