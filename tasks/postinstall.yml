@@ -35,7 +35,7 @@
     - name: Set fact for path test of pip/pip3
       set_fact:
         _docker_pip_or_pip3: "{{ _docker_python3 | ternary('pip3', 'pip') }}"
-    
+
     - name: Determine if pip/pip3 exists in path
       become: true
       shell: type {{ _docker_pip_or_pip3 }}
@@ -48,13 +48,19 @@
 
     - name: Set fact to install Python 2 PiP and build dependencies
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [((_docker_pip_cmd.rc == 0) | ternary('', docker_pip_package))] + [docker_python2_build_os_pkgs[_docker_os_dist]] }}"
+        _docker_additional_packages_os: >
+          {{ _docker_additional_packages_os 
+            + [((_docker_pip_cmd.rc == 0) | ternary('', docker_pip_package))] 
+            + [docker_python2_build_os_pkgs[_docker_os_dist]] }}
       when:
         - not _docker_python3 | bool
 
     - name: Set fact to install Python 3 PiP and build dependencies
       set_fact:
-        _docker_additional_packages_os: "{{ _docker_additional_packages_os + [((_docker_pip_cmd.rc == 0) | ternary('', docker_pip3_package))] + [docker_python3_build_os_pkgs[_docker_os_dist]] }}"
+        _docker_additional_packages_os: >
+          {{ _docker_additional_packages_os 
+            + [((_docker_pip_cmd.rc == 0) | ternary('', docker_pip3_package))] 
+            + [docker_python3_build_os_pkgs[_docker_os_dist]] }}
       when:
         - _docker_python3 | bool
 
@@ -103,7 +109,7 @@
   block:
     - name: Fetch install PiP version
       become: "{{ docker_pip_sudo | bool }}"
-      shell: "{{ _docker_pip_or_pip3 }} --version"
+      command: "{{ _docker_pip_or_pip3 }} --version"
       changed_when: no
       check_mode: no
       register: _pip_version
