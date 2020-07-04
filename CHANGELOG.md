@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.6.5](../../releases/tag/2.6.5) - 2020-07-04
+
 ### Fixed
 
 - Missing dependency zipp for installed docker-compose using PiP ([#112](../../issues/112))
