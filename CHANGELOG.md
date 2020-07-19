@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [2.6.6](../../releases/tag/2.6.6) - 2020-07-19
+
+### Fixed
+
+- No package matching '' is available ([#119](../../issues/119))
+
 ## [2.6.5](../../releases/tag/2.6.5) - 2020-07-04
 
 ### Fixed
