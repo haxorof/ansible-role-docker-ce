@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Add missing audit rules which are defined in CIS Docker Benchmark 1.2.0 ([#120](../../issues/120))
+
 ## [2.6.6](../../releases/tag/2.6.6) - 2020-07-19
 
 ### Fixed
