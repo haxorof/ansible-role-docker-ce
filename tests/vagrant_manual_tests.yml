@@ -55,3 +55,17 @@ tests:
     test_yml: test_tags.yml
     skip_boxes: none
     only_boxes: none
+  - 
+    id: t_cis
+    name: CIS
+    prep_yml: prepare_storage.yml
+    test_yml: experimental/cis/test_cis.yml
+    skip_boxes: none
+    only_boxes: none
+  - 
+    id: t_kata
+    name: Kata Containers
+    prep_yml: prepare_storage.yml
+    test_yml: experimental/kata/test_katacontainers.yml
+    skip_boxes: none
+    only_boxes: centos

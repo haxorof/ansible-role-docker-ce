@@ -66,6 +66,8 @@ if File.exist?(testcase_file)
         vb.customize ["modifyvm", :id, "--memory", mem]
         vb.customize ["modifyvm", :id, "--cpus", cpus]
         vb.customize ["modifyvm", :id, "--audio", "none"]
+        vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+        vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
       end
 
       if Vagrant.has_plugin?('vagrant-registration')

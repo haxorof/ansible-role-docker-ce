@@ -11,7 +11,6 @@
   hosts: test-host
   tasks:
     - name: Enable user namespace
-      become: yes
       include_role:
         name: jtyr.grub_cmdline
       vars:
@@ -24,18 +23,15 @@
       become: yes
       sysctl:
         name: user.max_user_namespaces
-        value: 15000
+        value: '15000'
         sysctl_set: yes
         state: present
         reload: yes
       register: _sysctl_usrns
 
-    # Not using module reboot because it requires Ansible 2.7 or later
     - name: Reboot immediately
       become: yes
-      shell: "sleep 5 && reboot"
-      async: 1
-      poll: 0
+      reboot:
       when: _sysctl_usrns is changed
 
     - name: Wait for the reboot to complete
@@ -69,7 +65,7 @@
         docker_plugins:
           - type: authz
             alias: opa-docker-authz
-            name: openpolicyagent/opa-docker-authz-v2:0.4
+            name: openpolicyagent/opa-docker-authz-v2:0.7
             args: opa_args="-policy-file /opa/policies/authz.rego"
         docker_enable_audit: yes
         docker_users:
