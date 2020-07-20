@@ -10,3 +10,5 @@
 -w /etc/docker/daemon.json -k docker
 -w /usr/bin/docker-containerd -k docker
 -w /usr/bin/docker-runc -k docker
+-w /usr/bin/containerd -k docker
+-w /usr/bin/dockerd -k docker
