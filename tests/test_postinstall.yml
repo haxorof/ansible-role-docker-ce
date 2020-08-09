@@ -25,12 +25,6 @@
   hosts: test-host
   vars:
   tasks:
-    - name: Enable experimental workarounds (Debian Buster)
-      set_fact:
-        docker_x_ssl_match_hostname: true
-      when:
-        - ansible_distribution == "Debian" and ansible_distribution_major_version == 'buster/sid'
-
     - name: Install Docker SDK using PiP
       include_role:
         name: haxorof.docker_ce

@@ -6,3 +6,7 @@
 *.yml text eol=lf
 *.json text eol=lf
 *.j2 text eol=lf
+
+# Do not export github and test related files to archive
+.github/ export-ignore
+tests/ export-ignore

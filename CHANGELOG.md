@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Changed
+
+- Update default docker-compose version to 1.26.2
+- Changed `docker_x_ssl_match_hostname` to true and detection if missing
+
+### Fixed
+
+- No module named shutil_get_terminal_size ([#121](../../issues/121))
+
 ### Added
 
 - Add missing audit rules which are defined in CIS Docker Benchmark 1.2.0 ([#120](../../issues/120))

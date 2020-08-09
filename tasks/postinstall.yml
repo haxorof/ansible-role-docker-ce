@@ -151,12 +151,40 @@
 
 # https://github.com/docker/docker-py/issues/1502
 - name: Workaround for issue - No module named ssl_match_hostname (Python 2.7)
-  become: yes
-  command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
+  block:
+    - name: Test if module ssl_match_hostname exists
+      command: python -c "import backports.ssl_match_hostname"
+      register: _docker_check_smh
+      changed_when: no
+      failed_when: _docker_check_smh.rc > 1
+      check_mode: no
+
+    - name: Apply workaround for issue - No module named ssl_match_hostname (Python 2.7)
+      become: yes
+      command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
+      when: _docker_check_smh.rc == 1
   when:
     - docker_x_ssl_match_hostname | bool
-    - _docker_additional_packages_pip | length > 0
     - not _docker_python3 | bool
+    - _docker_additional_packages_pip | length > 0
+
+- name: Workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
+  block:
+    - name: Test if module shutil_get_terminal_size exists
+      command: python -c "import backports.shutil_get_terminal_size"
+      register: _docker_check_shutil
+      changed_when: no
+      failed_when: _docker_check_shutil.rc > 1
+      check_mode: no
+
+    - name: Apply workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
+      become: yes
+      command: cp -r /usr/local/lib/python2.7/dist-packages/backports/shutil_get_terminal_size/ /usr/lib/python2.7/dist-packages/backports
+      when: _docker_check_shutil.rc == 1
+  when:
+    - docker_x_shutil_get_terminal_size | bool
+    - not _docker_python3 | bool
+    - _docker_additional_packages_pip | length > 0
 
 - name: Stat /usr/bin/docker-compose
   stat:
@@ -192,42 +220,36 @@
       when:
         - not docker_compose_no_pip_detect_version | bool
 
-    - name: Fetch docker-compose SHA265 sum file
-      get_url:
-        url: "https://github.com/docker/compose/releases/download/\
-          {{ _docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
-        dest: "/tmp/ansible.docker-compose-sha256"
-      register: _github_docker_compose_shasum_file
-      changed_when: false
-      until: _github_docker_compose_shasum_file.status_code == 200
-      retries: 10
-      check_mode: no
+    - name: Fetch SHA256 of docker-compose
+      block:
+        - name: Fetch docker-compose SHA265 sum file
+          get_url:
+            url: "https://github.com/docker/compose/releases/download/\
+              {{ _docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+            dest: "/tmp/ansible.docker-compose-sha256"
+          register: _github_docker_compose_shasum_file
+          changed_when: false
+          until: _github_docker_compose_shasum_file.status_code == 200
+          retries: 10
+          check_mode: no
 
-    - name: Dump SHA256 file contents to variable
-      command: cat /tmp/ansible.docker-compose-sha256
-      register: _github_docker_compose_shasum
-      changed_when: false
-      check_mode: no
+        - name: Dump SHA256 file contents to variable
+          command: cat /tmp/ansible.docker-compose-sha256
+          register: _github_docker_compose_shasum
+          changed_when: false
+          check_mode: no
 
-    - name: Remove temporary file for SHA256 sum
-      file:
-        path: "/tmp/ansible.docker-compose-sha256"
-        state: absent
-      changed_when: false
-      check_mode: no
+        - name: Remove temporary file for SHA256 sum
+          file:
+            path: "/tmp/ansible.docker-compose-sha256"
+            state: absent
+          changed_when: false
+          check_mode: no
 
-    - name: Set SHA256 facts related to docker-compose
-      set_fact:
-        _docker_compose_checksum: "sha256:{{ _github_docker_compose_shasum.stdout | \
-          regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
-
-    # Use when moving to Ansible 2.7 as minimum version
-    # - name: Set SHA256 facts related to docker-compose (Ansible >= 2.7)
-    #   set_fact:
-    #     _docker_compose_checksum: "sha256:https://github.com/docker/compose/releases/download/\
-    #       {{ _github_docker_compose.json.tag_name }}/\
-    #       docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
-    #   when: ansible_version.full is version_compare('2.7', '>=')
+        - name: Set SHA256 facts related to docker-compose
+          set_fact:
+            _docker_compose_checksum: "sha256:{{ _github_docker_compose_shasum.stdout | \
+              regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
 
     - name: Install docker-compose {{ _docker_compose_version }} (Linux)
       become: true
