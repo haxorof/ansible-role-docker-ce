@@ -48,6 +48,13 @@ tests:
     test_yml: test_config_devicemapper_test.yml
     skip_boxes: none
     only_boxes: none
+  -
+    id: t_old_docker
+    name: Old version of Docker
+    prep_yml: prepare.yml
+    test_yml: test_old_version.yml
+    skip_boxes: none
+    only_boxes: centos/7
   - 
     id: t_tags
     name: Tags

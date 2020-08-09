@@ -8,6 +8,7 @@ VAGRANT_TEST_VM_NAME=test-host
 VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
 VAGRANT_TESTS_FILE=vagrant_tests.yml
 LOG_FILE=test_$(date +"%Y%m%d%H%M").log
+RESULT_FILE=test_result_$(date +"%Y%m%d%H%M").log
 
 source $SCRIPT_DIR/scripts/utils.sh.inc
 
@@ -148,27 +149,30 @@ DownloadBoxes() {
 }
 
 AddTestResult() {
-  if [[ "$3" == "" ]]; then
-    TEST_SUMMARY+=("$1 | $2")
+  if [[ "$4" == "" ]]; then
+    TEST_SUMMARY+=("$1$2${TXTRST} | $3")
+    echo "$2 | $3" >> $RESULT_FILE
   else
-    if [[ "$4" == "" ]]; then
-      TEST_SUMMARY+=("$1 | $2 - $3")
+    if [[ "$5" == "" ]]; then
+      TEST_SUMMARY+=("$1$2${TXTRST} | $3 - $4")
+      echo "$2 | $3 - $4" >> $RESULT_FILE
     else
-      TEST_SUMMARY+=("$1 | $2 - $3 [$4]")
+      TEST_SUMMARY+=("$1$2${TXTRST} | $3 - $4 [$5]")
+      echo "$2 | $3 - $4 [$5]" >> $RESULT_FILE
     fi
   fi
 }
 
 AddTestResultPassed() {
-  AddTestResult "${BLDGRN}passed${TXTRST}" "$1" "$2" "$3"
+  AddTestResult "${BLDGRN}" "passed" "$1" "$2" "$3"
 }
 
 AddTestResultFailed() {
-  AddTestResult "${BLDRED}failed${TXTRST}" "$1" "$2" "$3"
+  AddTestResult "${BLDRED}" "failed" "$1" "$2" "$3"
 }
 
 AddTestResultSkipped() {
-  AddTestResult "${BLDCYN}skipped${TXTRST}" "$1" "$2" "$3"
+  AddTestResult "${BLDCYN}" "skipped" "$1" "$2" "$3"
 }
 
 PrintTestSummary() {
@@ -181,6 +185,7 @@ PrintTestSummary() {
 ExecuteTests() {
   BeforeTests
   Info "Starting tests..."
+  echo "Results:" > $RESULT_FILE
   local exitCode=0
   local do_skip=0
   local finalExitCode=0
@@ -238,6 +243,7 @@ ExecuteTests() {
       fi
       bash $SCRIPT_DIR/scripts/generateConf.sh $box_index $index $VAGRANT_TESTS_FILE
       Info "Test: ${tests__name[$index]} [$box]"
+      Vagrant box list | grep "$box"
       StartTest
       exitCode=$?
       EndTest $exitCode
