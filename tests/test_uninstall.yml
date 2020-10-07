@@ -22,7 +22,6 @@
     docker_remove_all: true
     # docker_remove_additional:
     #   - /var/lib/yum/repos/x86_64/7/docker-ce-test
-    #   - /var/lib/yum/repos/x86_64/7/docker-ce-edge
     #   - /var/lib/yum/repos/x86_64/7/docker-ce-nightly
     #   - /var/lib/yum/repos/x86_64/7/docker-ce-stable
   roles:

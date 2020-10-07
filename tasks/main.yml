@@ -69,14 +69,6 @@
     docker_service_envs: {}
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Temporary handling of deprecated variable docker_enable_ce_edge (#54)
-  set_fact:
-    docker_channel: edge
-  when:
-    - docker_enable_ce_edge is defined
-    - docker_enable_ce_edge
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
-
 - name: Temporary handling of deprecated variable docker_pkg_name
   set_fact:
     docker_version: "{{ docker_pkg_name | regex_replace('^docker-ce.(.+)$', '\\1') }}"

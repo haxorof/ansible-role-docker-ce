@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Changed
+
+- Support for Ansible 2.8 dropped, increased to 2.9. Future changes might break compatibility.
+- containerd for CentOS/RHEL 8 update to version 1.2.13-3.2
+- Experimental switch `docker_x_redhat_centos_8_workaround` now defaults to `no`
+  since it seems to now be available in CentOS/RHEL 8 repo: https://github.com/docker/for-linux/issues/873
+
+### Fixed
+
+- RHEL8 install fails due to missing docker-ce-edge repository ([#123](../../issues/123))
+
+### Removed
+
+- Remove handling of deprecated variable docker_enable_ce_edge ([#83](../../issues/83))
+
 ## [2.7.0](../../releases/tag/2.7.0) - 2020-08-09
 
 ### Changed

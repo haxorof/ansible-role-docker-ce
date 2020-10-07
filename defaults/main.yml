@@ -60,8 +60,10 @@ docker_rhel_repos:
 docker_network_access: true
 
 # Workaround for RHEL/CentOS 8
-# Reason: Fails to install because YUM cannot find a good candidate for the  library containerd.
-docker_x_redhat_centos_8_workaround: yes
+# Reason: Fails to install because YUM cannot find a good candidate for the library containerd.
+docker_x_redhat_centos_8_workaround: no
+# containerd RPM URL
+docker_x_redhat_centos_8_containerd_rpm: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.13-3.2.el7.x86_64.rpm
 
 ################################################################################
 # Docker daemon configuration

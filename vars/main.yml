@@ -26,7 +26,6 @@ docker_channels:
   - stable
   - nightly
   - test
-  - edge
 
 docker_cmd_enable_disable_edge_repo:
   CentOS: yum-config-manager --{{ (_item_enabled == true) | ternary('enable','disable') }} docker-ce-{{ item }}
