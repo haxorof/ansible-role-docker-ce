@@ -69,12 +69,6 @@
     docker_service_envs: {}
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Temporary handling of deprecated variable docker_pkg_name
-  set_fact:
-    docker_version: "{{ docker_pkg_name | regex_replace('^docker-ce.(.+)$', '\\1') }}"
-  when: docker_pkg_name is match('docker-ce' + docker_os_pkg_version_separator[_docker_os_dist])
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
-
 - name: Print interpreted distribution information
   debug:
     msg: "distribution={{ _docker_os_dist }}, release={{ _docker_os_dist_release }}, major_version={{ _docker_os_dist_major_version }}"

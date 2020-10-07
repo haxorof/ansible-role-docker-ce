@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
+- Remove handling of deprecated variable docker_pkg_name ([#85](../../issues/85))
 - Remove handling of deprecated variable docker_enable_ce_edge ([#83](../../issues/83))
 
 ## [2.7.0](../../releases/tag/2.7.0) - 2020-08-09

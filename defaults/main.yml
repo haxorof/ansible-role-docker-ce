@@ -8,9 +8,6 @@
 docker_channel: stable
 # Always ensure latest version of Docker CE
 docker_latest_version: true
-# Docker package to install. Change this if you want a specific version of Docker
-# DEPRECATED! use docker_version instead
-docker_pkg_name: docker-ce
 # Docker version
 # Relation with other variables:
 # - If docker_version is set to a non-empty value (e.g. 18.06.1.ce-3.el7) then that is used.

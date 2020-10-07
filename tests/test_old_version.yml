@@ -4,18 +4,6 @@
 
 - hosts: test-host
   tasks:
-    - name: Install Docker CE 17.06 (using docker_pkg_name)
-      include_role:
-        name: haxorof.docker_ce
-      vars:
-        docker_pkg_name: docker-ce-17.06.0.ce-1.el7.centos
-
-    - name: Remove Docker CE
-      include_role:
-        name: haxorof.docker_ce
-      vars:
-        docker_remove: true
-
     - name: Install Docker CE 18.06 (using docker_version)
       include_role:
         name: haxorof.docker_ce
