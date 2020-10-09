@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Changed
+
+- Pip install on RHEL 7 and 8 ([#125](../../issues/125))
+
 ### Fixed
 
+- Fails on RHEL 7 because $releasever is set to 7Server ([#126](../../issues/126))
 - Tasks related to removal uses yum instead of dnf for RHEL 8 ([#124](../../issues/124))
 
 ## [3.0.0](../../releases/tag/3.0.0) - 2020-10-07

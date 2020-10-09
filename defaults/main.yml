@@ -62,6 +62,10 @@ docker_x_redhat_centos_8_workaround: no
 # containerd RPM URL
 docker_x_redhat_centos_8_containerd_rpm: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.13-3.2.el7.x86_64.rpm
 
+# Workaround for - CentOS 7/RHEL 7 installations broken where $releasever is '7Server'
+# https://github.com/docker/for-linux/issues/1111
+docker_x_fix_centos_redhat_7_releasever: yes
+
 ################################################################################
 # Docker daemon configuration
 ################################################################################

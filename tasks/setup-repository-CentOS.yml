@@ -33,6 +33,27 @@
       _docker_os_dist == "Fedora" or
       _docker_os_dist == "RedHat"
 
+# https://github.com/haxorof/ansible-role-docker-ce/issues/126
+- name: Workaround issue with $releasever set to 7Server
+  block:
+    - name: Fetch $relesever value
+      command: python -c 'import yum, json; yb = yum.YumBase(); print json.dumps(yb.conf.yumvar, indent=2)'
+      changed_when: no
+      check_mode: no
+      register: _docker_releasever
+
+    - name: Replace $releasever with '7' in /etc/yum.repos.d/docker-ce.repo
+      become: yes
+      replace:
+        path: /etc/yum.repos.d/docker-ce.repo
+        regexp: \$releasever
+        replace: '7'
+      when: _docker_releasever.stdout is search('7Server')
+  when:
+    - (_docker_os_dist == "RedHat" or _docker_os_dist == "CentOS")
+    - _docker_os_dist_major_version | int == 7
+    - docker_x_fix_centos_redhat_7_releasever | bool
+
 - name: Disable Docker CE repository channels (Fedora/CentOS/RedHat)
   become: true
   shell: "{{ docker_cmd_enable_disable_edge_repo[_docker_os_dist] }}"
