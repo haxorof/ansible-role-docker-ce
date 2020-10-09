@@ -30,7 +30,7 @@ different distributions.
 - RHEL<sup>†</sup>
 - Ubuntu
 
-<sup>†</sup> NB: Docker does _not_ officially support Docker CE on this distribution.
+<sup>†</sup> NB: Docker does _not_ officially support Docker CE on this distribution and some features might/will not work.
 
 ## Changelog
 

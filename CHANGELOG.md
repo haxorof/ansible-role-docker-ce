@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Tasks related to removal uses yum instead of dnf for RHEL 8 ([#124](../../issues/124))
+
 ## [3.0.0](../../releases/tag/3.0.0) - 2020-10-07
 
 ### Changed
