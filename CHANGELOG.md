@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.1.0](../../releases/tag/3.1.0) - 2020-10-09
+
 ### Changed
 
 - Pip install on RHEL 7 and 8 ([#125](../../issues/125))
