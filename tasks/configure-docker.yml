@@ -37,12 +37,8 @@
   notify: restart docker
   when: docker_daemon_config_file is defined
 
-- name: Fetch Docker daemon status
-  become: true
-  service:
-    name: docker
-  register: _docker_status_check
-  when: docker_plugins | length > 0
+- name: Check services
+  service_facts:
 
 - name: Configure Docker daemon (variables)
   become: true
@@ -53,10 +49,10 @@
   when:
     - docker_daemon_config_file is not defined
     - docker_daemon_config is defined
-    - _docker_status_check.status is not defined or
-      (_docker_status_check.status is defined and
-      _docker_status_check.status.SubState is defined and
-      _docker_status_check.status.SubState != "running")
+    - ansible_facts.services['docker'] is not defined or
+      (ansible_facts.services['docker'] is defined and
+      ansible_facts.services['docker'].state is defined and
+      ansible_facts.services['docker'].state != "running")
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
   become: true
