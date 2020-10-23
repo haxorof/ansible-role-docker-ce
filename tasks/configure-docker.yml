@@ -113,7 +113,7 @@
     msg: "Notify handler to start/restart docker"
   notify: restart docker
   changed_when: true
-  when: 
+  when:
     - not _docker_service is changed
     - _docker_service.status is defined
     - _docker_service.status.SubState is defined
