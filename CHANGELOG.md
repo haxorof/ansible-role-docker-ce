@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.1.1](../../releases/tag/3.1.1) - 2020-10-23
+
 ### Fixed
 
 - WSL2: Failing to check docker daemon status ([#127](../../issues/127))
