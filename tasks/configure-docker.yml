@@ -37,11 +37,8 @@
   notify: restart docker
   when: docker_daemon_config_file is defined
 
-- name: Fetch Docker daemon status
-  become: true
-  service:
-    name: docker
-  register: _docker_status_check
+- name: Fetch service statuses
+  service_facts:
   when: docker_plugins | length > 0
 
 - name: Configure Docker daemon (variables)
@@ -53,10 +50,10 @@
   when:
     - docker_daemon_config_file is not defined
     - docker_daemon_config is defined
-    - _docker_status_check.status is not defined or
-      (_docker_status_check.status is defined and
-      _docker_status_check.status.SubState is defined and
-      _docker_status_check.status.SubState != "running")
+    - ansible_facts.services['docker'] is not defined or
+      (ansible_facts.services['docker'] is defined and
+       ansible_facts.services['docker'].state is defined and
+       ansible_facts.services['docker'].state != "running")
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
   become: true
@@ -112,11 +109,15 @@
   register: _docker_service
 
 - name: Trigger start/restart of Docker
-  service:
-    name: docker
+  debug:
+    msg: "Notify handler to start/restart docker"
   notify: restart docker
-  changed_when: _docker_service.status.SubState != "running"
-  when: _docker_service.status is defined and _docker_service.status.SubState is defined
+  changed_when: true
+  when: 
+    - not _docker_service is changed
+    - _docker_service.status is defined
+    - _docker_service.status.SubState is defined
+    - _docker_service.status.SubState != "running"
 
 - name: Install and configure Docker plugins
   include_tasks: configure-docker/configure-docker-plugins.yml

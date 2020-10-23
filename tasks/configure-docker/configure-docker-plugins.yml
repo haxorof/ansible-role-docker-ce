@@ -1,8 +1,5 @@
-- name: Fetch Docker daemon status
-  become: yes
-  service:
-    name: docker
-  register: _docker_status
+- name: Fetch service statuses
+  service_facts:
 
 - name: Start Docker daemon
   become: yes
@@ -10,9 +7,9 @@
     name: docker
     state: started
   when:
-    - _docker_status.status is defined
-    - _docker_status.status.SubState is defined
-    - _docker_status.status.SubState != "running"
+    - ansible_facts.services['docker'] is defined
+    - ansible_facts.services['docker'].state is defined
+    - ansible_facts.services['docker'].state != "running"
 
 - name: Wait for Docker daemon to started
   become: yes
