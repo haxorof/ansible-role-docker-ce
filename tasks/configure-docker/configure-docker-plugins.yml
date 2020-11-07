@@ -6,10 +6,16 @@
   service:
     name: docker
     state: started
-  when:
-    - ansible_facts.services['docker'] is defined
-    - ansible_facts.services['docker'].state is defined
-    - ansible_facts.services['docker'].state != "running"
+  when: (
+          ansible_facts.services['docker'] is defined and
+          ansible_facts.services['docker'].state is defined and
+          ansible_facts.services['docker'].state != "running"
+        ) or
+        (
+          ansible_facts.services['docker.service'] is defined and
+          ansible_facts.services['docker.service'].state is defined and
+          ansible_facts.services['docker.service'].state != "running"
+        )
 
 - name: Wait for Docker daemon to started
   become: yes
