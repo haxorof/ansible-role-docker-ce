@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.1.2](../../releases/tag/3.1.2) - 2020-11-07
+
 ### Fixed
 
 - Centos8: Issues when trying to install plugins ([#131](../../issues/131))
