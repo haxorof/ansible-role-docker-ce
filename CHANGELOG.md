@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Changed
+
+- Review code around Docker plugin handling ([#132](../../issues/132))
+
+### Fixed
+
+- Docker daemon is not restarted on configuration change when already started. Fixed by changes in #132.
+
+### Internal
+
+- Readme file in tests directory updated
+- Updated tests to use Ansible 2.9.15
+
 ## [3.1.2](../../releases/tag/3.1.2) - 2020-11-07
 
 ### Fixed
