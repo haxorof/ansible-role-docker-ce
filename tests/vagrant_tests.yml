@@ -34,10 +34,3 @@ tests:
     test_yml: test_auditd.yml
     skip_boxes: rhel/8
     only_boxes: none
-  -
-    id: t_docker_compatibility
-    name: Docker compatibility
-    prep_yml: prepare.yml
-    test_yml: test_docker_compatibility.yml
-    skip_boxes: none
-    only_boxes: ubuntu1604
