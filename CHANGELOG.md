@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.2.1](../../releases/tag/3.2.1) - 2020-12-21
+
+### Changed
+
+- Bumped docker-compose version to 1.27.4
+
 ## [3.2.0](../../releases/tag/3.2.0) - 2020-11-16
 
 ### Changed
