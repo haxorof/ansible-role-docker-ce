@@ -87,11 +87,13 @@ if File.exist?(testcase_file)
     end
 
     config.vm.define 'controller', primary: true do |machine|
-      machine.vm.box = "centos/7"
+      box_image = "generic/ubuntu2004"
+      #box_image = "centos/7"
+      machine.vm.box = box_image
       machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
       machine.vbguest.auto_update = true
       machine.vbguest.no_remote = true
-      machine.vm.synced_folder ".", "/vagrant", :mount_options => ["ro"]
+      machine.vm.synced_folder ".", "/vagrant", :mount_options => ["rw"]
       machine.vm.synced_folder "../", "/mnt/#{vagrant_config['role_dir']}", :mount_options => ["ro"]
       machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
       machine.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: true
@@ -115,27 +117,26 @@ if File.exist?(testcase_file)
       #     && tar -zxf mitogen.tar.gz mitogen-0.2.9 \
       #     && rm mitogen.tar.gz"
 
-      $script = <<-SCRIPT
-      type pip
-      if [[ $? > 0 ]]; then
-        . /etc/os-release  
-        if [[ "$ID" == "centos" ]]; then
-          echo "Install Python PiP"
-          sudo yum install -y epel-release
-          sudo yum makecache
-          sudo yum install -y python-pip
-          sudo yum install -y haveged
-        fi
-      fi
-      SCRIPT
-      machine.vm.provision "shell", inline: $script
+      # Not so nice hack with hardcoded strings
+      if "#{box_image}" == "centos/7" then
+        install_cmd = "sudo yum install -y epel-release python-pip haveged"
+      end
+
+      # Not so nice hack with hardcoded strings
+      if "#{box_image}" == "generic/ubuntu2004" then
+        install_cmd = "sudo apt-get install -y python3-pip python-is-python3 haveged && sudo ln -s -f /usr/bin/pip3 /usr/bin/pip"
+      end
 
       # Prepare
       machine.vm.provision "ansible_local" do |ansible|
         ansible.install_mode = "pip"
+        ansible.pip_install_cmd = "#{install_cmd}"
         ansible.compatibility_mode = "2.0"
         ansible.version = "#{vagrant_config['ansible_version']}"
         ansible.galaxy_role_file  = "requirements.yml"
+        ansible.galaxy_roles_path = '/var/tmp/roles'
+        # To avoid installing roles multiple times when running regession testing
+        ansible.galaxy_command = "test -d /var/tmp/roles || sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
         ansible.playbook = vagrant_config['prep_yml']
         ansible.limit = "test-host"
         ansible.inventory_path = "hosts"
