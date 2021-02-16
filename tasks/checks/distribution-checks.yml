@@ -9,7 +9,7 @@
       - Debian
       - Fedora
       - RedHat
-      - Ubuntu  
+      - Ubuntu
   when: _docker_os_dist not in _supported_distributions
 
 - name: Fail if kernel version is lower than 3.10
@@ -27,6 +27,6 @@
       Fedora: 24
       RedHat: 7
       Ubuntu: 14
-  when: 
+  when:
     - _docker_os_dist in _version_checks
     - _docker_os_dist_major_version | int < _version_checks[_docker_os_dist]
