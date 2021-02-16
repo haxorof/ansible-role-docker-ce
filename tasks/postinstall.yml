@@ -132,7 +132,7 @@
         - _docker_python3 | bool
         - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+).+$', '\\1')) is version('21.0', '<')
   when:
-    - _pip_version is defined 
+    - _pip_version is defined
     - _pip_version.stdout_lines[0] is defined
 
 # PiP 21 drop Python 2 support
