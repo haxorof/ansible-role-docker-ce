@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.3.0](../../releases/tag/3.3.0) - 2021-02-16
+
 ### Added
 
 - Add support for AlmaLinux 8 ([#133](../../issues/133))
