@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Added
+
+- Add support for AlmaLinux 8 ([#133](../../issues/133))
+
+### Fixed
+
+- PiP upgrade no longer works for Python 2 ([#134](../../issues/134))
+
 ## [3.2.1](../../releases/tag/3.2.1) - 2020-12-21
 
 ### Changed

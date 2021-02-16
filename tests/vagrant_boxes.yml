@@ -1,4 +1,4 @@
-ansible_version: "2.9.16"
+ansible_version: "2.9.17"
 galaxy_role_name: haxorof.docker_ce
 role_dir: ansible-role-docker-ce
 
@@ -15,6 +15,13 @@ boxes:
     box: generic/centos8
     box_url: vagrantup
     storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
+  - # AlmaLinux 8
+    box: almalinux/8
+    box_url: vagrantup
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
@@ -40,14 +47,7 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-    # Testing only supported releases: https://wiki.debian.org/sv/DebianReleases
-  - # Jessie
-    box: generic/debian8
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
+    # Testing only supported releases: https://wiki.debian.org/LTS
   - # Stretch
     box: generic/debian9
     box_url: vagrantup
@@ -63,22 +63,15 @@ boxes:
     vbguest_update: false
     reboot: false
   # Testing only supported releases: https://fedoraproject.org/wiki/End_of_life
-  - # F30
-    box: generic/fedora30
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
-  - # F31
-    box: generic/fedora31
+  - # F32
+    box: generic/fedora32
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
-  - # F32
-    box: generic/fedora32
+  - # F33
+    box: generic/fedora33
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1

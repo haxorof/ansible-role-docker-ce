@@ -92,8 +92,8 @@
     state: absent
   loop:
     # all distributions
-    - "{{ docker_envs_dir[_docker_os_dist] }}/docker"
-    - "{{ docker_envs_dir[_docker_os_dist] }}/docker-envs"
+    - "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker"
+    - "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker-envs"
     - /etc/audit/rules.d/docker.rules
     # centos/rhel
     - /etc/yum.repos.d/docker-ce.repo

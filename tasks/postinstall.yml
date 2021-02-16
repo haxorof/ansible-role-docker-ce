@@ -7,21 +7,21 @@
 - name: Set facts to install Docker SDK for Python
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[_docker_os_dist]['sdk'] }}"
+      docker_predefined_packages_pip[ansible_distribution_file_variety]['sdk'] }}"
   when:
     - docker_sdk | bool
 
 - name: Set facts to install Docker Compose
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[_docker_os_dist]['compose'] }}"
+      docker_predefined_packages_pip[ansible_distribution_file_variety]['compose'] }}"
   when:
     - docker_compose | bool and not docker_compose_no_pip | bool
 
 - name: Set facts to install Docker Stack dependencies ('docker_stack')
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[_docker_os_dist]['stack'] }}"
+      docker_predefined_packages_pip[ansible_distribution_file_variety]['stack'] }}"
   when:
     - docker_stack | bool
 
@@ -51,7 +51,7 @@
         _docker_additional_packages_os: >
           {{ _docker_additional_packages_os
             + ([] if (_docker_pip_cmd.rc == 0) else [docker_pip_package])
-            + [docker_python2_build_os_pkgs[_docker_os_dist]] }}
+            + [docker_python2_build_os_pkgs[_docker_os_dist] | default(docker_python2_build_os_pkgs[ansible_distribution_file_variety])] }}
       when:
         - not _docker_python3 | bool
 
@@ -60,7 +60,7 @@
         _docker_additional_packages_os: >
           {{ _docker_additional_packages_os
             + ([] if (_docker_pip_cmd.rc == 0) else [docker_pip3_package])
-            + [docker_python3_build_os_pkgs[_docker_os_dist]] }}
+            + [docker_python3_build_os_pkgs[_docker_os_dist] | default(docker_python3_build_os_pkgs[ansible_distribution_file_variety])] }}
       when:
         - _docker_python3 | bool
 
@@ -104,26 +104,46 @@
   until: _pkg_result is succeeded
   when: _docker_additional_packages_os | length > 0
 
-# https://github.com/haxorof/ansible-role-docker-ce/issues/112
-- name: Best effort workaround to avoid 'No module named zipp'
+- name: Fetch install PiP version
+  become: "{{ docker_pip_sudo | bool }}"
+  command: "{{ _docker_pip_or_pip3 }} --version"
+  changed_when: no
+  check_mode: no
+  register: _pip_version
+  when:
+    - _docker_additional_packages_pip | length > 0
+
+- name: Check and set PiP for upgrade if necessary
   block:
-    - name: Fetch install PiP version
-      become: "{{ docker_pip_sudo | bool }}"
-      command: "{{ _docker_pip_or_pip3 }} --version"
-      changed_when: no
-      check_mode: no
-      register: _pip_version
+    # Best effort workaround to avoid 'No module named zipp'
+    # https://github.com/haxorof/ansible-role-docker-ce/issues/112
 
     - name: Set PiP to be upgraded due to too old PiP version (< 9.0.0)
       set_fact:
         docker_pip_upgrade: true
       when:
-        - _pip_version is defined
-        - _pip_version.stdout_lines[0] is defined
-        - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+\.\d+).+$', '\\1')) is version('9.0.0', '<')
+        - docker_x_fix_no_zipp_module
+        - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+).+$', '\\1')) is version('9.0', '<')
+
+    - name: Set PiP to be upgraded due to Rust depencency for cryptography
+      set_fact:
+        docker_pip_upgrade: true
+      when:
+        - _docker_python3 | bool
+        - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+).+$', '\\1')) is version('21.0', '<')
   when:
-    - _docker_additional_packages_pip | length > 0
-    - docker_x_fix_no_zipp_module
+    - _pip_version is defined 
+    - _pip_version.stdout_lines[0] is defined
+
+# PiP 21 drop Python 2 support
+# https://pip.pypa.io/en/latest/development/release-process/#python-2-support
+# https://github.com/pypa/pip/issues/7423
+- name: Ensure PiP upgrade for Python 2 only is upgraded to at most 20.3
+  set_fact:
+    docker_pip_package_pip: "{{ docker_pip_package_pip }}<21"
+  when:
+    - (not _docker_python3 | bool) or (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 18)
+    - docker_pip_upgrade | bool
 
 - name: Upgrade/Reinstall PiP
   become: "{{ docker_pip_sudo | bool }}"

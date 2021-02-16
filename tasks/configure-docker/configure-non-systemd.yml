@@ -5,11 +5,11 @@
     _docker_service_opts:
       DOCKER_OPTS: "{{ docker_daemon_opts }}"
 
-- name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist] }}/docker
+- name: Setup Docker environment file {{ docker_envs_dir[ansible_distribution_file_variety] }}/docker
   become: true
   template:
     src: docker-envs.j2
-    dest: "{{ docker_envs_dir[_docker_os_dist] }}/docker"
+    dest: "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker"
   notify: restart docker
   vars:
     docker_envs: "{{ docker_service_envs }}"

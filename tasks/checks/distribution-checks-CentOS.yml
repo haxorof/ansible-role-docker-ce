@@ -1,5 +1,0 @@
----
-- name: Fail if unsupported CentOS version
-  fail:
-    msg: "CentOS 7 or later is required!"
-  when: _docker_os_dist_major_version | int < 7
