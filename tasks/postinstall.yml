@@ -123,6 +123,7 @@
         docker_pip_upgrade: true
       when:
         - docker_x_fix_no_zipp_module
+        - not docker_x_skip_pip_auto_upgrade | bool
         - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+).+$', '\\1')) is version('9.0', '<')
 
     - name: Set PiP to be upgraded due to Rust depencency for cryptography
@@ -130,6 +131,7 @@
         docker_pip_upgrade: true
       when:
         - _docker_python3 | bool
+        - not docker_x_skip_pip_auto_upgrade | bool
         - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+).+$', '\\1')) is version('21.0', '<')
   when:
     - _pip_version is defined
@@ -143,6 +145,7 @@
     docker_pip_package_pip: "{{ docker_pip_package_pip }}<21"
   when:
     - (not _docker_python3 | bool) or (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 18)
+    - not docker_x_skip_pip_auto_upgrade | bool
     - docker_pip_upgrade | bool
 
 - name: Upgrade/Reinstall PiP

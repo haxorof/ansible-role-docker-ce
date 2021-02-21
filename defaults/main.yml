@@ -123,8 +123,8 @@ docker_stack: false
 docker_additional_packages_pip: []
 # Additional OS packages to install after Docker is configured and started.
 docker_additional_packages_os: []
-# Ensure PiP is upgraded before further use.
-# IMPORTANT! Be carful to set this because it might cause dependecy problems.
+# Forces a PiP upgraded before further use.
+# IMPORTANT! Be carful to set this because it might cause dependency problems.
 docker_pip_upgrade: false
 # This variable is used when docker_pip_upgrade is true to upgrade/reinstall pip.
 # Override if you want older version than latest during upgrade, e.g. pip==19.3.1
@@ -146,6 +146,10 @@ docker_x_fix_no_zipp_module: true
 # Workaround for - No module named shutil_get_terminal_size
 # https://github.com/haxorof/ansible-role-docker-ce/issues/121
 docker_x_shutil_get_terminal_size: true
+# Experimental - ensure that PiP is not upgraded automatically
+# Setting this to true will break installation of some parts
+# e.g. Python based docker-compose.
+docker_x_skip_pip_auto_upgrade: false
 
 ################################################################################
 # Docker removal configuration
