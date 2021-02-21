@@ -16,7 +16,7 @@
     dest: /etc/systemd/system/docker.service.d/default.conf
     owner: root
     group: root
-    mode: 0644    
+    mode: 0644
   register: _systemd_docker_dropin
   notify: restart docker
   vars:
@@ -37,7 +37,7 @@
     dest: "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker-envs"
     owner: root
     group: root
-    mode: 0644    
+    mode: 0644
   notify: restart docker
   vars:
     docker_envs: "{{ docker_service_envs }}"

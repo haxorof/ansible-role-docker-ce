@@ -12,7 +12,7 @@
     dest: "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker"
     owner: root
     group: root
-    mode: 0644    
+    mode: 0644
   notify: restart docker
   vars:
     docker_envs: "{{ docker_service_envs }}"
