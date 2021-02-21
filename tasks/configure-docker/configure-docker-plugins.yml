@@ -46,6 +46,9 @@
   copy:
     content: "{{ _docker_daemon_config | to_nice_json }}"
     dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644    
   notify: restart docker
   when:
     - docker_daemon_config_file is not defined

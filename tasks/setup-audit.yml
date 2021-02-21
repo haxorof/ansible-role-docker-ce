@@ -16,6 +16,9 @@
   copy:
     src: files/etc/audit/rules.d/docker.rules
     dest: /etc/audit/rules.d/docker.rules
+    owner: root
+    group: root
+    mode: 0644    
   notify: restart auditd
   when: docker_enable_audit | bool
 

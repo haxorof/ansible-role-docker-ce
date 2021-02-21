@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Fixed Ansible linting warnings related to rule 208
+
 ## [3.3.1](../../releases/tag/3.3.1) - 2021-02-21
 
 ### Fixed
