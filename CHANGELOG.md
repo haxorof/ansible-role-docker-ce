@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.3.1](../../releases/tag/3.3.1) - 2021-02-21
+
+### Fixed
+
+- Version 3.3.0 forces pip upgrades on RHEL8 ([#135](../../issues/135))
+
+### Changed
+
+- Cleaned out old compatibility check related to Debian 7
+
 ## [3.3.0](../../releases/tag/3.3.0) - 2021-02-16
 
 ### Added
