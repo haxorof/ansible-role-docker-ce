@@ -107,7 +107,7 @@ if File.exist?(testcase_file)
 
       machine.vm.provision "shell",
         inline: "test -e /home/vagrant/.ssh/id_rsa || (mkdir -p /home/vagrant/.ssh && chmod 0700 /home/vagrant/.ssh && \
-          curl https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant > /home/vagrant/.ssh/id_rsa && \
+          curl -s https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant > /home/vagrant/.ssh/id_rsa && \
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
 
       # machine.vm.provision "shell",
