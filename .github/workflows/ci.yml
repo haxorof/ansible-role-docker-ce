@@ -14,4 +14,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Lint Ansible role
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt:ro haxorof/ansible-lint -v --force-color .
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt haxorof/ansible-lint -v --force-color .
