@@ -1,5 +1,6 @@
 galaxy_info:
   role_name: docker_ce
+  namespace: haxorof
   author: Bjorn Oscarsson
   company: none
   description: "Installs and configures Docker Community Edition (CE)"
