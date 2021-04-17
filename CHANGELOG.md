@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.3.2](../../releases/tag/3.3.2) - 2021-04-17
+
 ### Fixed
 
+- Python docker version 5 Drops support for Python 2 ([#136](../../issues/136))
+- Bumped non-Python version of docker-compose from 1.27.4 to 1.29.1
 - Fixed Ansible linting warnings related to rule 208
+
+### Internal
+
+- Bumped ansible version to 2.9.20 which is used for regression testing
 
 ## [3.3.1](../../releases/tag/3.3.1) - 2021-02-21
 
