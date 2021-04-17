@@ -93,17 +93,17 @@ docker_predefined_packages_os: []
 docker_predefined_packages_pip:
   RedHat:
     sdk:
-      - docker
+      - docker{{'<5' if ansible_python_version is version('3', '<') }}
     compose:
-      - docker-compose
+      - docker-compose{{'<1.29' if ansible_python_version is version('3', '<') }}
     stack:
       - jsondiff
       - pyyaml
   Debian:
     sdk:
-      - docker
+      - docker{{'<5' if ansible_python_version is version('3', '<') }}
     compose:
-      - docker-compose
+      - docker-compose{{'<1.29' if ansible_python_version is version('3', '<') }}
     stack:
       - jsondiff
       - pyyaml
