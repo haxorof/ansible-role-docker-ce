@@ -2,3 +2,4 @@ warn_list:
   # Bug: https://github.com/ansible/ansible-lint/issues/457
   - 'empty-string-compare' # https://ansible-lint.readthedocs.io/en/latest/default_rules.html#empty-string-compare
   - 'no-handler'  # https://ansible-lint.readthedocs.io/en/latest/default_rules.html#no-handler
+  - 'ignore-errors' # https://ansible-lint.readthedocs.io/en/latest/default_rules.html#ignore-errors
