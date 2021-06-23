@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Changed
+
+- Bumped minimum Ansible version to 2.10 in role meta information
+
 ### Fixed
 
 - Failed execution during removal of Docker CE and related files
@@ -14,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Internal
 
 - Restructure of test cases
+- Bumped Ansible version to 2.10.7 meaning regression testing is no longer done on versions below 2.10
 
 ## [3.3.2](../../releases/tag/3.3.2) - 2021-04-17
 
