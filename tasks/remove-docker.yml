@@ -152,7 +152,7 @@
 
 - name: Update repository cache
   become: true
-  shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist] }}"
+  shell: "{{ docker_cmd_update_repo_cache[ansible_distribution_file_variety] }}"
   args:
     warn: false
   changed_when: false
