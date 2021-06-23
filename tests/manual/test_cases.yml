@@ -3,63 +3,63 @@ tests:
     id: t_nothing
     name: Do nothing
     prep_yml: prepare.yml
-    test_yml: test_nothing.yml
+    test_yml: manual/test_nothing.yml
     skip_boxes: none
     only_boxes: none
   -
     id: t_default
     name: Default no config
     prep_yml: prepare.yml
-    test_yml: test_default.yml
+    test_yml: manual/test_default.yml
     skip_boxes: none
     only_boxes: none
   -
     id: t_downgrade
     name: Downgrade
     prep_yml: prepare.yml
-    test_yml: test_downgrade.yml
+    test_yml: manual/test_downgrade.yml
     skip_boxes: none
     only_boxes: none
   -
     id: t_uninstall
     name: Uninstall
     prep_yml: prepare.yml
-    test_yml: test_uninstall.yml
+    test_yml: manual/test_uninstall.yml
     skip_boxes: none
     only_boxes: none
   -
     id: t_remove_pre_ce
     name: Remove pre Docker CE
     prep_yml: prepare.yml
-    test_yml: test_remove_pre_ce.yml
+    test_yml: manual/test_remove_pre_ce.yml
     skip_boxes: none
     only_boxes: none
   -
     id: t_net_access
     name: Network access
     prep_yml: prepare.yml
-    test_yml: test_network_access.yml
+    test_yml: manual/test_network_access.yml
     skip_boxes: none
     only_boxes: none
   -
     id: t_devicemapper_config_test
     name: Devicemapper configuration (test channel)
     prep_yml: prepare_storage.yml
-    test_yml: test_config_devicemapper_test.yml
+    test_yml: manual/test_config_devicemapper_test.yml
     skip_boxes: none
     only_boxes: none
   -
     id: t_old_docker
     name: Old version of Docker
     prep_yml: prepare.yml
-    test_yml: test_old_version.yml
+    test_yml: manual/test_old_version.yml
     skip_boxes: none
     only_boxes: centos/7
   - 
     id: t_tags
     name: Tags
     prep_yml: prepare.yml
-    test_yml: test_tags.yml
+    test_yml: manual/test_tags.yml
     skip_boxes: none
     only_boxes: none
   - 

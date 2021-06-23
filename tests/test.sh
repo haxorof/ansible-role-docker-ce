@@ -5,7 +5,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TEST_SUMMARY=()
 
 VAGRANT_TEST_VM_NAME=test-host
-VAGRANT_TESTCASE_FILE=vagrant_testcase.yml
+VAGRANT_TESTCASE_FILE=regression/test_cases.yml
 VAGRANT_TESTS_FILE=vagrant_tests.yml
 LOG_FILE=test_$(date +"%Y%m%d%H%M").log
 RESULT_FILE=test_result_$(date +"%Y%m%d%H%M").log

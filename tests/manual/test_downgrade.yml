@@ -1,7 +1,4 @@
 ---
-- name: Determine Python interpreter
-  import_playbook: determine_python_interpreter.yml
-
 - hosts: test-host
   tasks:
     - name: Install latest Docker CE

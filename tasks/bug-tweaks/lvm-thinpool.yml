@@ -37,6 +37,8 @@
     size: '{{ pool.metadata_size }}'
     vg: '{{ pool.volume_group }}'
   when: _datavolume_created is changed
+  tags:
+    - skip_ansible_lint
 
 - name: Convert data volume to thinpool
   become: true

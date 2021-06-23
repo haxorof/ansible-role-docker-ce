@@ -18,7 +18,7 @@
       register: _distribution
       until: _distribution is succeeded
       retries: 10
-      delay: 10     
+      delay: 10
       changed_when: no
 
     - name: Print distribution information
@@ -34,7 +34,7 @@
         && apt-get update"
       when:
         - _distribution.stdout_lines|join('') is search("Artful")
-      
+
     - name: Fix Debian 7 (Wheezy) APT sources
       become: yes
       raw: "wget https://deb.freexian.com/extended-lts/pool/main/f/freexian-archive-keyring/freexian-archive-keyring_2018.05.29_all.deb \

@@ -4,7 +4,7 @@
     path: ~/.ansible/cp
     state: absent
   delegate_to: 127.0.0.1
-    
+
 - name: Docker info
   become: yes
   shell: docker info

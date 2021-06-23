@@ -1,4 +1,4 @@
-ansible_version: "2.9.20"
+ansible_version: "2.10.7"
 galaxy_role_name: haxorof.docker_ce
 role_dir: ansible-role-docker-ce
 

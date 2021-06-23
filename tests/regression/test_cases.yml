@@ -3,34 +3,34 @@ tests:
     id: t_config
     name: Configurations
     prep_yml: prepare.yml
-    test_yml: test_config.yml
+    test_yml: regression/test_config.yml
     skip_boxes: rhel/8
     only_boxes: none
   -
     id: t_channel
     name: Channel configuration
     prep_yml: prepare.yml
-    test_yml: test_config_channel.yml
+    test_yml: regression/test_config_channel.yml
     skip_boxes: rhel/8
     only_boxes: none
   -
     id: t_postinstall
     name: Postinstall
     prep_yml: prepare.yml
-    test_yml: test_postinstall.yml
+    test_yml: regression/test_postinstall.yml
     skip_boxes: rhel/8
     only_boxes: none
   -
     id: t_devicemapper_config
     name: Devicemapper configuration
     prep_yml: prepare_storage.yml
-    test_yml: test_config_devicemapper.yml
+    test_yml: regression/test_config_devicemapper.yml
     skip_boxes: rhel/8
     only_boxes: none
   -
     id: t_auditd
     name: Auditd
     prep_yml: prepare.yml
-    test_yml: test_auditd.yml
+    test_yml: regression/test_auditd.yml
     skip_boxes: rhel/8
     only_boxes: none

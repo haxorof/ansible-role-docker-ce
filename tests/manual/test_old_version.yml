@@ -1,7 +1,4 @@
 ---
-- name: Determine Python interpreter
-  import_playbook: determine_python_interpreter.yml
-
 - hosts: test-host
   tasks:
     - name: Install Docker CE 18.06 (using docker_version)
@@ -11,4 +8,4 @@
         docker_version: 18.06.1.ce-3.el7
 
 - name: Verify Docker function
-  import_playbook: verify_docker.yml
+  import_playbook: ../verify_docker.yml

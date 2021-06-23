@@ -1,0 +1,8 @@
+---
+- name: Test default configuration
+  hosts: test-host
+  roles:
+    - haxorof.docker_ce
+
+- name: Verify Docker function
+  import_playbook: ../verify_docker.yml

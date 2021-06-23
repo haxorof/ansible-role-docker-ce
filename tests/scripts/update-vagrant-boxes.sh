@@ -9,6 +9,8 @@ DetectWSL
 OLDIFS=$IFS
 export IFS=$'\n'
 
+# Remove all old versions
+Vagrant box prune -f
 # Find all boxes which have updates
 AVAILABLE_UPDATES=$(Vagrant box outdated --global | grep outdated | tr -d "*'" | cut -d ' ' -f 2 2>/dev/null)
 
@@ -21,7 +23,7 @@ if [[ ${#AVAILABLE_UPDATES[@]} -ne 0 ]]; then
           provider=$(echo ${boxtype} | awk -F\( '{print $2}' | awk -F\, '{print $1}')
           version=$(echo ${boxtype} | cut -d ',' -f 2 | tr -d ' )')
           # Add latest version
-          Vagrant box add --clean ${box} --provider ${provider}
+          Vagrant box add --clean ${box} --provider ${provider} --force
           BOX_UPDATED="TRUE"
       done
   done

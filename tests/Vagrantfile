@@ -125,10 +125,11 @@ if File.exist?(testcase_file)
 
       # Prepare
       machine.vm.provision "ansible_local" do |ansible|
-        ansible.install_mode = "pip"
+        ansible.install_mode = "pip_args_only"
         ansible.pip_install_cmd = "#{install_cmd}"
+        ansible.pip_args = "ansible==#{vagrant_config['ansible_version']}"
         ansible.compatibility_mode = "2.0"
-        ansible.version = "#{vagrant_config['ansible_version']}"
+        #ansible.version = "#{vagrant_config['ansible_version']}"
         ansible.galaxy_role_file  = "requirements.yml"
         ansible.galaxy_roles_path = '/var/tmp/roles'
         # To avoid installing roles multiple times when running regession testing

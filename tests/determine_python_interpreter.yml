@@ -1,5 +1,9 @@
 ---
-- name: Install Python on host
+# This import is needed of this file in tests which are using Ansible version below 2.10
+# - name: Determine Python interpreter
+#   import_playbook: determine_python_interpreter.yml
+
+- name: Determine and set Python interpreter
   hosts: test-host
   gather_facts: no
   tasks:

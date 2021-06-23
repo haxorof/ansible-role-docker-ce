@@ -165,7 +165,7 @@ Here is the latest test results of the automated test which is located in the te
 
 Note! All distributions listed in test matrix below does not provided the latest released Docker CE version.
 
-**Last run:** 2021-02-16 (Latest possible Docker CE release 20.10.3, Run with Ansible 2.9.17)
+**Last run:** 2021-06-19 (Latest possible Docker CE release 20.10.7, Run with Ansible 3.4.0)
 
 ### Test Suites
 
@@ -193,7 +193,7 @@ Note! All distributions listed in test matrix below does not provided the latest
 | generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| generic/debian9    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| generic/debian9    | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: |
 | generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: |
 | generic/fedora32   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | generic/fedora33   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |

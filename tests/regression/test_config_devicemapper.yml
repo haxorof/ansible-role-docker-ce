@@ -1,7 +1,4 @@
 ---
-- name: Determine Python interpreter
-  import_playbook: determine_python_interpreter.yml
-
 - name: Test devicemapper support
   hosts: test-host
   vars:
@@ -14,7 +11,7 @@
     - haxorof.docker_ce
 
 - name: Verify Docker function
-  import_playbook: verify_docker.yml
+  import_playbook: ../verify_docker.yml
 
 - name: Verify devicemapper is used
   hosts: test-host

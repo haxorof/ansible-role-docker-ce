@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Failed execution during removal of Docker CE and related files
+
+### Internal
+
+- Restructure of test cases
+
 ## [3.3.2](../../releases/tag/3.3.2) - 2021-04-17
 
 ### Fixed

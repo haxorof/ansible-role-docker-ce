@@ -53,7 +53,7 @@ In the cases where you are interested to run a manual test which is not part of 
 ```console
 # ./scripts/generateConf.sh 0 0
 ==> Generating config: box=[generic/centos7], test_yml=[test_config.yml]
-# ./scripts/generateConf.sh 1 9 vagrant_manual_tests.yml
+# ./scripts/generateConf.sh 1 9 manual/test_cases.yml
 ==> Generating config: box=[generic/centos8], test_yml=[experimental/cis/test_cis.yml]
 ```
 
