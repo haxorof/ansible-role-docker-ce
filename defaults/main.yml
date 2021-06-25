@@ -113,7 +113,9 @@ docker_compose: false
 # Ensures that docker-compose is installed without pip, meaning 'docker_service' will NOT work.
 # Important! This only has any affect when 'docker_compose' is set to true.
 docker_compose_no_pip: false
-# Uses Github API to lookup latest version of docker compose
+# Uses GitHub API to lookup latest version of docker compose
+# Important! GitHub API has a rate limit and if that is exceeded value from variable
+# docker_compose_no_pip_version will be used instead.
 docker_compose_no_pip_detect_version: true
 # Docker compose version to use if no automatic lookup is used
 docker_compose_no_pip_version: 1.29.2

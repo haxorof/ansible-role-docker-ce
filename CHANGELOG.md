@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Add support to upgrade/downgrade docker-compose (binary version) ([#138](../../issues/138))
 - Bumped minimum Ansible version to 2.10 in role meta information
 
 ### Fixed

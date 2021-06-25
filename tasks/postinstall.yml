@@ -209,22 +209,16 @@
     - not _docker_python3 | bool
     - _docker_additional_packages_pip | length > 0
 
-- name: Stat /usr/bin/docker-compose
-  stat:
-    path: /usr/bin/docker-compose
-  register: _docker_compose_file
-  check_mode: no
-
 # Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
 - name: Install docker-compose without PiP
   block:
     # Not using github_release:  https://github.com/ansible/ansible/issues/45391
-    - name: Get latest release of docker-compose
+    - name: Get latest release information of docker-compose via GitHub API
       uri:
         url: https://api.github.com/repos/docker/compose/releases/latest
         body_format: json
       register: _github_docker_compose
-      until: _github_docker_compose.status == 200
+      until: _github_docker_compose.status == 200 or _github_docker_compose.status == 403
       retries: 10
       check_mode: no
       when:
@@ -232,16 +226,42 @@
 
     - name: Set detected docker-compose version
       set_fact:
+        _docker_compose_install: true
         _docker_compose_version: "{{ _github_docker_compose.json.tag_name }}"
       when:
         - _github_docker_compose is defined
+        - _github_docker_compose.status is defined
+        - _github_docker_compose.status == 200
         - _github_docker_compose.json is defined
 
-    - name: Set fixed docker-compose version
+    - name: Set fixed docker-compose version {{ docker_compose_no_pip_version }}
       set_fact:
+        _docker_compose_install: true
         _docker_compose_version: "{{ docker_compose_no_pip_version }}"
       when:
         - not docker_compose_no_pip_detect_version | bool
+
+    - name: Stat /usr/bin/docker-compose
+      stat:
+        path: /usr/bin/docker-compose
+      register: _docker_compose_file
+      check_mode: no
+
+    - name: Fetch current docker-compose version installed in the system
+      command: docker-compose --version
+      register: _docker_compose_cmd_version
+      changed_when: no
+      when:
+       - _docker_compose_file.stat.exists
+
+    - name: Determine if installed docker-compose version needs to be replaced
+      set_fact:
+        _docker_compose_install: "{{ _docker_compose_version is version(_docker_compose_current_version, '!=') | bool }}"
+      vars:
+        _docker_compose_current_version: "{{ (_docker_compose_cmd_version.stdout_lines | last) | regex_search('.*([0-9]+\\.[0-9]+\\.[0-9]+).*', '\\1') | last }}"
+      when:
+       - _docker_compose_cmd_version is defined
+       - _docker_compose_cmd_version.stdout_lines is defined
 
     - name: Fetch SHA256 of docker-compose
       block:
@@ -273,6 +293,7 @@
           set_fact:
             _docker_compose_checksum: "sha256:{{ _github_docker_compose_shasum.stdout | \
               regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
+      when: _docker_compose_install | bool
 
     - name: Install docker-compose {{ _docker_compose_version }} (Linux)
       become: true
@@ -282,6 +303,7 @@
         checksum: "{{ _docker_compose_checksum }}"
         dest: /usr/local/bin/docker-compose
         mode: 0755
+      when: _docker_compose_install | bool
 
     - name: Create symlink for docker-compose to work with sudo in some distributions
       become: true
@@ -289,7 +311,7 @@
         src: /usr/local/bin/docker-compose
         dest: /usr/bin/docker-compose
         state: link
+      when: _docker_compose_install | bool
   when:
     - docker_compose | bool
     - docker_compose_no_pip | bool
-    - not _docker_compose_file.stat.exists
