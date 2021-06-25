@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- Bumped docker-compose version from 1.29.1 to 1.29.2 (`docker_compose_no_pip_version`)
 - Failed execution during removal of Docker CE and related files
 
 ### Internal
