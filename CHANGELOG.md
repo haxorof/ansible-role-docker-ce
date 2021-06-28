@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.4.0](../../releases/tag/3.4.0) - 2021-06-28
+
 ### Changed
 
 - Add support to upgrade/downgrade docker-compose (binary version) ([#138](../../issues/138))
