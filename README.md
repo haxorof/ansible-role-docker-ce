@@ -1,5 +1,7 @@
 # Ansible Role for Docker CE (Community Edition)
 
+**IMPORTANT!** Even if this role does not list support for some distribution versions it might still work.
+
 [![Ansible Role](https://img.shields.io/ansible/role/38776)](https://galaxy.ansible.com/haxorof/docker_ce/)
 [![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce)](https://github.com/haxorof/ansible-role-docker-ce)
 [![Ansible Quality](https://img.shields.io/ansible/quality/38776)](https://galaxy.ansible.com/haxorof/docker_ce/)

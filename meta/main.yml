@@ -9,8 +9,8 @@ galaxy_info:
   platforms:
   - name: Fedora
     versions:
-      - 32
       - 33
+      - 34
 
   - name: EL
     versions:
@@ -19,12 +19,10 @@ galaxy_info:
 
   - name: Debian
     versions:
-      - stretch
       - buster
 
   - name: Ubuntu
     versions:
-      - xenial
       - bionic
       - focal
 
