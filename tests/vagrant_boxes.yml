@@ -44,13 +44,6 @@ boxes:
     reboot: false
     # Testing only supported releases: https://wiki.debian.org/LTS
     # and supported by Docker CE
-  - # Stretch
-    box: generic/debian9
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
   - # Buster
     box: generic/debian10
     box_url: vagrantup
