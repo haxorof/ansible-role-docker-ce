@@ -4,6 +4,7 @@ role_dir: ansible-role-docker-ce
 
 boxes:
   # Testing only supported releases: https://www.centosblog.com/centos-eol-dates/
+  # and supported by Docker CE
   - # CentOS 7
     box: generic/centos7
     box_url: vagrantup
@@ -26,13 +27,7 @@ boxes:
     vbguest_update: false
     reboot: false
   # Testing only supported releases: https://wiki.ubuntu.com/Releases
-  - # Xenial Xerus
-    box: generic/ubuntu1604
-    box_url: vagrantup
-    storage_ctl: IDE Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
+  # and supported by Docker CE
   - # Bionic Beaver
     box: generic/ubuntu1804
     box_url: vagrantup
@@ -48,6 +43,7 @@ boxes:
     vbguest_update: false
     reboot: false
     # Testing only supported releases: https://wiki.debian.org/LTS
+    # and supported by Docker CE
   - # Stretch
     box: generic/debian9
     box_url: vagrantup
@@ -63,15 +59,16 @@ boxes:
     vbguest_update: false
     reboot: false
   # Testing only supported releases: https://fedoraproject.org/wiki/End_of_life
-  - # F32
-    box: generic/fedora32
+  # and supported by Docker CE
+  - # F33
+    box: generic/fedora33
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
-  - # F33
-    box: generic/fedora33
+  - # F34
+    box: generic/fedora34
     box_url: vagrantup
     storage_ctl: IDE Controller
     storage_port: 1
