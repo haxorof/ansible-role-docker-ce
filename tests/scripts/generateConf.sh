@@ -63,7 +63,7 @@ fi
 
 arg_1=${1:-0}
 arg_2=${2:-0}
-arg_3=${3:-vagrant_tests.yml}
+arg_3=${3:-regression/test_cases.yml}
 
 create_variables vagrant_boxes.yml
 create_variables $arg_3

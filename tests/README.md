@@ -14,7 +14,7 @@ Note! Running through all test will take several hours and will at the end provi
 
 ### Limit testing
 
-If you would like to do different test that are specified in `vagrant_tests.yml` (all boxes in `vagrant_boxes.yml`) under the `tests` then you can use the `test.sh` and you can limit the testing to a certain test and/or box by specifying one or two arguments. The first argument limits by ID and the second limit by box.
+If you would like to do different test that are specified in `regression/test_cases.yml` (all boxes in `vagrant_boxes.yml`) under the `tests` then you can use the `test.sh` and you can limit the testing to a certain test and/or box by specifying one or two arguments. The first argument limits by ID and the second limit by box.
 It is based on a very simple mechanism by string comparison (contains text).
 
 To run all tests on all CentOS distributions:
