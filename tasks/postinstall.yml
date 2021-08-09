@@ -311,6 +311,7 @@
         src: /usr/local/bin/docker-compose
         dest: /usr/bin/docker-compose
         state: link
+        force: yes
       when: _docker_compose_install | bool
   when:
     - docker_compose | bool
