@@ -28,30 +28,48 @@
     path: /etc/docker
     state: directory
     mode: 0755
+    
+- name: Check Config File Exists
+  stat: 
+    path: /etc/docker/daemon.json
+  register: config_file_exists
 
-- name: Configure Docker daemon (file)
-  become: true
-  copy:
-    src: "{{ docker_daemon_config_file }}"
+- name: Warning Manual configuration is required
+  fail:
+    msg: "WARNING: the /etc/docker/daemon.json file already exists. You should update it manually"
+  when: config_file_exists.stat.exists
+  
+- name: Create File
+  template:
     dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    mode: 0644
+    src: docker_daemon_json.j2
+  when: not config_file_exists.stat.exists
+  become: yes
   notify: restart docker
-  when: docker_daemon_config_file is defined
+  
+# - name: Configure Docker daemon (file)
+  # become: true
+  # copy:
+    # src: "{{ docker_daemon_config_file }}"
+    # dest: /etc/docker/daemon.json
+    # owner: root
+    # group: root
+    # mode: 0644
+  # notify: restart docker
+  # when: docker_daemon_config_file is defined
 
-- name: Configure Docker daemon (variables)
-  become: true
-  copy:
-    content: "{{ docker_daemon_config | to_nice_json }}"
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart docker
-  when:
-    - docker_daemon_config_file is not defined
-    - docker_daemon_config is defined
+# - name: Configure Docker daemon (variables)
+  # become: true
+  # copy:
+    # content: "{{ docker_daemon_config | to_nice_json }}"
+    # dest: /etc/docker/daemon.json
+    # owner: root
+    # group: root
+    # mode: 0644
+  # notify: restart docker
+  # when:
+    # - docker_daemon_config_file is not defined
+    # - docker_daemon_config is defined
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
   become: true
