@@ -105,12 +105,12 @@
             sm: subscription-manager repos --disable=
             yum: "yum-config-manager --disable "
             
-    - name: Pick relevant repo if ansible_architecture == x86_64
+    - name: Set RHEL repo for x86_64 architecture
       set_fact:  
         _rhel_repos: "{{ docker_rhel_repos }}"
       when: ansible_facts['architecture'] == "x86_64"
       
-    - name: Pick relevant repo if ansible_architecture == ppc64le
+    - name: Set RHEL repo for ppc64le architecture 
       set_fact:  
         _rhel_repos: "{{ docker_rhel_ppc64_repos }}"
       when: ansible_facts['architecture'] == "ppc64le"

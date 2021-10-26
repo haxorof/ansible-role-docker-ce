@@ -51,7 +51,7 @@ docker_rhel_repos:
     repo_manager: sm
     state: disabled
     
-docker_rhel_ppc64_repos:
+docker_rhel_ppc64le_repos:
   - id: rhel-7-for-power-le-extras-rpms
     repo_manager: sm
     state: enabled
