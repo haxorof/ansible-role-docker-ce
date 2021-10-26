@@ -29,7 +29,6 @@
     state: directory
     mode: 0755
     
-  
 - name: Configure Docker daemon (file)
   become: true
   copy:
