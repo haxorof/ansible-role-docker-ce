@@ -104,7 +104,7 @@
           disabled:
             sm: subscription-manager repos --disable=
             yum: "yum-config-manager --disable "
-        _rhel_repos: "{{ (ansible_facts['architecture'] == 'ppc64le') | ternary(docker_rhel_ppc64_repos, docker_rhel_repos) }}"
+        _rhel_repos: "{{ (ansible_facts['architecture'] == 'ppc64le') | ternary(docker_rhel_ppc64le_repos, docker_rhel_repos) }}"
 
     - name: Enable and disable repositories (RedHat)
       become: true
