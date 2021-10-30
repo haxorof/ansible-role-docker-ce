@@ -50,12 +50,11 @@ docker_rhel_repos:
   - id: rhel-7-server-rt-beta-rpms
     repo_manager: sm
     state: disabled
-    
+# Repositories required to be enabled or disabled on RHEL on ppc64le architecture
 docker_rhel_ppc64le_repos:
   - id: rhel-7-for-power-le-extras-rpms
     repo_manager: sm
     state: enabled
-    
 
 # If Docker is installed this can stop the role from accessing network.
 # IMPORTANT! Role will fail is some external resource is necessary for some

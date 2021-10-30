@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.5.0](../../releases/tag/3.5.0) - 2021-10-30
+
+### Added
+
+- Add support for RHEL7 ppc64le architecture [@DimaShmu] ([#140](../../issues/140))
+
 ## [3.4.1](../../releases/tag/3.4.1) - 2021-08-09
 
 ### Fixed
