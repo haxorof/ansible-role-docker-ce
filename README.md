@@ -168,7 +168,7 @@ Here is the latest test results of the automated test which is located in the te
 
 Note! All distributions listed in test matrix below does not provided the latest released Docker CE version.
 
-**Last run:** 2021-06-19 (Latest possible Docker CE release 20.10.7, Run with Ansible 3.4.0)
+**Last run:** 2021-11-07 (Latest possible Docker CE release 20.10.10, Run with Ansible 2.10.7)
 
 ### Test Suites
 
@@ -188,20 +188,21 @@ Note! All distributions listed in test matrix below does not provided the latest
 | :x: | At least one test failed |
 | :heavy_minus_sign: | No test done / Not yet tested |
 
-| #                  | s-1                | s-2                | s-3                | s-4                | s-5                |
-|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| almalinux/8        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| centos/8           | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| generic/debian9    | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: |
-| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: |
-| generic/fedora32   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| generic/fedora33   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| rhel/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| rhel/8             | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| #                  | s-1                | s-2                | s-3                | s-4                | s-5                | updated    |
+|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|------------|
+| almalinux/8        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
+| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
+| centos/8           | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
+| generic/debian9    | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/fedora32   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/fedora33   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/rocky8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
+| generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
+| rhel/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| rhel/8             | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
 
 ## License
 
