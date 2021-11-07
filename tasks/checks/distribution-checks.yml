@@ -10,6 +10,7 @@
       - Fedora
       - RedHat
       - Ubuntu
+      - Rocky
   when: _docker_os_dist not in _supported_distributions
 
 - name: Fail if kernel version is lower than 3.10

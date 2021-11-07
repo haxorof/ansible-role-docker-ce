@@ -31,6 +31,7 @@ different distributions.
 - Linux Mint<sup>†</sup> (based on Ubuntu).
 - Raspbian (based on Debian)
 - RHEL<sup>†</sup>
+- Rocky Linux
 - Ubuntu
 
 <sup>†</sup> NB: Docker does _not_ officially support Docker CE on this distribution and some features might/will not work.

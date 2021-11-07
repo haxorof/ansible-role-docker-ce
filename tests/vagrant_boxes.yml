@@ -26,6 +26,13 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
+  - # Rocky Linux 8
+    box: generic/rocky8
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
   # Testing only supported releases: https://wiki.ubuntu.com/Releases
   # and supported by Docker CE
   - # Bionic Beaver
