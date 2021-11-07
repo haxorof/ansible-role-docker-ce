@@ -37,7 +37,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart docker
+  register: _docker_config_file
   when: docker_daemon_config_file is defined
 
 - name: Configure Docker daemon (variables)
@@ -48,7 +48,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart docker
+  register: _docker_config_var
   when:
     - docker_daemon_config_file is not defined
     - docker_daemon_config is defined
@@ -103,20 +103,27 @@
   service:
     name: docker
     enabled: yes
-  notify: restart docker
   register: _docker_service
 
-- name: Trigger start/restart of Docker
-  debug:
-    msg: "Notify handler to start/restart docker"
-  notify: restart docker
-  changed_when: true
-  when:
-    - not _docker_service is changed
-    - _docker_service.status is defined
-    - _docker_service.status.SubState is defined
-    - _docker_service.status.SubState != "running"
+- name: Docker daemon restart is required
+  set_fact:
+    _docker_restart_required: true
+  when: (
+         _docker_service.status is defined
+         and _docker_service.status.SubState is defined
+         and _docker_service.status.SubState != "running"
+        ) or (
+          _docker_config_file is changed
+          or _docker_config_var is changed
+        )
 
 - name: Install and configure Docker plugins
   include_tasks: configure-docker/configure-docker-plugins.yml
   when: docker_plugins | length > 0
+
+- name: Trigger start/restart of Docker daemon
+  become: yes
+  service:
+    name: docker
+    state: restarted
+  when: _docker_restart_required | bool

@@ -40,11 +40,16 @@
   file:
     path: /etc/systemd/system/docker.service.d/mountflags-slave.conf
     state: absent
-  notify: restart docker
+  register: _docker_old_mountflag_fix
+
+- name: Docker daemon restart is required
+  set_fact:
+    _docker_restart_required: true
+  when: _docker_old_mountflag_fix is changed
 
 - name: Set MountFlags option to "slave" to prevent "device busy" errors on CentOS/RedHat 7.3 kernels (CentOS/RedHat)
   set_fact:
-    docker_systemd_service_config_tweaks: "{{ docker_systemd_service_config_tweaks + \
+    _docker_systemd_service_config_tweaks: "{{ _docker_systemd_service_config_tweaks + \
       _systemd_service_config_tweaks }}"
   vars:
     _systemd_service_config_tweaks:

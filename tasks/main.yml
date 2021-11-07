@@ -65,8 +65,9 @@
 
 - name: Reset role variables
   set_fact:
-    docker_systemd_service_config_tweaks: []
-    docker_service_envs: {}
+    _docker_systemd_service_config_tweaks: []
+    _docker_service_envs: {}
+    _docker_restart_required: false
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print interpreted distribution information

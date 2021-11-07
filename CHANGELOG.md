@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Fixed
 
+- Docker restart fails after OPA authz plugin installation on Ubuntu 20.04 ([#143](../../issues/143))
 - Docker plugin install seems to be missing "item.args" ([#142](../../issues/142))
 
 ## [3.5.0](../../releases/tag/3.5.0) - 2021-10-30

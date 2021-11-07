@@ -1,6 +1,6 @@
 - name: Combine all systemd service configuration options
   set_fact:
-    _systemd_service_config: "{{ docker_systemd_service_config_tweaks + docker_systemd_service_config }}"
+    _systemd_service_config: "{{ _docker_systemd_service_config_tweaks + docker_systemd_service_config }}"
 
 - name: Ensure /etc/systemd/system/docker.service.d directory exists
   become: true
@@ -17,15 +17,14 @@
     owner: root
     group: root
     mode: 0644
-  register: _systemd_docker_dropin
-  notify: restart docker
+  register: _docker_systemd_docker_dropin
   vars:
     systemd_envs_dir: "{{ docker_envs_dir[ansible_distribution_file_variety] }}"
     systemd_service_conf: "{{ _systemd_service_config }}"
 
 - name: Combine Docker daemon environment variable configuration
   set_fact:
-    docker_service_envs: "{{ docker_service_envs | combine(_docker_service_opts) | combine(docker_daemon_envs) }}"
+    _docker_service_envs: "{{ _docker_service_envs | combine(_docker_service_opts) | combine(docker_daemon_envs) }}"
   vars:
     _docker_service_opts:
       DOCKER_OPTS: "{{ docker_daemon_opts }}"
@@ -38,15 +37,19 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart docker
+  register: _docker_systemd_envs
   vars:
-    docker_envs: "{{ docker_service_envs }}"
+    docker_envs: "{{ _docker_service_envs }}"
 
 - name: Force daemon reload of systemd
   become: true
   systemd:
     daemon_reload: yes
-  notify: restart docker
-  when: _systemd_docker_dropin is changed
+  when: _docker_systemd_docker_dropin is changed
   tags:
     - skip_ansible_lint
+
+- name: Docker daemon restart is required
+  set_fact:
+    _docker_restart_required: true
+  when: (_docker_systemd_docker_dropin is changed) or (_docker_systemd_envs is changed)

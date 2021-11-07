@@ -1,8 +1,8 @@
-- name: Ensure Docker daemon is started
+- name: Ensure Docker daemon is started/restarted
   become: yes
   service:
     name: docker
-    state: started
+    state: "{{ _docker_restart_required | ternary('restarted','started') }}"
 
 - name: Wait for Docker daemon to started
   become: yes
@@ -49,7 +49,12 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart docker
+  register: _docker_config_var_plugin
   when:
     - docker_daemon_config_file is not defined
     - docker_daemon_config is defined
+
+- name: Docker daemon restart is required
+  set_fact:
+    _docker_restart_required: true
+  when: _docker_config_var_plugin is changed
