@@ -32,8 +32,8 @@ docker_users: []
 # docker_plugins:
 #   - type: authz
 #     alias: opa-docker-authz
-#     name: openpolicyagent/opa-docker-authz-v2:0.4
-#     args: opa_args="-policy-file /opa/policies/authz.rego"
+#     name: openpolicyagent/opa-docker-authz-v2:0.8
+#     args: opa-args="-policy-file /opa/policies/authz.rego"
 docker_plugins: []
 
 # Setup Docker CE apt/dnf/yum repos or assume it has already been done

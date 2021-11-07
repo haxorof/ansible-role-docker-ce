@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## Fixed
+
+- Docker plugin install seems to be missing "item.args" ([#142](../../issues/142))
+
 ## [3.5.0](../../releases/tag/3.5.0) - 2021-10-30
 
 ### Added

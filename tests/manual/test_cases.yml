@@ -76,3 +76,10 @@ tests:
     test_yml: experimental/kata/test_katacontainers.yml
     skip_boxes: none
     only_boxes: centos
+  -
+    id: t_plugins
+    name: Test Docker plugin
+    prep_yml: prepare.yml
+    test_yml: manual/test_docker_plugin.yml
+    skip_boxes: none
+    only_boxes: none

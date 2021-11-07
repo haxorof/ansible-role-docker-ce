@@ -122,7 +122,7 @@ However this configuration setup devicemapper in a certain way which will create
       - type: authz
         alias: opa-docker-authz
         name: openpolicyagent/opa-docker-authz-v2:0.4
-        args: opa_args="-policy-file /opa/policies/authz.rego"
+        args: opa-args="-policy-file /opa/policies/authz.rego"
     docker_enable_audit: yes
     docker_daemon_config:
       icc: false

@@ -1,6 +1,4 @@
-- name: Determine Python interpreter
-  import_playbook: ../../determine_python_interpreter.yml
-
+---
 - name: Prepare
   import_playbook: ../../prepare_storage.yml
   vars:
@@ -10,14 +8,31 @@
 - name: Configure user namespaces
   hosts: test-host
   tasks:
-    - name: Enable user namespace
-      include_role:
-        name: jtyr.grub_cmdline
-      vars:
-        ansible_become: yes
-        grub_cmdline_add_args:
-          - namespace.unpriv_enable=1
-          - user_namespace.enable=1
+    - name: Enable user namespaces (Debian based)
+      block:
+        - name: Enable user namespaces in GRUB (Debian based)
+          become: yes
+          lineinfile:
+            path: /etc/default/grub
+            regexp: '^GRUB_CMDLINE_LINUX='
+            line: GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0 namespace.unpriv_enable=1 user_namespace.enable=1"
+
+        - name: Update GRUB (Debian based)
+          become: yes
+          command: update-grub
+      when: ansible_distribution_file_variety == "Debian"
+
+    - name: Enable user namespaces (RHEL based)
+      block:
+        - name: Enable user namespace in GRUB (RHEL based)
+          include_role:
+            name: jtyr.grub_cmdline
+          vars:
+            ansible_become: yes
+            grub_cmdline_add_args:
+              - namespace.unpriv_enable=1
+              - user_namespace.enable=1
+      when: ansible_distribution_file_variety == "RedHat"
 
     - name: Set user.max_user_namespaces
       become: yes
@@ -40,7 +55,7 @@
         sleep: 5
         delay: 5
         timeout: 300
-      when: _sysctl_usrns is changed    
+      when: _sysctl_usrns is changed
 
 - name: Install and configure according to CIS
   hosts: test-host
@@ -50,7 +65,7 @@
       file:
         path: /etc/docker/policies
         state: directory
-    
+
     - name: OPA policy file
       become: yes
       copy:
@@ -65,8 +80,8 @@
         docker_plugins:
           - type: authz
             alias: opa-docker-authz
-            name: openpolicyagent/opa-docker-authz-v2:0.7
-            args: opa_args="-policy-file /opa/policies/authz.rego"
+            name: openpolicyagent/opa-docker-authz-v2:0.8
+            args: opa-args="-policy-file /opa/policies/authz.rego"
         docker_enable_audit: yes
         docker_users:
           - vagrant
