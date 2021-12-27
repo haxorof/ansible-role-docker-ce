@@ -65,7 +65,7 @@ arg_1=${1:-0}
 arg_2=${2:-0}
 arg_3=${3:-regression/test_cases.yml}
 
-create_variables vagrant_boxes.yml
+create_variables vagrant_testconfig.yml
 create_variables $arg_3
 
 if [[ "$arg_1" == "--nop" ]]; then

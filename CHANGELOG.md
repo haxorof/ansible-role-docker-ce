@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## Internal
+
+- Minor refactoring of test configuration.
+
 ## [3.6.0](../../releases/tag/3.6.0) - 2021-11-07
 
 ## Added

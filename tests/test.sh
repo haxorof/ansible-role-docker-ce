@@ -284,10 +284,10 @@ if [[ "$1" != "" ]]; then
   fi
 fi
 
-create_variables vagrant_boxes.yml
+create_variables vagrant_testconfig.yml
 create_variables $VAGRANT_TESTS_FILE
 if [[ "$DEBUG" != "" ]]; then
-  parse_yaml vagrant_boxes.yml
+  parse_yaml vagrant_testconfig.yml
   parse_yaml $VAGRANT_TESTS_FILE
 fi
 
