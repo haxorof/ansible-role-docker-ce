@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.6.1](../../releases/tag/3.6.1) - 2021-12-29
+
 ## Fixed
 
 - Fix broken Linux Mint 19 + 20 ([#144](../../pull/144))
