@@ -157,7 +157,17 @@ docker_x_shutil_get_terminal_size: true
 # Setting this to true will break installation of some parts
 # e.g. Python based docker-compose.
 docker_x_skip_pip_auto_upgrade: false
-
+# Experimental - Linux Mint reinterpretation mapping
+docker_x_mint_ubuntu_mapping:
+      18:
+        release: "xenial"
+        major_version: 16
+      19:
+        release: "bionic"
+        major_version: 18
+      20:
+        release: "focal"
+        major_version: 20
 ################################################################################
 # Docker removal configuration
 ################################################################################

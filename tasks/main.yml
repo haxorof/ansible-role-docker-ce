@@ -16,28 +16,12 @@
     _docker_python3: "{{ ansible_python_version is version('3', '>=') }}"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Reinterpret distribution facts for Linux Mint 18
+- name: Reinterpret distribution facts for Linux Mint
   set_fact:
     _docker_os_dist: "Ubuntu"
-    _docker_os_dist_release: "xenial"
-    _docker_os_dist_major_version: 16
-  when: _docker_os_dist == "Linux Mint" and _docker_os_dist_major_version | int == 18
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
-
-- name: Reinterpret distribution facts for Linux Mint 19
-  set_fact:
-    _docker_os_dist: "Ubuntu"
-    _docker_os_dist_release: "bionic"
-    _docker_os_dist_major_version: 18
-  when: _docker_os_dist == "Linux Mint" and _docker_os_dist_major_version | int == 19
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
-
-- name: Reinterpret distribution facts for Linux Mint 20
-  set_fact:
-    _docker_os_dist: "Ubuntu"
-    _docker_os_dist_release: "focal"
-    _docker_os_dist_major_version: 20
-  when: _docker_os_dist == "Linux Mint" and _docker_os_dist_major_version | int == 20
+    _docker_os_dist_release: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].release }}"
+    _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int ].major_version }}"
+  when: _docker_os_dist == "Linux Mint"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Debian 10 (Buster) due to bug
