@@ -71,6 +71,17 @@ docker_x_redhat_centos_8_containerd_rpm: https://download.docker.com/linux/cento
 # https://github.com/docker/for-linux/issues/1111
 docker_x_fix_centos_redhat_7_releasever: yes
 
+# Experimental - Linux Mint reinterpretation mapping
+docker_x_mint_ubuntu_mapping:
+      18:
+        release: "xenial"
+        major_version: 16
+      19:
+        release: "bionic"
+        major_version: 18
+      20:
+        release: "focal"
+        major_version: 20
 ################################################################################
 # Docker daemon configuration
 ################################################################################
@@ -157,17 +168,6 @@ docker_x_shutil_get_terminal_size: true
 # Setting this to true will break installation of some parts
 # e.g. Python based docker-compose.
 docker_x_skip_pip_auto_upgrade: false
-# Experimental - Linux Mint reinterpretation mapping
-docker_x_mint_ubuntu_mapping:
-      18:
-        release: "xenial"
-        major_version: 16
-      19:
-        release: "bionic"
-        major_version: 18
-      20:
-        release: "focal"
-        major_version: 20
 ################################################################################
 # Docker removal configuration
 ################################################################################
