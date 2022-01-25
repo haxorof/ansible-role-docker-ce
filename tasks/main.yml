@@ -16,6 +16,12 @@
     _docker_python3: "{{ ansible_python_version is version('3', '>=') }}"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
+- name: Override ansible_distribution_file_variety for CentOS 8
+  set_fact:
+    ansible_distribution_file_variety: "RedHat"
+  when: ansible_distribution_file_variety == "CentOS"
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
+
 - name: Reinterpret distribution facts for Linux Mint
   set_fact:
     _docker_os_dist: "Ubuntu"
