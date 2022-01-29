@@ -26,26 +26,6 @@
       debug:
         var: _distribution
 
-    - name: Fix Ubuntu 17.10 (Artful) APT sources
-      become: yes
-      raw: "cat /etc/apt/sources.list | grep -v '#' | sed 's/\\/\\/.*ubuntu\\.com/\\/\\/old-releases.ubuntu.com/g' \
-        > /etc/apt/sources.list.updated \
-        && cp /etc/apt/sources.list.updated /etc/apt/sources.list \
-        && apt-get update"
-      when:
-        - _distribution.stdout_lines|join('') is search("Artful")
-
-    - name: Fix Debian 7 (Wheezy) APT sources
-      become: yes
-      raw: "wget https://deb.freexian.com/extended-lts/pool/main/f/freexian-archive-keyring/freexian-archive-keyring_2018.05.29_all.deb \
-        && dpkg -i freexian-archive-keyring_2018.05.29_all.deb \
-        && rm -rf /etc/apt/sources.list.d/*
-        ; echo 'deb http://deb.freexian.com/extended-lts wheezy-lts main contrib non-free' > /etc/apt/sources.list \
-        && echo 'deb http://deb.freexian.com/extended-lts wheezy-lts-kernel main contrib non-free' >> /etc/apt/sources.list \
-        && apt-get update"
-      when:
-        - _distribution.stdout_lines|join('') is search("wheezy")
-
     - name: Install Python (Debian or Ubuntu)
       become: yes
       raw: type python3 || type python2 || type python || (apt-get update && apt-get -y install python-minimal)

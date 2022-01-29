@@ -8,11 +8,11 @@
 - name: Upgrade host
   import_playbook: host_upgrade.yml
 
-- name: Grub changes
-  import_playbook: grub_changes.yml
-
 - hosts: test-host
   tasks:
+    - name: Force all notified handlers to run at this point, not waiting for normal sync points
+      meta: flush_handlers
+
     - name: Print LSB information
       debug:
         var: ansible_lsb
