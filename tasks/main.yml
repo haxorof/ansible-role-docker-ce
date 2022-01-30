@@ -25,7 +25,7 @@
   when: _docker_os_dist == "Linux Mint"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Reinterpret distribution facts for CentOS 8 Stream
+- name: Reinterpret distribution facts for CentOS Stream 8
   set_fact:
     _docker_os_dist_file_varity: "RedHat"
   when: 
