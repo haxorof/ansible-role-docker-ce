@@ -7,21 +7,21 @@
 - name: Set facts to install Docker SDK for Python
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[ansible_distribution_file_variety]['sdk'] }}"
+      docker_predefined_packages_pip[_docker_os_dist_file_varity]['sdk'] }}"
   when:
     - docker_sdk | bool
 
 - name: Set facts to install Docker Compose
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[ansible_distribution_file_variety]['compose'] }}"
+      docker_predefined_packages_pip[_docker_os_dist_file_varity]['compose'] }}"
   when:
     - docker_compose | bool and not docker_compose_no_pip | bool
 
 - name: Set facts to install Docker Stack dependencies ('docker_stack')
   set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[ansible_distribution_file_variety]['stack'] }}"
+      docker_predefined_packages_pip[_docker_os_dist_file_varity]['stack'] }}"
   when:
     - docker_stack | bool
 
@@ -51,7 +51,7 @@
         _docker_additional_packages_os: >
           {{ _docker_additional_packages_os
             + ([] if (_docker_pip_cmd.rc == 0) else [docker_pip_package])
-            + [docker_python2_build_os_pkgs[_docker_os_dist] | default(docker_python2_build_os_pkgs[ansible_distribution_file_variety])] }}
+            + [docker_python2_build_os_pkgs[_docker_os_dist] | default(docker_python2_build_os_pkgs[_docker_os_dist_file_varity])] }}
       when:
         - not _docker_python3 | bool
 
@@ -60,7 +60,7 @@
         _docker_additional_packages_os: >
           {{ _docker_additional_packages_os
             + ([] if (_docker_pip_cmd.rc == 0) else [docker_pip3_package])
-            + [docker_python3_build_os_pkgs[_docker_os_dist] | default(docker_python3_build_os_pkgs[ansible_distribution_file_variety])] }}
+            + [docker_python3_build_os_pkgs[_docker_os_dist] | default(docker_python3_build_os_pkgs[_docker_os_dist_file_varity])] }}
       when:
         - _docker_python3 | bool
 

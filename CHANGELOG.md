@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## Added
+
+- Support for CentOS Stream 8
+
+## Internal
+
+- Update of test configuration.
+- Updated Docker CE support matrix.
+
 ## [3.6.1](../../releases/tag/3.6.1) - 2021-12-29
 
 ## Fixed

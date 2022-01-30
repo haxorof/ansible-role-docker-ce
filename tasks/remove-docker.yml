@@ -92,8 +92,8 @@
     state: absent
   loop:
     # all distributions
-    - "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker"
-    - "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker-envs"
+    - "{{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker"
+    - "{{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker-envs"
     - /etc/audit/rules.d/docker.rules
     # centos/rhel
     - /etc/yum.repos.d/docker-ce.repo
@@ -152,7 +152,7 @@
 
 - name: Update repository cache
   become: true
-  shell: "{{ docker_cmd_update_repo_cache[ansible_distribution_file_variety] }}"
+  shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist_file_varity] }}"
   args:
     warn: false
   changed_when: false

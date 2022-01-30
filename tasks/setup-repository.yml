@@ -1,10 +1,10 @@
 ---
-- name: Include tasks for distribution variety {{ ansible_distribution_file_variety }} to setup repository
-  include_tasks: setup-repository-{{ ansible_distribution_file_variety }}.yml
+- name: Include tasks for distribution variety {{ _docker_os_dist_file_varity }} to setup repository
+  include_tasks: setup-repository-{{ _docker_os_dist_file_varity }}.yml
 
 - name: Update repository cache
   become: true
-  shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist] | default(docker_cmd_update_repo_cache[ansible_distribution_file_variety]) }}"
+  shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist] | default(docker_cmd_update_repo_cache[_docker_os_dist_file_varity]) }}"
   args:
     warn: false
   changed_when: false

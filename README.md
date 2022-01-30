@@ -25,16 +25,17 @@ different distributions.
 ## Supported Distributions
 
 - AlmaLinux
-- CentOS
+- CentOS 
+- CentOS Stream<sup>1</sup>
 - Debian
 - Fedora
-- Linux Mint<sup>†</sup> (based on Ubuntu).
+- Linux Mint<sup>1</sup> (based on Ubuntu).
 - Raspbian (based on Debian)
-- RHEL<sup>†</sup>
+- RHEL<sup>1</sup>
 - Rocky Linux
 - Ubuntu
 
-<sup>†</sup> NB: Docker does _not_ officially support Docker CE on this distribution and some features might/will not work.
+<sup>1</sup> NB: Docker does _not_ officially support completely or partly Docker CE on this distribution and some features might/will not work.
 
 ## Changelog
 

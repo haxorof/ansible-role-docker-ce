@@ -41,4 +41,4 @@
   register: _pkg_result
   until: _pkg_result is succeeded
   when: _remove_old_docker | bool
-  loop: "{{ docker_old_packages[_docker_os_dist] | default(docker_old_packages[ansible_distribution_file_variety]) }}"
+  loop: "{{ docker_old_packages[_docker_os_dist] | default(docker_old_packages[_docker_os_dist_file_varity]) }}"

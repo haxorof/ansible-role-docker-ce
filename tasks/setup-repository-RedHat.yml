@@ -13,7 +13,7 @@
   package:
     name: "{{ item }}"
     state: present
-  loop: "{{ docker_repository_related_packages[ansible_distribution_file_variety] }}"
+  loop: "{{ docker_repository_related_packages[_docker_os_dist_file_varity] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
   when:
@@ -31,7 +31,7 @@
 - name: Add Docker CE repository
   become: true
   get_url:
-    url: "{{ docker_repository_url[_docker_os_dist] | default(docker_repository_url[ansible_distribution_file_variety]) }}"
+    url: "{{ docker_repository_url[_docker_os_dist] | default(docker_repository_url[_docker_os_dist_file_varity]) }}"
     dest: /etc/yum.repos.d/docker-ce.repo
     mode: 0644
     force: yes
@@ -64,7 +64,7 @@
 
 - name: Disable Docker CE repository channels
   become: true
-  shell: "{{ docker_cmd_enable_disable_repo[ansible_distribution_file_variety] }}"
+  shell: "{{ docker_cmd_enable_disable_repo[_docker_os_dist_file_varity] }}"
   args:
     warn: false
   loop: "{{ _docker_disable_channels }}"
@@ -76,7 +76,7 @@
 
 - name: Enable Docker CE repository channels
   become: true
-  shell: "{{ docker_cmd_enable_disable_repo[ansible_distribution_file_variety] }}"
+  shell: "{{ docker_cmd_enable_disable_repo[_docker_os_dist_file_varity] }}"
   args:
     warn: false
   loop: "{{ _docker_enable_channels }}"

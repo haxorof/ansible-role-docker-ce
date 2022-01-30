@@ -19,7 +19,7 @@
     mode: 0644
   register: _docker_systemd_docker_dropin
   vars:
-    systemd_envs_dir: "{{ docker_envs_dir[ansible_distribution_file_variety] }}"
+    systemd_envs_dir: "{{ docker_envs_dir[_docker_os_dist_file_varity] }}"
     systemd_service_conf: "{{ _systemd_service_config }}"
 
 - name: Combine Docker daemon environment variable configuration
@@ -29,11 +29,11 @@
     _docker_service_opts:
       DOCKER_OPTS: "{{ docker_daemon_opts }}"
 
-- name: Setup Docker environment file {{ docker_envs_dir[ansible_distribution_file_variety] }}/docker-envs
+- name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker-envs
   become: true
   template:
     src: docker-envs.j2
-    dest: "{{ docker_envs_dir[ansible_distribution_file_variety] }}/docker-envs"
+    dest: "{{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker-envs"
     owner: root
     group: root
     mode: 0644
