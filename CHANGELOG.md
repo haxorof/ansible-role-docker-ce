@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.7.0](../../releases/tag/3.7.0) - 2022-02-05
+
 ## Added
 
 - Support for CentOS Stream 8
