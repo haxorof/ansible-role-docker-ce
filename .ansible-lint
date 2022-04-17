@@ -3,3 +3,6 @@ warn_list:
   - 'empty-string-compare' # https://ansible-lint.readthedocs.io/en/latest/default_rules.html#empty-string-compare
   - 'no-handler'  # https://ansible-lint.readthedocs.io/en/latest/default_rules.html#no-handler
   - 'ignore-errors' # https://ansible-lint.readthedocs.io/en/latest/default_rules.html#ignore-errors
+
+skip_list:
+  - yaml

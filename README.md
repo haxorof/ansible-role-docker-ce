@@ -169,7 +169,7 @@ Here is the latest test results of the automated test which is located in the te
 
 Note! All distributions listed in test matrix below does not provided the latest released Docker CE version.
 
-**Last run:** 2021-11-07 (Latest possible Docker CE release 20.10.10, Run with Ansible 2.10.7)
+**Last run:** 2022-04-17 (Latest possible Docker CE release 20.10.14, Run with Ansible 4.10.0)
 
 ### Test Suites
 
@@ -191,17 +191,17 @@ Note! All distributions listed in test matrix below does not provided the latest
 
 | #                  | s-1                | s-2                | s-3                | s-4                | s-5                | updated    |
 |--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|------------|
-| almalinux/8        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
-| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
-| centos/8           | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
-| generic/debian9    | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/fedora32   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/fedora33   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/rocky8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
-| generic/ubuntu1604 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-11-07 |
+| almalinux/8        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| centos/stream8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/debian11   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/fedora34   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/fedora35   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/rocky8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/ubuntu2104 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
 | rhel/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
 | rhel/8             | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
 
