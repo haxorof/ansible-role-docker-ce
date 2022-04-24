@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.7.1](../../releases/tag/3.7.1) - 2022-04-24
+
 ## Fixed
 
 - Upgrade of docker-compose fails when fetching latest version from Github API ([#151](../../issues/151))
