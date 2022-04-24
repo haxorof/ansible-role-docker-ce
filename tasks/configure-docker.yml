@@ -101,6 +101,7 @@
 - name: Enable Docker service
   become: true
   service:
+    use: "{{ docker_x_service_mgr }}"
     name: docker
     enabled: yes
   register: _docker_service
@@ -121,9 +122,17 @@
   include_tasks: configure-docker/configure-docker-plugins.yml
   when: docker_plugins | length > 0
 
-- name: Trigger start/restart of Docker daemon
+- name: Trigger restart of Docker daemon
   become: yes
   service:
+    use: "{{ docker_x_service_mgr }}"
     name: docker
     state: restarted
   when: _docker_restart_required | bool
+
+- name: Ensure Docker daemon is running
+  become: yes
+  service:
+    use: "{{ docker_x_service_mgr }}"
+    name: docker
+    state: started

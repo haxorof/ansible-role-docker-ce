@@ -3,6 +3,7 @@
 - name: Stop Docker service
   become: yes
   service:
+    use: "{{ docker_x_service_mgr }}"
     name: docker
     state: stopped
   ignore_errors: yes

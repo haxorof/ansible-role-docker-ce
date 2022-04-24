@@ -82,6 +82,11 @@ docker_x_mint_ubuntu_mapping:
       20:
         release: "focal"
         major_version: 20
+
+# Change OS service manager. Can be used to work around issues related
+# to Ubuntu on WSL2 or similar.
+# Valid values: auto, systemd, service
+docker_x_service_mgr: auto
 ################################################################################
 # Docker daemon configuration
 ################################################################################

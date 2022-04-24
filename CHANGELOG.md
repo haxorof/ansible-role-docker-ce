@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Fixed
 
 - Upgrade of docker-compose fails when fetching latest version from Github API ([#151](../../issues/151))
+- Service module fail on WSL2 with Ubuntu 20.04 ([#150](../../issues/150))
 
 ## [3.7.0](../../releases/tag/3.7.0) - 2022-02-05
 

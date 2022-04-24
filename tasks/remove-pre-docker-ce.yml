@@ -29,6 +29,7 @@
 
 - name: Stop Docker service
   service:
+    use: "{{ docker_x_service_mgr }}"
     name: docker
     state: stopped
   when: "_service_docker_status.rc | default(1) == 0"

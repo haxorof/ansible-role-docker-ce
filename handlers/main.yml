@@ -4,6 +4,7 @@
 - name: restart docker
   become: yes
   service:
+    use: "{{ docker_x_service_mgr }}"
     name: docker
     state: restarted
   tags: ["install", "configure"]
@@ -11,6 +12,7 @@
 - name: reload docker
   become: yes
   service:
+    use: "{{ docker_x_service_mgr }}"
     name: docker
     state: reloaded
   tags: ["install", "configure"]
