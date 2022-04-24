@@ -227,7 +227,7 @@
     - name: Set detected docker-compose version
       set_fact:
         _docker_compose_install: true
-        _docker_compose_version: "{{ _github_docker_compose.json.tag_name }}"
+        _docker_compose_version: "{{ _github_docker_compose.json.tag_name | replace('v','') }}"
       when:
         - _github_docker_compose is defined
         - _github_docker_compose.status is defined
@@ -263,12 +263,16 @@
        - _docker_compose_cmd_version is defined
        - _docker_compose_cmd_version.stdout_lines is defined
 
+    - name: Set Docker Compose version for Github API
+      set_fact:
+        _docker_compose_github_version: "{{ (_docker_compose_version is version('2', '<') | bool) | ternary(_docker_compose_version, ('v' + _docker_compose_version)) }}"
+
     - name: Fetch SHA256 of docker-compose
       block:
-        - name: Fetch docker-compose SHA265 sum file
+        - name: Fetch docker-compose {{ _docker_compose_github_version }} SHA265 sum file
           get_url:
             url: "https://github.com/docker/compose/releases/download/\
-              {{ _docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
+              {{ _docker_compose_github_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
             dest: "/tmp/ansible.docker-compose-sha256"
           register: _github_docker_compose_shasum_file
           changed_when: false
@@ -295,11 +299,11 @@
               regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
       when: _docker_compose_install | bool
 
-    - name: Install docker-compose {{ _docker_compose_version }} (Linux)
+    - name: Install docker-compose {{ _docker_compose_github_version }} (Linux)
       become: true
       get_url:
         url: "https://github.com/docker/compose/releases/download/\
-          {{ _docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+          {{ _docker_compose_github_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
         checksum: "{{ _docker_compose_checksum }}"
         dest: /usr/local/bin/docker-compose
         mode: 0755
