@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.7.2](../../releases/tag/3.7.2) - 2022-04-24
+
 ## Fixed
 
 - Docker daemon environment variables not set when SysVinit is used ([#152](../../issues/152))
