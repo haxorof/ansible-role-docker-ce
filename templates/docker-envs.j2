@@ -2,3 +2,7 @@
 {% for key, value in docker_envs.items()|list %}
 {{ key }}="{{ value }}"
 {% endfor %}
+
+{% if not _docker_systemd_used and (docker_envs.items()|list)|length > 0  %}
+export{% for key, value in docker_envs.items()|list %} {{ key }}{% endfor %}
+{% endif %}
