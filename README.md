@@ -202,6 +202,7 @@ Note! All distributions listed in test matrix below does not provided the latest
 | generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
 | generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
 | generic/ubuntu2104 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
+| generic/ubuntu2204 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-06-18 |
 | rhel/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
 | rhel/8             | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
 

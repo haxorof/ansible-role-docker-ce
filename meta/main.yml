@@ -9,8 +9,8 @@ galaxy_info:
   platforms:
   - name: Fedora
     versions:
-      - 33
       - 34
+      - 35
 
   - name: EL
     versions:
@@ -20,11 +20,13 @@ galaxy_info:
   - name: Debian
     versions:
       - buster
+      - bullseye
 
   - name: Ubuntu
     versions:
       - bionic
       - focal
+      - jammy
 
   galaxy_tags:
     - docker

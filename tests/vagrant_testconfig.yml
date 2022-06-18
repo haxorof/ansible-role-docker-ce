@@ -19,7 +19,7 @@ boxes:
   - # CentOS 7
     box: generic/centos7
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
@@ -62,6 +62,13 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: true
+  - # F36
+    box: generic/fedora36
+    box_url: vagrantup
+    storage_ctl: IDE Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: true
   - # Rocky Linux 8
     box: generic/rocky8
     box_url: vagrantup
@@ -85,10 +92,10 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-  - # Hirsute Hippo
-    box: generic/ubuntu2104
+  - # Jammy Jellyfish
+    box: generic/ubuntu2204
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
