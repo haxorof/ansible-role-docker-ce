@@ -25,6 +25,7 @@ if File.exist?(testcase_file)
     config.vm.define 'test-host' do |testmachine|
       testmachine.vm.box = vagrant_config['box']
       testmachine.vm.box_url = vagrant_box_url
+      testmachine.vm.box_check_update = true
       testmachine.vagrant.plugins = ["vagrant-vbguest", "vagrant-registration"]
       testmachine.vbguest.no_remote = true
       testmachine.vbguest.auto_update = vagrant_config['vbguest_update']
@@ -90,6 +91,7 @@ if File.exist?(testcase_file)
 
     config.vm.define 'controller', primary: true do |machine|
       machine.vm.box = "generic/ubuntu2004"
+      machine.vm.box_check_update = true
       machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
       machine.vbguest.auto_update = true
       machine.vbguest.no_remote = true

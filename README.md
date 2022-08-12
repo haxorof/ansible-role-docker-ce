@@ -189,22 +189,25 @@ Note! All distributions listed in test matrix below does not provided the latest
 | :x: | At least one test failed |
 | :heavy_minus_sign: | No test done / Not yet tested |
 
-| #                  | s-1                | s-2                | s-3                | s-4                | s-5                | updated    |
-|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|------------|
-| almalinux/8        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| centos/stream8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/debian11   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/fedora34   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/fedora35   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/rocky8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/ubuntu2104 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17 |
-| generic/ubuntu2204 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-06-18 |
-| rhel/7             | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| rhel/8             | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| #                  | s-1                | s-2                | s-3                | s-4                | s-5                | updated            |
+|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| almalinux/8        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| almalinux/9        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-08-12         |
+| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| centos/stream8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/debian11   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/fedora34   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/fedora35   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/fedora36   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
+| generic/rocky8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/rocky9     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2022-08-12         |
+| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
+| generic/ubuntu2204 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-06-18         |
+| generic/rhel7      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19         |
+| generic/rhel8      | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19         |
+| generic/rhel9      | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2022-08-12         |
 
 ## License
 
