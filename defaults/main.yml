@@ -82,6 +82,9 @@ docker_x_mint_ubuntu_mapping:
       20:
         release: "focal"
         major_version: 20
+      21:
+        release: "jammy"
+        major_version: 22
 
 # Change OS service manager. Can be used to work around issues related
 # to Ubuntu on WSL2 or similar.
