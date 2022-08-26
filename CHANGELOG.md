@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## Added
+- Add Linux Mint 21 support. ([#156](../../issues/156))
+
 ## [3.7.2](../../releases/tag/3.7.2) - 2022-04-24
 
 ## Fixed
