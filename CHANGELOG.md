@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [3.8.0](../../releases/tag/3.8.0) - 2022-10-22
+
 ## Added
 
 - Add Linux Mint 21 support. [@alexander-danilenko] ([#156](../../issues/156))
