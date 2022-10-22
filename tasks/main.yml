@@ -90,6 +90,15 @@
   when: docker_do_checks | bool
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Abort if podman is already installed
+  fail:
+    msg: "Podman is already installed! If you want to use this role ensure you do not have any podman related packages installed!"
+  when: "'podman' in ansible_facts.packages"
+
 - name: Install and configure Docker CE
   block:
     - name: Network access disabled
