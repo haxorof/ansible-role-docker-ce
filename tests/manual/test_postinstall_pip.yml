@@ -1,0 +1,19 @@
+---
+- name: Test using PiP to install SDK, compose and stack
+  hosts: test-host
+  roles:
+    - name: haxorof.docker_ce
+      vars:
+        docker_users:
+          - vagrant
+        docker_sdk: true
+        docker_compose: true
+        docker_stack: true
+  post_tasks:
+    - name: Test docker-compose (shell)
+      become: no
+      shell: docker-compose --version
+      ignore_errors: yes
+
+- name: Verify Docker function
+  import_playbook: ../verify_docker.yml

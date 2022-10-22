@@ -8,7 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
 ## Added
+
 - Add Linux Mint 21 support. [@alexander-danilenko] ([#156](../../issues/156))
+- Abort if podman in detected in the system
+
+## Internal
+
+- Added manuel test related to Docker SDK and PiP
+- Added test of docker-compose not using PiP and auto detect version in regression suite
 
 ## [3.7.2](../../releases/tag/3.7.2) - 2022-04-24
 

@@ -18,6 +18,34 @@
       shell: /usr/bin/docker-compose --version
       ignore_errors: yes
 
+- name: Test install of Docker compose not using PiP (auto detect)
+  hosts: test-host
+  vars:
+    docker_compose: true
+    docker_compose_no_pip: true
+  pre_tasks:
+    - name: Remove previously installed docker-compose
+      become: true
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /usr/local/bin/docker-compose
+        - /usr/bin/docker-compose
+        - /usr/libexec/docker/cli-plugins/docker-compose
+  roles:
+    - haxorof.docker_ce
+  post_tasks:
+    - name: Test docker-compose (shell)
+      become: no
+      shell: /usr/bin/docker-compose --version
+      ignore_errors: yes
+
+    - name: Test docker-compose with sudo (shell)
+      become: yes
+      shell: /usr/bin/docker-compose --version
+      ignore_errors: yes
+
 - name: Test using PiP to install SDK, compose and stack
   hosts: test-host
   vars:

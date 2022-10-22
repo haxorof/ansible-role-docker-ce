@@ -14,6 +14,13 @@ tests:
     skip_boxes: none
     only_boxes: none
   -
+    id: t_postinstall_pip
+    name: Docker SDK etc via PiP
+    prep_yml: prepare.yml
+    test_yml: manual/test_postinstall_pip.yml
+    skip_boxes: none
+    only_boxes: none
+  -
     id: t_downgrade
     name: Downgrade
     prep_yml: prepare.yml
