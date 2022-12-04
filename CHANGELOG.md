@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [4.0.0](../../releases/tag/4.0.0) - 2022-12-05
+
 ### Changed
 
 - Bumped minimal Ansible version to 5.0.0
