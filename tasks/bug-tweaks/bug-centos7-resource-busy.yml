@@ -6,7 +6,7 @@
 
 - name: Ensure fs.may_detach_mounts is set to avoid 'Device or resource busy' (CentOS/RedHat)
   become: true
-  ansible.builtin.sysctl:
+  ansible.posix.sysctl:
     name: fs.may_detach_mounts
     value: "1"
     sysctl_file: /etc/sysctl.d/99-docker.conf
@@ -25,7 +25,7 @@
 
 - name: Unset fs.may_detach_mounts (CentOS/RedHat)
   become: true
-  ansible.builtin.sysctl:
+  ansible.posix.sysctl:
     name: fs.may_detach_mounts
     value: "0"
     sysctl_file: /etc/sysctl.d/99-docker.conf

@@ -8,7 +8,7 @@
 
 - name: Create LVM volume group
   become: true
-  ansible.builtin.lvg:
+  community.general.lvg:
     pvs: '{{ pool.physical_volumes }}'
     state: present
     vg: '{{ pool.volume_group }}'
@@ -23,7 +23,7 @@
 
 - name: Create data volume
   become: true
-  ansible.builtin.lvol:
+  community.general.lvol:
     lv: '{{ pool.name }}'
     size: '{{ pool.data_size }}'
     vg: '{{ pool.volume_group }}'
@@ -32,7 +32,7 @@
 
 - name: Create meta data volume
   become: true
-  ansible.builtin.lvol:
+  community.general.lvol:
     lv: '{{ pool.name }}meta'
     size: '{{ pool.metadata_size }}'
     vg: '{{ pool.volume_group }}'

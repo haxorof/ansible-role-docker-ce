@@ -277,6 +277,7 @@
             url: "https://github.com/docker/compose/releases/download/\
               {{ _docker_compose_github_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
             dest: "/tmp/ansible.docker-compose-sha256"
+            mode: 0644
           register: _github_docker_compose_shasum_file
           changed_when: false
           until: _github_docker_compose_shasum_file.status_code == 200
