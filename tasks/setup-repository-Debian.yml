@@ -3,7 +3,7 @@
   block:
     - name: Update APT cache
       become: true
-      apt:
+      ansible.builtin.apt:
         update_cache: yes
       changed_when: false
       register: _pkg_result
@@ -13,9 +13,7 @@
   rescue:
     - name: Retry APT cache update with allow-releaseinfo-change
       become: true
-      command: apt-get update --allow-releaseinfo-change
-      args:
-        warn: false
+      ansible.builtin.command: apt-get update --allow-releaseinfo-change
       changed_when: false
       register: _pkg_result
       until: _pkg_result is succeeded
@@ -24,7 +22,7 @@
 
 - name: Ensure packages are installed for repository setup
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   loop: "{{ docker_repository_related_packages[_docker_os_dist_file_varity] }}"
@@ -35,7 +33,7 @@
 
 - name: Add Docker official GPG key
   become: true
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://download.docker.com/linux/{{ _docker_os_dist|lower }}/gpg
     state: present
   register: _pkg_result
@@ -47,9 +45,7 @@
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
   become: true
-  shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
-  args:
-    warn: false
+  ansible.builtin.shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
   changed_when: false
   when:
     - docker_network_access | bool
@@ -59,7 +55,7 @@
     - skip_ansible_lint
 
 - name: Determine channels to be enabled and/or disabled
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
     _docker_enable_channels: "{{ docker_channels | intersect(_docker_merged_channels) }}"
   vars:
@@ -68,7 +64,7 @@
 
 - name: Add Docker CE repository with correct channels (Ubuntu/Debian)
   become: true
-  copy:
+  ansible.builtin.copy:
     content: >
       deb [arch={{ _docker_os_arch|lower }}] https://download.docker.com/linux/{{ _docker_os_dist|lower }}
       {{ _docker_os_dist_release }} {{ _docker_enable_channels | join(' ') }}

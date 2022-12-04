@@ -1,12 +1,12 @@
 - name: Ensure Docker daemon is started/restarted
   become: yes
-  service:
+  ansible.builtin.service:
     name: docker
     state: "{{ _docker_restart_required | ternary('restarted','started') }}"
 
 - name: Wait for Docker daemon to started
   become: yes
-  shell: docker info
+  ansible.builtin.shell: docker info
   register: _docker_info
   until: _docker_info.rc == 0
   retries: 10
@@ -16,7 +16,7 @@
 
 - name: Install Docker plugins
   become: yes
-  shell: "(docker plugin install --grant-all-permissions --alias {{ item.alias | default(item.name) }} {{ item.name }} {{ item.args | default('') }} \
+  ansible.builtin.shell: "(docker plugin install --grant-all-permissions --alias {{ item.alias | default(item.name) }} {{ item.name }} {{ item.args | default('') }} \
     && echo 'installed') || echo 'nop'"
   loop: "{{ docker_plugins }}"
   register: _docker_plugin_install
@@ -25,25 +25,25 @@
     - docker_network_access | bool
 
 - name: Reset list of authorization plugins
-  set_fact:
+  ansible.builtin.set_fact:
     _authz_plugins: []
 
 - name: Create list of authorization plugins
-  set_fact:
+  ansible.builtin.set_fact:
     _authz_plugins: "{{ _authz_plugins + [item.alias | default(item.name)] }}"
   loop: "{{ docker_plugins }}"
   when:
     - item.type == 'authz'
 
 - name: Update Docker daemon configuration with authorization plugins
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_daemon_config: "{{ docker_daemon_config | combine(_updated_item, recursive=true) }}"
   vars:
     _updated_item: "{ 'authorization-plugins': {{ _authz_plugins | list }} }"
 
 - name: Update Docker daemon (variables)
   become: yes
-  copy:
+  ansible.builtin.copy:
     content: "{{ _docker_daemon_config | to_nice_json }}"
     dest: /etc/docker/daemon.json
     owner: root
@@ -55,6 +55,6 @@
     - docker_daemon_config is defined
 
 - name: Docker daemon restart is required
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_restart_required: true
   when: _docker_config_var_plugin is changed

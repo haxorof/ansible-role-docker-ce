@@ -90,11 +90,12 @@ if File.exist?(testcase_file)
     end
 
     config.vm.define 'controller', primary: true do |machine|
-      machine.vm.box = "generic/ubuntu2004"
+      machine.vm.box = "almalinux/9"
       machine.vm.box_check_update = true
       machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
       machine.vbguest.auto_update = true
       machine.vbguest.no_remote = true
+      machine.vbguest.installer_hooks[:before_start] = ["dnf install -y kernel-devel"]
       machine.vm.synced_folder ".", "/vagrant", :mount_options => ["rw"]
       machine.vm.synced_folder "../", "/mnt/#{vagrant_config['role_dir']}", :mount_options => ["ro"]
       machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
@@ -119,25 +120,18 @@ if File.exist?(testcase_file)
       #     && tar -zxf mitogen.tar.gz mitogen-0.2.9 \
       #     && rm mitogen.tar.gz"
 
-      if "#{machine.vm.box}".include?("centos/7") || "#{machine.vm.box}".include?("centos7") then
-        install_cmd = "sudo yum install -y epel-release python-pip haveged"
-      end
-
-      if "#{machine.vm.box}".include?("ubuntu") then
-        install_cmd = "sudo apt-get install -y python3-pip python-is-python3 haveged && sudo ln -s -f /usr/bin/pip3 /usr/bin/pip"
-      end
+      machine.vm.provision "shell",
+      inline: "dnf -y install epel-release && dnf -y install curl gcc libffi-devel openssl-devel python3-devel python3-setuptools haveged && \
+        pip install ansible==#{vagrant_config['ansible_version']}"
 
       # Prepare
       machine.vm.provision "ansible_local" do |ansible|
-        ansible.install_mode = "pip_args_only"
-        ansible.pip_install_cmd = "#{install_cmd}"
-        ansible.pip_args = "ansible==#{vagrant_config['ansible_version']}"
+        ansible.install = false
         ansible.compatibility_mode = "2.0"
-        #ansible.version = "#{vagrant_config['ansible_version']}"
         ansible.galaxy_role_file  = "requirements.yml"
         ansible.galaxy_roles_path = '/var/tmp/roles'
         # To avoid installing roles multiple times when running regession testing
-        ansible.galaxy_command = "test -d /var/tmp/roles || sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
+        ansible.galaxy_command = "test -d /var/tmp/roles || sudo /usr/local/bin/ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
         ansible.playbook = vagrant_config['prep_yml']
         ansible.limit = "test-host"
         ansible.inventory_path = "hosts"

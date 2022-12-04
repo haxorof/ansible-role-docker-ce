@@ -1,16 +1,16 @@
 ---
 - name: Set version string
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_version_string: "{{ docker_os_pkg_version_separator[_docker_os_dist_file_varity] }}{{ docker_version }}"
   when: docker_version | length > 0
 
 - name: Set packages state to latest
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_pkg_state: "latest"
   when: docker_latest_version | bool and docker_version | length == 0
 
 - name: Filter out packages to match older Docker CE versions
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_packages:
       - docker-ce
   when:
@@ -18,7 +18,7 @@
     - docker_version is match('17.') or docker_version is match('18.03') or docker_version is match('18.06')
 
 - name: Ensure some kind of compatibility for no longer officially supported distributions since Docker CE 18.09
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_packages:
       - docker-ce
   when:
@@ -29,7 +29,7 @@
       (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 17)
 
 - name: Do workaround to handle CentOS/RHEL 8 installation issues
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_packages:
       - "{{ docker_x_redhat_centos_8_containerd_rpm }}"
       - docker-ce-cli
@@ -42,7 +42,7 @@
 
 - name: Ensure Docker CE is installed
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ (item is search('docker')) | ternary((item + _docker_version_string | default('')), item) }}"
     state: "{{ _docker_pkg_state | default('present') }}"
   loop: "{{ _docker_packages | default(docker_packages) }}"
@@ -51,6 +51,6 @@
   until: _docker_pkg_result is succeeded
 
 - name: Docker daemon restart is required
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_restart_required: true
   when: _docker_pkg_result is changed

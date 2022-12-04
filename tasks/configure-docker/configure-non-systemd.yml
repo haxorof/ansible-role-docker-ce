@@ -1,5 +1,5 @@
 - name: Combine Docker daemon environment variable configuration
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_service_envs: "{{ _docker_service_envs | combine(_docker_service_opts) | combine(docker_daemon_envs) }}"
   vars:
     _docker_service_opts:
@@ -7,7 +7,7 @@
 
 - name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker
   become: true
-  template:
+  ansible.builtin.template:
     src: docker-envs.j2
     dest: "{{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker"
     owner: root
@@ -18,6 +18,6 @@
     docker_envs: "{{ _docker_service_envs }}"
 
 - name: Docker daemon restart is required
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_restart_required: true
   when: _docker_non_systemd_envs is changed

@@ -1,44 +1,44 @@
 ---
 - name: Reset internal variables for additional packages to be installed
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_additional_packages_os: []
     _docker_additional_packages_pip: []
 
 - name: Set facts to install Docker SDK for Python
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist_file_varity]['sdk'] }}"
   when:
     - docker_sdk | bool
 
 - name: Set facts to install Docker Compose
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist_file_varity]['compose'] }}"
   when:
     - docker_compose | bool and not docker_compose_no_pip | bool
 
 - name: Set facts to install Docker Stack dependencies ('docker_stack')
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist_file_varity]['stack'] }}"
   when:
     - docker_stack | bool
 
 - name: Set facts with additional package to be installed
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + docker_additional_packages_pip }}"
     _docker_additional_packages_os: "{{ _docker_additional_packages_os + docker_additional_packages_os }}"
 
 - name: Ensure required OS packages will be installed for PiP
   block:
     - name: Set fact for path test of pip/pip3
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_pip_or_pip3: "{{ _docker_python3 | ternary('pip3', 'pip') }}"
 
     - name: Determine if pip/pip3 exists in path
       become: true
-      shell: type {{ _docker_pip_or_pip3 }}
+      ansible.builtin.shell: type {{ _docker_pip_or_pip3 }}
       register: _docker_pip_cmd
       changed_when: false
       failed_when: false
@@ -47,7 +47,7 @@
         - skip_ansible_lint
 
     - name: Set fact to install Python 2 PiP and build dependencies
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_additional_packages_os: >
           {{ _docker_additional_packages_os
             + ([] if (_docker_pip_cmd.rc == 0) else [docker_pip_package])
@@ -56,7 +56,7 @@
         - not _docker_python3 | bool
 
     - name: Set fact to install Python 3 PiP and build dependencies
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_additional_packages_os: >
           {{ _docker_additional_packages_os
             + ([] if (_docker_pip_cmd.rc == 0) else [docker_pip3_package])
@@ -65,14 +65,14 @@
         - _docker_python3 | bool
 
     - name: Ensure python-pip-whl is present (Debian 8)
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-pip-whl'] }}"
       when:
         - _docker_os_dist == "Debian"
         - _docker_os_dist_major_version | int == 8
 
     - name: Ensure python-backports.ssl-match-hostname is present (Debian 10)
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_additional_packages_os: "{{ _docker_additional_packages_os + ['python-backports.ssl-match-hostname'] }}"
       when:
         - not _docker_python3 | bool
@@ -84,7 +84,7 @@
 
 - name: Ensure EPEL release repository is installed
   become: true
-  package:
+  ansible.builtin.package:
     name: "epel-release"
     state: present
   register: _pkg_result
@@ -96,7 +96,7 @@
 
 - name: Install additional packages (OS package manager)
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   loop: "{{ _docker_additional_packages_os }}"
@@ -106,7 +106,7 @@
 
 - name: Fetch install PiP version
   become: "{{ docker_pip_sudo | bool }}"
-  command: "{{ _docker_pip_or_pip3 }} --version"
+  ansible.builtin.command: "{{ _docker_pip_or_pip3 }} --version"
   changed_when: no
   check_mode: no
   register: _pip_version
@@ -119,7 +119,7 @@
     # https://github.com/haxorof/ansible-role-docker-ce/issues/112
 
     - name: Set PiP to be upgraded due to too old PiP version (< 9.0.0)
-      set_fact:
+      ansible.builtin.set_fact:
         docker_pip_upgrade: true
       when:
         - docker_x_fix_no_zipp_module
@@ -127,7 +127,7 @@
         - (_pip_version.stdout_lines[0] | regex_replace('^pip\s(\d+\.\d+).+$', '\\1')) is version('9.0', '<')
 
     - name: Set PiP to be upgraded due to Rust depencency for cryptography
-      set_fact:
+      ansible.builtin.set_fact:
         docker_pip_upgrade: true
       when:
         - _docker_python3 | bool
@@ -141,7 +141,7 @@
 # https://pip.pypa.io/en/latest/development/release-process/#python-2-support
 # https://github.com/pypa/pip/issues/7423
 - name: Ensure PiP upgrade for Python 2 only is upgraded to at most 20.3
-  set_fact:
+  ansible.builtin.set_fact:
     docker_pip_package_pip: "{{ docker_pip_package_pip }}<21"
   when:
     - (not _docker_python3 | bool) or (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 18)
@@ -150,7 +150,7 @@
 
 - name: Upgrade/Reinstall PiP
   become: "{{ docker_pip_sudo | bool }}"
-  pip:
+  ansible.builtin.pip:
     name: "{{ docker_pip_package_pip }}"
     state: forcereinstall
   register: _pkg_result
@@ -161,7 +161,7 @@
 
 - name: Install additional packages (PiP)
   become: "{{ docker_pip_sudo | bool }}"
-  pip:
+  ansible.builtin.pip:
     name: "{{ item }}"
     state: present
     extra_args: "{{ docker_pip_extra_args }}"
@@ -176,7 +176,7 @@
 - name: Workaround for issue - No module named ssl_match_hostname (Python 2.7)
   block:
     - name: Test if module ssl_match_hostname exists
-      command: python -c "import backports.ssl_match_hostname"
+      ansible.builtin.command: python -c "import backports.ssl_match_hostname"
       register: _docker_check_smh
       changed_when: no
       failed_when: _docker_check_smh.rc > 1
@@ -184,7 +184,7 @@
 
     - name: Apply workaround for issue - No module named ssl_match_hostname (Python 2.7)
       become: yes
-      command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
+      ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
       when: _docker_check_smh.rc == 1
   when:
     - docker_x_ssl_match_hostname | bool
@@ -194,7 +194,7 @@
 - name: Workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
   block:
     - name: Test if module shutil_get_terminal_size exists
-      command: python -c "import backports.shutil_get_terminal_size"
+      ansible.builtin.command: python -c "import backports.shutil_get_terminal_size"
       register: _docker_check_shutil
       changed_when: no
       failed_when: _docker_check_shutil.rc > 1
@@ -202,7 +202,7 @@
 
     - name: Apply workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
       become: yes
-      command: cp -r /usr/local/lib/python2.7/dist-packages/backports/shutil_get_terminal_size/ /usr/lib/python2.7/dist-packages/backports
+      ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/shutil_get_terminal_size/ /usr/lib/python2.7/dist-packages/backports
       when: _docker_check_shutil.rc == 1
   when:
     - docker_x_shutil_get_terminal_size | bool
@@ -214,7 +214,7 @@
   block:
     # Not using github_release:  https://github.com/ansible/ansible/issues/45391
     - name: Get latest release information of docker-compose via GitHub API
-      uri:
+      ansible.builtin.uri:
         url: https://api.github.com/repos/docker/compose/releases/latest
         body_format: json
       register: _github_docker_compose
@@ -225,7 +225,7 @@
         - docker_compose_no_pip_detect_version | bool
 
     - name: Set detected docker-compose version
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_compose_install: true
         _docker_compose_version: "{{ _github_docker_compose.json.tag_name | replace('v','') }}"
       when:
@@ -235,27 +235,27 @@
         - _github_docker_compose.json is defined
 
     - name: Set fixed docker-compose version {{ docker_compose_no_pip_version }}
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_compose_install: true
         _docker_compose_version: "{{ docker_compose_no_pip_version }}"
       when:
         - not docker_compose_no_pip_detect_version | bool
 
     - name: Stat /usr/bin/docker-compose
-      stat:
+      ansible.builtin.stat:
         path: /usr/bin/docker-compose
       register: _docker_compose_file
       check_mode: no
 
     - name: Fetch current docker-compose version installed in the system
-      command: docker-compose --version
+      ansible.builtin.command: docker-compose --version
       register: _docker_compose_cmd_version
       changed_when: no
       when:
        - _docker_compose_file.stat.exists
 
     - name: Determine if installed docker-compose version needs to be replaced
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_compose_install: "{{ _docker_compose_version is version(_docker_compose_current_version, '!=') | bool }}"
       vars:
         _docker_compose_current_version: "{{ (_docker_compose_cmd_version.stdout_lines | last) | regex_search('.*([0-9]+\\.[0-9]+\\.[0-9]+).*', '\\1') | last }}"
@@ -264,13 +264,13 @@
        - _docker_compose_cmd_version.stdout_lines is defined
 
     - name: Set Docker Compose version for Github API
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_compose_github_version: "{{ (_docker_compose_version is version('2', '<') | bool) | ternary(_docker_compose_version, ('v' + _docker_compose_version)) }}"
 
     - name: Fetch SHA256 of docker-compose
       block:
         - name: Fetch docker-compose {{ _docker_compose_github_version }} SHA265 sum file
-          get_url:
+          ansible.builtin.get_url:
             url: "https://github.com/docker/compose/releases/download/\
               {{ _docker_compose_github_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}.sha256"
             dest: "/tmp/ansible.docker-compose-sha256"
@@ -281,27 +281,27 @@
           check_mode: no
 
         - name: Dump SHA256 file contents to variable
-          command: cat /tmp/ansible.docker-compose-sha256
+          ansible.builtin.command: cat /tmp/ansible.docker-compose-sha256
           register: _github_docker_compose_shasum
           changed_when: false
           check_mode: no
 
         - name: Remove temporary file for SHA256 sum
-          file:
+          ansible.builtin.file:
             path: "/tmp/ansible.docker-compose-sha256"
             state: absent
           changed_when: false
           check_mode: no
 
         - name: Set SHA256 facts related to docker-compose
-          set_fact:
+          ansible.builtin.set_fact:
             _docker_compose_checksum: "sha256:{{ _github_docker_compose_shasum.stdout | \
               regex_replace('^([0-9a-zA-Z]*)[\\s\\t]+.+', '\\1') }}"
       when: _docker_compose_install | bool
 
     - name: Install docker-compose {{ _docker_compose_github_version }} (Linux)
       become: true
-      get_url:
+      ansible.builtin.get_url:
         url: "https://github.com/docker/compose/releases/download/\
           {{ _docker_compose_github_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
         checksum: "{{ _docker_compose_checksum }}"
@@ -311,7 +311,7 @@
 
     - name: Create symlink for docker-compose to work with sudo in some distributions
       become: true
-      file:
+      ansible.builtin.file:
         src: /usr/local/bin/docker-compose
         dest: /usr/bin/docker-compose
         state: link

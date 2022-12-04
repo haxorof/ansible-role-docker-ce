@@ -1,11 +1,11 @@
 - name: Configuration to avoid 'Device or resource busy' (CentOS/RedHat)
-  include_tasks: bug-tweaks/bug-centos7-resource-busy.yml
+  ansible.builtin.include_tasks: bug-tweaks/bug-centos7-resource-busy.yml
   when:
     - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
     - ansible_kernel is version_compare('4', '<')
 
 - name: Best effort handling to directlvm for Debian 8 to get uniform behavior across distributions
-  include_tasks: bug-tweaks/tweak-debian8-directlvm.yml
+  ansible.builtin.include_tasks: bug-tweaks/tweak-debian8-directlvm.yml
   when:
     - _docker_os_dist == "Debian"
     - _docker_os_dist_major_version | int == 8

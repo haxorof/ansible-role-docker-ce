@@ -1,6 +1,6 @@
 ---
-- include_tasks: checks/distribution-checks.yml
+- ansible.builtin.include_tasks: checks/distribution-checks.yml
   when:
     _docker_os_dist_check | bool
 
-- include_tasks: checks/compatibility-checks.yml
+- ansible.builtin.include_tasks: checks/compatibility-checks.yml

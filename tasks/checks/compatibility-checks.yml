@@ -2,7 +2,7 @@
 # https://github.com/moby/moby/issues/35873
 # https://access.redhat.com/solutions/2991041
 - name: Compatibility check - Fail if both MountFlags=slave and live-restore are set
-  fail:
+  ansible.builtin.fail:
     msg: >
       Setting both `MountFlags=slave` (docker_enable_mount_flag_fix: true)
       and `live-restore=true` (docker_daemon_config['live-restore']: true)

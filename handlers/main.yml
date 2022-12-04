@@ -3,7 +3,7 @@
 
 - name: restart docker
   become: yes
-  service:
+  ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: restarted
@@ -11,7 +11,7 @@
 
 - name: reload docker
   become: yes
-  service:
+  ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: reloaded
@@ -20,7 +20,5 @@
 # Workaround because systemd cannot be used: https://github.com/ansible/ansible/issues/22171
 - name: restart auditd
   become: yes
-  command: service auditd restart
-  args:
-    warn: no
+  ansible.builtin.command: service auditd restart
   tags: ["install", "configure"]

@@ -1,8 +1,7 @@
 # Regression tests are run using minimum supported Ansible version
 # https://docs.ansible.com/ansible/devel/reference_appendices/release_and_maintenance.html
-#ansible_version: "2.10.7"
-ansible_version: "4.10.0"
-#ansible_version: "6.2.0"
+ansible_version: "5.10.0"
+#ansible_version: "7.0.0"
 galaxy_role_name: haxorof.docker_ce
 role_dir: ansible-role-docker-ce
 
@@ -49,14 +48,14 @@ boxes:
   - # Buster
     box: generic/debian10
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
   - # Bullseye
     box: generic/debian11
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
@@ -65,14 +64,14 @@ boxes:
   - # F34
     box: generic/fedora34
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
   - # F35
     box: generic/fedora35
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
@@ -86,7 +85,7 @@ boxes:
   - # Rocky Linux 8
     box: generic/rocky8
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
@@ -102,14 +101,14 @@ boxes:
   - # Bionic Beaver
     box: generic/ubuntu1804
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
   - # Focal Fossa
     box: generic/ubuntu2004
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
@@ -124,14 +123,14 @@ boxes:
   - # RHEL 7
     box: generic/rhel7
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
   - # RHEL 8
     box: generic/rhel8
     box_url: vagrantup
-    storage_ctl: IDE Controller
+    storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: true

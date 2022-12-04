@@ -1,7 +1,7 @@
 ---
 - name: Ensure python and deps for Ansible modules
   become: true
-  raw: dnf install -y python2 python2-dnf libselinux-python
+  ansible.builtin.raw: dnf install -y python2 python2-dnf libselinux-python
   changed_when: false
   when:
     - docker_network_access | bool
@@ -10,7 +10,7 @@
 
 - name: Ensure packages are installed for repository setup
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   loop: "{{ docker_repository_related_packages[_docker_os_dist_file_varity] }}"
@@ -21,7 +21,7 @@
     - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
 
 - name: Determine channels to be enabled and/or disabled
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
     _docker_enable_channels: "{{ docker_channels | intersect(_docker_merged_channels) }}"
   vars:
@@ -30,7 +30,7 @@
 
 - name: Add Docker CE repository
   become: true
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ docker_repository_url[_docker_os_dist] | default(docker_repository_url[_docker_os_dist_file_varity]) }}"
     dest: /etc/yum.repos.d/docker-ce.repo
     mode: 0644
@@ -45,14 +45,14 @@
 - name: Workaround issue with $releasever set to 7Server
   block:
     - name: Fetch $relesever value
-      command: python -c 'import yum, json; yb = yum.YumBase(); print json.dumps(yb.conf.yumvar, indent=2)'
+      ansible.builtin.command: python -c 'import yum, json; yb = yum.YumBase(); print json.dumps(yb.conf.yumvar, indent=2)'
       changed_when: no
       check_mode: no
       register: _docker_releasever
 
     - name: Replace $releasever with '7' in /etc/yum.repos.d/docker-ce.repo
       become: yes
-      replace:
+      ansible.builtin.replace:
         path: /etc/yum.repos.d/docker-ce.repo
         regexp: \$releasever
         replace: '7'
@@ -64,9 +64,7 @@
 
 - name: Disable Docker CE repository channels
   become: true
-  shell: "{{ docker_cmd_enable_disable_repo[_docker_os_dist_file_varity] }}"
-  args:
-    warn: false
+  ansible.builtin.shell: "{{ docker_cmd_enable_disable_repo[_docker_os_dist_file_varity] }}"
   loop: "{{ _docker_disable_channels }}"
   changed_when: false
   vars:
@@ -76,9 +74,7 @@
 
 - name: Enable Docker CE repository channels
   become: true
-  shell: "{{ docker_cmd_enable_disable_repo[_docker_os_dist_file_varity] }}"
-  args:
-    warn: false
+  ansible.builtin.shell: "{{ docker_cmd_enable_disable_repo[_docker_os_dist_file_varity] }}"
   loop: "{{ _docker_enable_channels }}"
   changed_when: false
   vars:
@@ -89,7 +85,7 @@
 - name: RHEL 7 repositories
   block:
     - name: Set internal facts for repository handling
-      set_fact:
+      ansible.builtin.set_fact:
         _rhel_repo_check_cmd:
           enabled:
             sm: subscription-manager repos --list-enabled
@@ -108,7 +104,7 @@
 
     - name: Enable and disable repositories (RedHat)
       become: true
-      shell: "{{ _rhel_repo_check_cmd[item.state][item.repo_manager]  }} \
+      ansible.builtin.shell: "{{ _rhel_repo_check_cmd[item.state][item.repo_manager]  }} \
         | grep {{ item.id }} && exit 0 \
         || {{ _rhel_cmd_enable_disable_repo[item.state][item.repo_manager] }}{{ item.id }} \
         && exit 2"

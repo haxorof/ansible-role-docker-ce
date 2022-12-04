@@ -1,7 +1,7 @@
 ---
 - name: Ensure auditd is installed
   become: true
-  package:
+  ansible.builtin.package:
     name: auditd
     state: present
   register: _pkg_result
@@ -13,7 +13,7 @@
 
 - name: Copy Docker audit rules
   become: yes
-  copy:
+  ansible.builtin.copy:
     src: files/etc/audit/rules.d/docker.rules
     dest: /etc/audit/rules.d/docker.rules
     owner: root
@@ -24,7 +24,7 @@
 
 - name: Ensure Docker audit rules are removed
   become: yes
-  file:
+  ansible.builtin.file:
     path: /etc/audit/rules.d/docker.rules
     state: absent
   notify: restart auditd

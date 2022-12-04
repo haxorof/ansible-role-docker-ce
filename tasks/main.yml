@@ -1,13 +1,13 @@
 ---
 - name: Collect distribution facts if not already done
-  setup:
+  ansible.builtin.setup:
     gather_subset:
       - min
   when: not ansible_distribution_major_version is defined
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Set distribution and python facts
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_os_dist: "{{ ansible_distribution }}"
     _docker_os_dist_release: "{{ ansible_distribution_release }}"
     _docker_os_dist_major_version: "{{ ansible_distribution_major_version }}"
@@ -18,7 +18,7 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Linux Mint
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_os_dist: "Ubuntu"
     _docker_os_dist_release: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].release }}"
     _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int ].major_version }}"
@@ -26,7 +26,7 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for CentOS Stream 8
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_os_dist_file_varity: "RedHat"
   when: 
     - _docker_os_dist == "CentOS"
@@ -34,7 +34,7 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Debian 10 (Buster) due to bug
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_os_dist: "Debian"
     _docker_os_dist_release: "buster"
     _docker_os_dist_major_version: 10
@@ -45,20 +45,20 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: OS release info
-  raw: cat /etc/os-release
+  ansible.builtin.raw: cat /etc/os-release
   check_mode: no
   changed_when: no
   register: _docker_os_release_info
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print OS release information
-  debug:
+  ansible.builtin.debug:
     var: _docker_os_release_info
     verbosity: 1
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print LSB information
-  debug:
+  ansible.builtin.debug:
     var: ansible_lsb
     verbosity: 1
   when:
@@ -66,27 +66,27 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Raspbian
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_os_arch: "armhf"
   when:
     - _docker_os_release_info.stdout is search('raspbian')
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reset role variables
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_systemd_service_config_tweaks: []
     _docker_service_envs: {}
     _docker_restart_required: false
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print interpreted distribution information
-  debug:
+  ansible.builtin.debug:
     msg: "distribution={{ _docker_os_dist }}, release={{ _docker_os_dist_release }}, major_version={{ _docker_os_dist_major_version }}"
     verbosity: 1
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Compatibility and distribution checks
-  include_tasks: checks.yml
+  ansible.builtin.include_tasks: checks.yml
   when: docker_do_checks | bool
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
@@ -95,52 +95,52 @@
     manager: auto
 
 - name: Abort if podman is already installed
-  fail:
+  ansible.builtin.fail:
     msg: "Podman is already installed! If you want to use this role ensure you do not have any podman related packages installed!"
   when: "'podman' in ansible_facts.packages"
 
 - name: Install and configure Docker CE
   block:
     - name: Network access disabled
-      debug:
+      ansible.builtin.debug:
         msg: "Tasks requiring network access will be skipped!"
       when: not docker_network_access | bool
 
     - name: Remove Docker versions before Docker CE
-      include_tasks: remove-pre-docker-ce.yml
+      ansible.builtin.include_tasks: remove-pre-docker-ce.yml
       when:
         - docker_remove_pre_ce | bool
         - docker_network_access | bool
       tags: ["install", "docker_install"]
 
     - name: Setup Docker package repositories
-      include_tasks: setup-repository.yml
+      ansible.builtin.include_tasks: setup-repository.yml
       when: docker_setup_repos | bool
       tags: ["install", "docker_install"]
 
     - name: Install Docker
-      include_tasks: install-docker.yml
+      ansible.builtin.include_tasks: install-docker.yml
       when: docker_network_access | bool
       tags: ["install", "docker_install"]
 
     - name: Configure audit logging
-      include_tasks: setup-audit.yml
+      ansible.builtin.include_tasks: setup-audit.yml
       tags: ["configure", "docker_configure"]
 
     - name: Apply workarounds for bugs and/or tweaks
-      include_tasks: bug-tweaks.yml
+      ansible.builtin.include_tasks: bug-tweaks.yml
       tags: ["configure", "docker_configure"]
 
     - name: Configure Docker
-      include_tasks: configure-docker.yml
+      ansible.builtin.include_tasks: configure-docker.yml
       tags: ["configure", "docker_configure"]
 
     - name: Postinstall tasks
-      include_tasks: postinstall.yml
+      ansible.builtin.include_tasks: postinstall.yml
       when: docker_network_access | bool
       tags: ["install", "postinstall", "docker_install", "docker_postinstall"]
   when: not docker_remove | bool
 
 - name: Remove Docker CE and related configuration
-  include_tasks: remove-docker.yml
+  ansible.builtin.include_tasks: remove-docker.yml
   when: docker_remove | bool

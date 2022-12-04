@@ -1,17 +1,17 @@
 - name: Combine all systemd service configuration options
-  set_fact:
+  ansible.builtin.set_fact:
     _systemd_service_config: "{{ _docker_systemd_service_config_tweaks + docker_systemd_service_config }}"
 
 - name: Ensure /etc/systemd/system/docker.service.d directory exists
   become: true
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system/docker.service.d
     state: directory
     mode: 0755
 
 - name: Setup default Docker drop-in to enable use of environment file
   become: true
-  template:
+  ansible.builtin.template:
     src: drop-ins/default.conf.j2
     dest: /etc/systemd/system/docker.service.d/default.conf
     owner: root
@@ -23,7 +23,7 @@
     systemd_service_conf: "{{ _systemd_service_config }}"
 
 - name: Combine Docker daemon environment variable configuration
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_service_envs: "{{ _docker_service_envs | combine(_docker_service_opts) | combine(docker_daemon_envs) }}"
   vars:
     _docker_service_opts:
@@ -31,7 +31,7 @@
 
 - name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker-envs
   become: true
-  template:
+  ansible.builtin.template:
     src: docker-envs.j2
     dest: "{{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker-envs"
     owner: root
@@ -43,13 +43,13 @@
 
 - name: Force daemon reload of systemd
   become: true
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: yes
   when: _docker_systemd_docker_dropin is changed
   tags:
     - skip_ansible_lint
 
 - name: Docker daemon restart is required
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_restart_required: true
   when: (_docker_systemd_docker_dropin is changed) or (_docker_systemd_envs is changed)

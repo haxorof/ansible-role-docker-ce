@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Changed
+
+- Bumped minimal Ansible version to 5.0.0
+
+## Fixed
+
+- Unsupported parameters for (ansible.legacy.command) module: warn ([#160](../../issues/160))
+
 ## [3.8.0](../../releases/tag/3.8.0) - 2022-10-22
 
 ## Added

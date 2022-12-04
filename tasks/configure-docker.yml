@@ -3,7 +3,7 @@
 # Important! systemd is only fully supported in Ubuntu 15.04 and later releases
 - name: Determine usage of systemd
   become: true
-  shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
+  ansible.builtin.shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
   changed_when: no
   check_mode: no
   register: _determine_systemd_usage
@@ -11,27 +11,27 @@
     - skip_ansible_lint
 
 - name: Set fact to indicate systemd is used or not
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_systemd_used: "{{ _determine_systemd_usage is defined and _determine_systemd_usage.stdout == 'systemd' }}"
 
 - name: Configure systemd service
-  include_tasks: configure-docker/configure-systemd.yml
+  ansible.builtin.include_tasks: configure-docker/configure-systemd.yml
   when: _docker_systemd_used | bool
 
 - name: Configure non-systemd service
-  include_tasks: configure-docker/configure-non-systemd.yml
+  ansible.builtin.include_tasks: configure-docker/configure-non-systemd.yml
   when: not _docker_systemd_used | bool
 
 - name: Ensure /etc/docker directory exists
   become: true
-  file:
+  ansible.builtin.file:
     path: /etc/docker
     state: directory
     mode: 0755
 
 - name: Configure Docker daemon (file)
   become: true
-  copy:
+  ansible.builtin.copy:
     src: "{{ docker_daemon_config_file }}"
     dest: /etc/docker/daemon.json
     owner: root
@@ -42,7 +42,7 @@
 
 - name: Configure Docker daemon (variables)
   become: true
-  copy:
+  ansible.builtin.copy:
     content: "{{ docker_daemon_config | to_nice_json }}"
     dest: /etc/docker/daemon.json
     owner: root
@@ -55,7 +55,7 @@
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ item }}"
     regexp: '^dockremap'
     line: 'dockremap:500000:65536'
@@ -70,7 +70,7 @@
 
 - name: Ensure Docker users are added to the docker group
   become: true
-  user:
+  ansible.builtin.user:
     name: "{{ item }}"
     groups: docker
     append: true
@@ -80,7 +80,7 @@
   block:
     - name: Ensure lvm2 is installed
       become: true
-      package:
+      ansible.builtin.package:
         name: lvm2
         state: present
       register: _pkg_result
@@ -88,7 +88,7 @@
 
     - name: Ensure thin-provisioning-tools is installed
       become: true
-      package:
+      ansible.builtin.package:
         name: thin-provisioning-tools
         state: present
       register: _pkg_result
@@ -100,14 +100,14 @@
 
 - name: Enable Docker service
   become: true
-  service:
+  ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     enabled: yes
   register: _docker_service
 
 - name: Docker daemon restart is required
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_restart_required: true
   when: (
          _docker_service.status is defined
@@ -119,12 +119,12 @@
         )
 
 - name: Install and configure Docker plugins
-  include_tasks: configure-docker/configure-docker-plugins.yml
+  ansible.builtin.include_tasks: configure-docker/configure-docker-plugins.yml
   when: docker_plugins | length > 0
 
 - name: Trigger restart of Docker daemon
   become: yes
-  service:
+  ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: restarted
@@ -132,7 +132,7 @@
 
 - name: Ensure Docker daemon is running
   become: yes
-  service:
+  ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: started

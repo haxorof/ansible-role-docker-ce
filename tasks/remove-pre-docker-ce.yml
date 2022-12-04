@@ -1,17 +1,17 @@
 ---
 - name: Reset fact related to removal of old Docker
-  set_fact:
+  ansible.builtin.set_fact:
     _remove_old_docker: false
 
 - name: Determine Docker version
-  shell: "docker version --format='{{ '{{' }} .Client.Version {{ '}}' }}' 2>/dev/null"
+  ansible.builtin.shell: "docker version --format='{{ '{{' }} .Client.Version {{ '}}' }}' 2>/dev/null"
   register: _cmd_docker_version
   changed_when: false
   failed_when: false
   check_mode: no
 
 - name: Set fact if old Docker installation shall be removed
-  set_fact:
+  ansible.builtin.set_fact:
     _remove_old_docker: true
   when:
     - _cmd_docker_version.stdout_lines is defined
@@ -20,7 +20,7 @@
 
 - name: Check if Docker is running
   become: true
-  systemd:
+  ansible.builtin.systemd:
     name: docker
   ignore_errors: yes
   register: _service_docker_status
@@ -28,7 +28,7 @@
   when: _remove_old_docker | bool
 
 - name: Stop Docker service
-  service:
+  ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: stopped
@@ -36,7 +36,7 @@
 
 - name: Remove old Docker installation before Docker CE
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: absent
   register: _pkg_result
