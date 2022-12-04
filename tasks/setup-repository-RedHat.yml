@@ -43,6 +43,10 @@
 
 # https://github.com/haxorof/ansible-role-docker-ce/issues/126
 - name: Workaround issue with $releasever set to 7Server
+  when:
+    - (_docker_os_dist == "RedHat" or _docker_os_dist == "CentOS")
+    - _docker_os_dist_major_version | int == 7
+    - docker_x_fix_centos_redhat_7_releasever | bool
   block:
     - name: Fetch $relesever value
       ansible.builtin.command: python -c 'import yum, json; yb = yum.YumBase(); print json.dumps(yb.conf.yumvar, indent=2)'
@@ -57,10 +61,6 @@
         regexp: \$releasever
         replace: '7'
       when: _docker_releasever.stdout is search('7Server')
-  when:
-    - (_docker_os_dist == "RedHat" or _docker_os_dist == "CentOS")
-    - _docker_os_dist_major_version | int == 7
-    - docker_x_fix_centos_redhat_7_releasever | bool
 
 - name: Disable Docker CE repository channels
   become: true
@@ -83,6 +83,10 @@
     - skip_ansible_lint
 
 - name: RHEL 7 repositories
+  when:
+    - docker_network_access | bool
+    - _docker_os_dist == "RedHat"
+    - _docker_os_dist_major_version | int == 7
   block:
     - name: Set internal facts for repository handling
       ansible.builtin.set_fact:
@@ -104,7 +108,7 @@
 
     - name: Enable and disable repositories (RedHat)
       become: true
-      ansible.builtin.shell: "{{ _rhel_repo_check_cmd[item.state][item.repo_manager]  }} \
+      ansible.builtin.shell: "{{ _rhel_repo_check_cmd[item.state][item.repo_manager] }} \
         | grep {{ item.id }} && exit 0 \
         || {{ _rhel_cmd_enable_disable_repo[item.state][item.repo_manager] }}{{ item.id }} \
         && exit 2"
@@ -114,8 +118,3 @@
       failed_when: _cmd_rhel_repo_enabled_disabled.rc not in [ 0, 2 ]
       tags:
         - skip_ansible_lint
-
-  when:
-    - docker_network_access | bool
-    - _docker_os_dist == "RedHat"
-    - _docker_os_dist_major_version | int == 7

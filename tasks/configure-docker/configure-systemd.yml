@@ -29,7 +29,7 @@
     _docker_service_opts:
       DOCKER_OPTS: "{{ docker_daemon_opts }}"
 
-- name: Setup Docker environment file {{ docker_envs_dir[_docker_os_dist_file_varity] }}/docker-envs
+- name: Setup Docker environment file in directory {{ docker_envs_dir[_docker_os_dist_file_varity] }}
   become: true
   ansible.builtin.template:
     src: docker-envs.j2

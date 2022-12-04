@@ -9,15 +9,15 @@ galaxy_info:
   platforms:
   - name: Fedora
     versions:
-      - 34
-      - 35
-      - 36
+      - "34"
+      - "35"
+      - "36"
 
   - name: EL
     versions:
-      - 7
-      - 8
-      - 9
+      - "7"
+      - "8"
+      - "9"
 
   - name: Debian
     versions:

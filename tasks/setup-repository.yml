@@ -1,5 +1,5 @@
 ---
-- name: Include tasks for distribution variety {{ _docker_os_dist_file_varity }} to setup repository
+- name: Include setup repository tasks for distribution variety {{ _docker_os_dist_file_varity }}
   ansible.builtin.include_tasks: setup-repository-{{ _docker_os_dist_file_varity }}.yml
 
 - name: Update repository cache

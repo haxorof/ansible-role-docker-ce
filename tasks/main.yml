@@ -21,7 +21,7 @@
   ansible.builtin.set_fact:
     _docker_os_dist: "Ubuntu"
     _docker_os_dist_release: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].release }}"
-    _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int ].major_version }}"
+    _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].major_version }}"
   when: _docker_os_dist == "Linux Mint"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
@@ -100,6 +100,7 @@
   when: "'podman' in ansible_facts.packages"
 
 - name: Install and configure Docker CE
+  when: not docker_remove | bool
   block:
     - name: Network access disabled
       ansible.builtin.debug:
@@ -139,7 +140,6 @@
       ansible.builtin.include_tasks: postinstall.yml
       when: docker_network_access | bool
       tags: ["install", "postinstall", "docker_install", "docker_postinstall"]
-  when: not docker_remove | bool
 
 - name: Remove Docker CE and related configuration
   ansible.builtin.include_tasks: remove-docker.yml

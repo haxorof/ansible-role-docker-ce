@@ -2,7 +2,7 @@
   become: yes
   ansible.builtin.service:
     name: docker
-    state: "{{ _docker_restart_required | ternary('restarted','started') }}"
+    state: "{{ _docker_restart_required | ternary('restarted', 'started') }}"
 
 - name: Wait for Docker daemon to started
   become: yes

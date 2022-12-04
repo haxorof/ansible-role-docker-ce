@@ -19,7 +19,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart auditd
+  notify: Restart auditd
   when: docker_enable_audit | bool
 
 - name: Ensure Docker audit rules are removed
@@ -27,5 +27,5 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/docker.rules
     state: absent
-  notify: restart auditd
+  notify: Restart auditd
   when: not docker_enable_audit | bool
