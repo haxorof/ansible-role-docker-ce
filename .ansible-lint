@@ -2,6 +2,6 @@ warn_list:
   - 'no-handler'  # https://ansible-lint.readthedocs.io/rules/no-handler/
   - 'ignore-errors' # https://ansible-lint.readthedocs.io/rules/ignore-errors/
   - 'command-instead-of-module' # https://ansible-lint.readthedocs.io/rules/command-instead-of-module/
-
+  - 'args[module]'  # service 'use' reported as error but should be valid: https://ansible-lint.readthedocs.io/rules/args/
 skip_list:
   - yaml

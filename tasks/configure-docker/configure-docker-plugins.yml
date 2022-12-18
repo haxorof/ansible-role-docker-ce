@@ -1,4 +1,4 @@
-- name: Ensure Docker daemon is started/restarted
+- name: Ensure Docker daemon is started/restarted # noqa: args[module]
   become: yes
   ansible.builtin.service:
     name: docker
