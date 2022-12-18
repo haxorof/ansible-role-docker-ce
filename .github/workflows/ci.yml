@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install role dependency
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt --entrypoint="ansible-galaxy" haxorof/ansible-lint:v6 collection install -r requirements.yml -p ./roles
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt --entrypoint="ansible-galaxy" haxorof/ansible-lint:v6 collection install -r requirements.yml
 
       - name: Lint Ansible role
         run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt haxorof/ansible-lint:v6 -v --force-color .
