@@ -191,6 +191,8 @@
       become: yes
       ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
       check_mode: no
+      tags:
+        - skip_ansible_lint
 
 - name: Workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
   when:
@@ -211,6 +213,8 @@
       become: yes
       ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/shutil_get_terminal_size/ /usr/lib/python2.7/dist-packages/backports
       check_mode: no
+      tags:
+        - skip_ansible_lint
 
 # Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
 - name: Create docker-compose symlinks for backward compatibility of this role
