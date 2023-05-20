@@ -181,14 +181,14 @@
     - name: Test if module ssl_match_hostname exists
       ansible.builtin.command: python -c "import backports.ssl_match_hostname"
       register: _docker_check_smh
-      changed_when: no
+      changed_when: _docker_check_shutil.rc == 1
       failed_when: _docker_check_smh.rc > 1
-      check_mode: no
 
     - name: Apply workaround for issue - No module named ssl_match_hostname (Python 2.7)
-      when: _docker_check_smh.rc == 1
+      when: _docker_check_smh is changed
       become: yes
       ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
+      check_mode: no
 
 - name: Workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
   when:
@@ -199,14 +199,14 @@
     - name: Test if module shutil_get_terminal_size exists
       ansible.builtin.command: python -c "import backports.shutil_get_terminal_size"
       register: _docker_check_shutil
-      changed_when: no
+      changed_when: _docker_check_shutil.rc == 1
       failed_when: _docker_check_shutil.rc > 1
-      check_mode: no
 
     - name: Apply workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
-      when: _docker_check_shutil.rc == 1
+      when: _docker_check_shutil is changed
       become: yes
       ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/shutil_get_terminal_size/ /usr/lib/python2.7/dist-packages/backports
+      check_mode: no
 
 # Official installation of docker-compose (Linux): https://docs.docker.com/compose/install/#install-compose
 - name: Create docker-compose symlinks for backward compatibility of this role
@@ -214,7 +214,7 @@
     - docker_compose | bool
     - not docker_compose_pip | bool
   block:
-    - name: Stat {{ docker_cli_plugins_dir[_docker_os_dist_file_varity] }}/docker-compose
+    - name: Stat docker-compose
       ansible.builtin.stat:
         path: "{{ docker_cli_plugins_dir[_docker_os_dist_file_varity] }}/docker-compose"
       register: _docker_compose_cli_file
