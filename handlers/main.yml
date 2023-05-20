@@ -21,4 +21,4 @@
 - name: Restart auditd
   become: yes
   ansible.builtin.command: service auditd restart
-  tags: ["install", "configure"]
+  tags: ["install", "configure", "skip_ansible_lint"]

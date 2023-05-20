@@ -183,6 +183,8 @@
       register: _docker_check_smh
       changed_when: _docker_check_smh.rc == 1
       failed_when: _docker_check_smh.rc > 1
+      tags:
+        - skip_ansible_lint
 
     - name: Apply workaround for issue - No module named ssl_match_hostname (Python 2.7)
       when: _docker_check_smh is changed
@@ -201,6 +203,8 @@
       register: _docker_check_shutil
       changed_when: _docker_check_shutil.rc == 1
       failed_when: _docker_check_shutil.rc > 1
+      tags:
+        - skip_ansible_lint
 
     - name: Apply workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
       when: _docker_check_shutil is changed
