@@ -4,7 +4,7 @@ galaxy_info:
   author: Bjorn Oscarsson
   company: none
   description: "Installs and configures Docker Community Edition (CE)"
-  min_ansible_version: 2.12
+  min_ansible_version: "2.12"
   license: MIT
   platforms:
   - name: Fedora

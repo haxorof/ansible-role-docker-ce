@@ -181,7 +181,7 @@
     - name: Test if module ssl_match_hostname exists
       ansible.builtin.command: python -c "import backports.ssl_match_hostname"
       register: _docker_check_smh
-      changed_when: _docker_check_shutil.rc == 1
+      changed_when: _docker_check_smh.rc == 1
       failed_when: _docker_check_smh.rc > 1
 
     - name: Apply workaround for issue - No module named ssl_match_hostname (Python 2.7)
