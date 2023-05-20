@@ -3,11 +3,11 @@
   ansible.builtin.include_tasks: setup-repository-{{ _docker_os_dist_file_varity }}.yml
 
 - name: Update repository cache
+  when: docker_network_access | bool
   become: true
   ansible.builtin.shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist] | default(docker_cmd_update_repo_cache[_docker_os_dist_file_varity]) }}"
   changed_when: false
   register: _result
   until: _result is succeeded
-  when: docker_network_access | bool
   tags:
     - skip_ansible_lint

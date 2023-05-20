@@ -1,14 +1,17 @@
 ---
 - name: Ensure python and deps for Ansible modules
-  become: true
-  ansible.builtin.raw: dnf install -y python2 python2-dnf libselinux-python
-  changed_when: false
   when:
     - docker_network_access | bool
     - _docker_os_dist == "Fedora"
     - not _docker_python3
+  become: true
+  ansible.builtin.raw: dnf install -y python2 python2-dnf libselinux-python
+  changed_when: false
 
 - name: Ensure packages are installed for repository setup
+  when:
+    - docker_network_access | bool
+    - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
   become: true
   ansible.builtin.package:
     name: "{{ item }}"
@@ -16,9 +19,6 @@
   loop: "{{ docker_repository_related_packages[_docker_os_dist_file_varity] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
-  when:
-    - docker_network_access | bool
-    - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
 
 - name: Determine channels to be enabled and/or disabled
   ansible.builtin.set_fact:
@@ -29,6 +29,8 @@
     _docker_merged_channels: "{{ _docker_mandatory_channel }} + [ '{{ docker_channel }}' ]"
 
 - name: Add Docker CE repository
+  when:
+    - docker_network_access | bool
   become: true
   ansible.builtin.get_url:
     url: "{{ docker_repository_url[_docker_os_dist] | default(docker_repository_url[_docker_os_dist_file_varity]) }}"
@@ -38,8 +40,6 @@
   register: _docker_repo
   until: _docker_repo is succeeded
   changed_when: no
-  when:
-    - docker_network_access | bool
 
 # https://github.com/haxorof/ansible-role-docker-ce/issues/126
 - name: Workaround issue with $releasever set to 7Server
@@ -55,12 +55,12 @@
       register: _docker_releasever
 
     - name: Replace $releasever with '7' in /etc/yum.repos.d/docker-ce.repo
+      when: _docker_releasever.stdout is search('7Server')
       become: yes
       ansible.builtin.replace:
         path: /etc/yum.repos.d/docker-ce.repo
         regexp: \$releasever
         replace: '7'
-      when: _docker_releasever.stdout is search('7Server')
 
 - name: Disable Docker CE repository channels
   become: true

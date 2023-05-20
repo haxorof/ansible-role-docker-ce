@@ -2,25 +2,27 @@
 - name: Update APT cache block
   block:
     - name: Update APT cache
+      when:
+        - docker_network_access | bool
       become: true
       ansible.builtin.apt:
         update_cache: yes
       changed_when: false
       register: _pkg_result
       until: _pkg_result is succeeded
-      when:
-        - docker_network_access | bool
   rescue:
     - name: Retry APT cache update with allow-releaseinfo-change
+      when:
+        - docker_network_access | bool
       become: true
       ansible.builtin.command: apt-get update --allow-releaseinfo-change
       changed_when: false
       register: _pkg_result
       until: _pkg_result is succeeded
-      when:
-        - docker_network_access | bool
 
 - name: Ensure packages are installed for repository setup
+  when:
+    - docker_network_access | bool
   become: true
   ansible.builtin.package:
     name: "{{ item }}"
@@ -28,29 +30,27 @@
   loop: "{{ docker_repository_related_packages[_docker_os_dist_file_varity] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
-  when:
-    - docker_network_access | bool
 
 - name: Add Docker official GPG key
+  when:
+    - docker_network_access | bool
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 14) or
+      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7)
   become: true
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/{{ _docker_os_dist | lower }}/gpg
     state: present
   register: _pkg_result
   until: _pkg_result is succeeded
-  when:
-    - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 14) or
-      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7)
 
 - name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
-  become: true
-  ansible.builtin.shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
-  changed_when: false
   when:
     - docker_network_access | bool
     - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 14) or
       (_docker_os_dist == "Debian" and  _docker_os_dist_major_version | int == 7)
+  become: true
+  ansible.builtin.shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+  changed_when: false
   tags:
     - skip_ansible_lint
 

@@ -93,9 +93,12 @@ if File.exist?(testcase_file)
       machine.vm.box = "almalinux/9"
       machine.vm.box_check_update = true
       machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
-      machine.vbguest.auto_update = true
+      machine.vbguest.auto_update = false
       machine.vbguest.no_remote = true
-      machine.vbguest.installer_hooks[:before_start] = ["dnf install -y kernel-devel"]
+      machine.vbguest.installer = VagrantVbguest::Installers::RedHat
+      machine.vbguest.installer_hooks[:before_install] = ["dnf install -y kernel-devel kernel-headers"]
+      # machine.vbguest.installer_hooks[:before_install] = ["dnf upgrade -y && dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)"]
+      machine.vbguest.installer_arguments = ['--nox11']
       machine.vm.synced_folder ".", "/vagrant", :mount_options => ["rw"]
       machine.vm.synced_folder "../", "/mnt/#{vagrant_config['role_dir']}", :mount_options => ["ro"]
       machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
@@ -114,11 +117,6 @@ if File.exist?(testcase_file)
         inline: "test -e /home/vagrant/.ssh/id_rsa || (mkdir -p /home/vagrant/.ssh && chmod 0700 /home/vagrant/.ssh && \
           curl -s https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant > /home/vagrant/.ssh/id_rsa && \
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
-
-      # machine.vm.provision "shell",
-      #   inline: "curl -L --output mitogen.tar.gz -q https://networkgenomics.com/try/mitogen-0.2.9.tar.gz \
-      #     && tar -zxf mitogen.tar.gz mitogen-0.2.9 \
-      #     && rm mitogen.tar.gz"
 
       machine.vm.provision "shell",
       inline: "dnf -y install epel-release && dnf -y install curl gcc libffi-devel openssl-devel python3-devel python3-setuptools haveged && \

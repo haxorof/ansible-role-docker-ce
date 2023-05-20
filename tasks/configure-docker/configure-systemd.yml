@@ -42,14 +42,14 @@
     docker_envs: "{{ _docker_service_envs }}"
 
 - name: Force daemon reload of systemd
+  when: _docker_systemd_docker_dropin is changed
   become: true
   ansible.builtin.systemd:
     daemon_reload: yes
-  when: _docker_systemd_docker_dropin is changed
   tags:
     - skip_ansible_lint
 
 - name: Docker daemon restart is required
+  when: (_docker_systemd_docker_dropin is changed) or (_docker_systemd_envs is changed)
   ansible.builtin.set_fact:
     _docker_restart_required: true
-  when: (_docker_systemd_docker_dropin is changed) or (_docker_systemd_envs is changed)

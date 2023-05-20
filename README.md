@@ -25,8 +25,8 @@ different distributions.
 ## Supported Distributions
 
 - AlmaLinux
-- CentOS 
-- CentOS Stream<sup>1</sup>
+- CentOS
+- CentOS Stream
 - Debian
 - Fedora
 - Linux Mint<sup>1</sup> (based on Ubuntu).
@@ -48,6 +48,13 @@ See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/mast
 For this role to support multiple Ansible versions it is not possible to avoid all Ansible deprecation warnings. Read Ansible documentation if you want to disable [deprecation warnings](http://docs.ansible.com/ansible/latest/reference_appendices/config.html#deprecation-warnings).
 
 This role tries to support the latest and previous major release of Ansible version. For supported Ansible versions see [here](https://docs.ansible.com/ansible/devel/reference_appendices/release_and_maintenance.html)
+
+### Ansible Collection Requirements
+
+If only ansible-core is installed these collections must also be installed for the role to work:
+
+- ansible.posix
+- community.general
 
 ## Requirements
 
@@ -176,10 +183,9 @@ Note! All distributions listed in test matrix below does not provided the latest
 | Suite | ID                     | Comment                                                                              |
 |-------|------------------------|--------------------------------------------------------------------------------------|
 | s-1   | t_config               |                                                                                      |
-| s-2   | t_channel              | Fail sometime since it might not be any nightly Docker CE build available            |
-| s-3   | t_postinstall          |                                                                                      |
-| s-4   | t_devicemapper_config  |                                                                                      |
-| s-5   | t_auditd               |                                                                                      |
+| s-2   | t_postinstall          |                                                                                      |
+| s-3   | t_devicemapper_config  |                                                                                      |
+| s-4   | t_auditd               |                                                                                      |
 
 ### Test Matrix
 
@@ -189,25 +195,25 @@ Note! All distributions listed in test matrix below does not provided the latest
 | :x: | At least one test failed |
 | :heavy_minus_sign: | No test done / Not yet tested |
 
-| #                  | s-1                | s-2                | s-3                | s-4                | s-5                | updated            |
-|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
-| almalinux/8        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| almalinux/9        | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-08-12         |
-| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| centos/stream8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/debian11   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/fedora34   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/fedora35   | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/fedora36   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
-| generic/rocky8     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/rocky9     | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2022-08-12         |
-| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/ubuntu2004 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-04-17         |
-| generic/ubuntu2204 | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-06-18         |
-| generic/rhel7      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19         |
-| generic/rhel8      | :heavy_check_mark: | :x:                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19         |
-| generic/rhel9      | :heavy_check_mark: | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2022-08-12         |
+| #                  | s-1                | s-2                | s-3                | s-4                | updated    |
+|--------------------|--------------------|--------------------|--------------------|--------------------|------------|
+| almalinux/8        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| almalinux/9        | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2023-05-18 |
+| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| centos/stream8     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| centos/stream9     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/debian11   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/fedora36   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| generic/fedora37   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| generic/rocky8     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/rocky9     | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2023-05-18 |
+| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/ubuntu2004 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/ubuntu2204 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/rhel7      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/rhel8      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/rhel9      | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2022-08-12 |
 
 ## License
 

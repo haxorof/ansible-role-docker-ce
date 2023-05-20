@@ -1,17 +1,18 @@
 ---
 - name: Ensure auditd is installed
+  when:
+    - docker_enable_audit | bool
+    - docker_network_access | bool
+    - _docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian"
   become: true
   ansible.builtin.package:
     name: auditd
     state: present
   register: _pkg_result
   until: _pkg_result is succeeded
-  when:
-    - docker_enable_audit | bool
-    - docker_network_access | bool
-    - _docker_os_dist == "Ubuntu" or _docker_os_dist == "Debian"
 
 - name: Copy Docker audit rules
+  when: docker_enable_audit | bool
   become: yes
   ansible.builtin.copy:
     src: files/etc/audit/rules.d/docker.rules
@@ -20,12 +21,11 @@
     group: root
     mode: 0644
   notify: Restart auditd
-  when: docker_enable_audit | bool
 
 - name: Ensure Docker audit rules are removed
+  when: not docker_enable_audit | bool
   become: yes
   ansible.builtin.file:
     path: /etc/audit/rules.d/docker.rules
     state: absent
   notify: Restart auditd
-  when: not docker_enable_audit | bool

@@ -7,12 +7,12 @@
   until: _pkg_result is succeeded
 
 - name: Create LVM volume group
+  when: pool.physical_volumes|default(None)
   become: true
   community.general.lvg:
     pvs: '{{ pool.physical_volumes }}'
     state: present
     vg: '{{ pool.volume_group }}'
-  when: pool.physical_volumes|default(None)
 
 - name: Check if data volume exists
   become: true
@@ -22,25 +22,26 @@
   register: _volume
 
 - name: Create data volume
+  when: not _volume.stat.exists
   become: true
   community.general.lvol:
     lv: '{{ pool.name }}'
     size: '{{ pool.data_size }}'
     vg: '{{ pool.volume_group }}'
   register: _datavolume_created
-  when: not _volume.stat.exists
 
 - name: Create meta data volume
+  when: _datavolume_created is changed
   become: true
   community.general.lvol:
     lv: '{{ pool.name }}meta'
     size: '{{ pool.metadata_size }}'
     vg: '{{ pool.volume_group }}'
-  when: _datavolume_created is changed
   tags:
     - skip_ansible_lint
 
 - name: Convert data volume to thinpool
+  when: _datavolume_created is changed
   become: true
   ansible.builtin.shell:
     lvconvert
@@ -49,6 +50,5 @@
         -c 512K
         --thinpool "{{ pool.volume_group }}/{{ pool.name }}"
         --poolmetadata "{{ pool.volume_group }}/{{ pool.name }}meta"
-  when: _datavolume_created is changed
   tags:
     - skip_ansible_lint

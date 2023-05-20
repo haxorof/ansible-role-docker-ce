@@ -34,15 +34,15 @@ boxes:
     box_url: vagrantup
     storage_ctl: IDE
     storage_port: 1
-    vbguest_update: true
+    vbguest_update: false
     reboot: false
-  # - # CentOS Stream 9
-  #   box: centos/stream9
-  #   box_url: vagrantup
-  #   storage_ctl: IDE
-  #   storage_port: 1
-  #   vbguest_update: true
-  #   reboot: false
+  - # CentOS Stream 9
+    box: centos/stream9
+    box_url: vagrantup
+    storage_ctl: IDE
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
     # Testing only supported releases: https://wiki.debian.org/LTS
     # and supported by Docker CE
   - # Buster
@@ -59,22 +59,15 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
+  # - # Bookworm
+  #   box: generic/debian12
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: false
   # Testing only supported releases: https://fedoraproject.org/wiki/End_of_life
   # and supported by Docker CE
-  - # F34
-    box: generic/fedora34
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: true
-  - # F35
-    box: generic/fedora35
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: true
   - # F36
     box: generic/fedora36
     box_url: vagrantup
@@ -82,6 +75,20 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: true
+  - # F37
+    box: generic/fedora37
+    box_url: vagrantup
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: true
+  # - # F38
+  #   box: generic/fedora38
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: true
   - # Rocky Linux 8
     box: generic/rocky8
     box_url: vagrantup
@@ -120,24 +127,24 @@ boxes:
     vbguest_update: false
     reboot: false
   # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
-  - # RHEL 7
-    box: generic/rhel7
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: true
-  - # RHEL 8
-    box: generic/rhel8
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: true
-  - # RHEL 9
-    box: generic/rhel9
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: true
+  # - # RHEL 7
+  #   box: generic/rhel7
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: true
+  # - # RHEL 8
+  #   box: generic/rhel8
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: true
+  # - # RHEL 9
+  #   box: generic/rhel9
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: true

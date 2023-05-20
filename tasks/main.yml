@@ -1,9 +1,9 @@
 ---
 - name: Collect distribution facts if not already done
+  when: not ansible_distribution_major_version is defined
   ansible.builtin.setup:
     gather_subset:
       - min
-  when: not ansible_distribution_major_version is defined
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Set distribution and python facts
@@ -18,30 +18,30 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Linux Mint
+  when: _docker_os_dist == "Linux Mint"
   ansible.builtin.set_fact:
     _docker_os_dist: "Ubuntu"
     _docker_os_dist_release: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].release }}"
     _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].major_version }}"
-  when: _docker_os_dist == "Linux Mint"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for CentOS Stream 8
-  ansible.builtin.set_fact:
-    _docker_os_dist_file_varity: "RedHat"
-  when: 
+  when:
     - _docker_os_dist == "CentOS"
     - _docker_os_dist_release == "Stream"
+  ansible.builtin.set_fact:
+    _docker_os_dist_file_varity: "RedHat"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Debian 10 (Buster) due to bug
-  ansible.builtin.set_fact:
-    _docker_os_dist: "Debian"
-    _docker_os_dist_release: "buster"
-    _docker_os_dist_major_version: 10
   when:
     - _docker_os_dist == "Debian"
     - _docker_os_dist_release == "buster" or (ansible_lsb is defined
       and ansible_lsb.codename is defined and ansible_lsb.codename == "buster")
+  ansible.builtin.set_fact:
+    _docker_os_dist: "Debian"
+    _docker_os_dist_release: "buster"
+    _docker_os_dist_major_version: 10
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: OS release info
@@ -58,18 +58,18 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print LSB information
+  when:
+    - ansible_lsb is defined
   ansible.builtin.debug:
     var: ansible_lsb
     verbosity: 1
-  when:
-    - ansible_lsb is defined
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Raspbian
-  ansible.builtin.set_fact:
-    _docker_os_arch: "armhf"
   when:
     - _docker_os_release_info.stdout is search('raspbian')
+  ansible.builtin.set_fact:
+    _docker_os_arch: "armhf"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reset role variables
@@ -86,8 +86,8 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Compatibility and distribution checks
-  ansible.builtin.include_tasks: checks.yml
   when: docker_do_checks | bool
+  ansible.builtin.include_tasks: checks.yml
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Gather the package facts
@@ -95,33 +95,33 @@
     manager: auto
 
 - name: Abort if podman is already installed
+  when: "'podman' in ansible_facts.packages"
   ansible.builtin.fail:
     msg: "Podman is already installed! If you want to use this role ensure you do not have any podman related packages installed!"
-  when: "'podman' in ansible_facts.packages"
 
 - name: Install and configure Docker CE
   when: not docker_remove | bool
   block:
     - name: Network access disabled
+      when: not docker_network_access | bool
       ansible.builtin.debug:
         msg: "Tasks requiring network access will be skipped!"
-      when: not docker_network_access | bool
 
     - name: Remove Docker versions before Docker CE
-      ansible.builtin.include_tasks: remove-pre-docker-ce.yml
       when:
         - docker_remove_pre_ce | bool
         - docker_network_access | bool
+      ansible.builtin.include_tasks: remove-pre-docker-ce.yml
       tags: ["install", "docker_install"]
 
     - name: Setup Docker package repositories
-      ansible.builtin.include_tasks: setup-repository.yml
       when: docker_setup_repos | bool
+      ansible.builtin.include_tasks: setup-repository.yml
       tags: ["install", "docker_install"]
 
     - name: Install Docker
-      ansible.builtin.include_tasks: install-docker.yml
       when: docker_network_access | bool
+      ansible.builtin.include_tasks: install-docker.yml
       tags: ["install", "docker_install"]
 
     - name: Configure audit logging
@@ -137,10 +137,12 @@
       tags: ["configure", "docker_configure"]
 
     - name: Postinstall tasks
+      when:
+        - docker_network_access | bool
+        - (docker_sdk | bool) or (docker_stack | bool) or (docker_compose | bool)
       ansible.builtin.include_tasks: postinstall.yml
-      when: docker_network_access | bool
       tags: ["install", "postinstall", "docker_install", "docker_postinstall"]
 
 - name: Remove Docker CE and related configuration
-  ansible.builtin.include_tasks: remove-docker.yml
   when: docker_remove | bool
+  ansible.builtin.include_tasks: remove-docker.yml

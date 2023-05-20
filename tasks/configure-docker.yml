@@ -15,12 +15,12 @@
     _docker_systemd_used: "{{ _determine_systemd_usage is defined and _determine_systemd_usage.stdout == 'systemd' }}"
 
 - name: Configure systemd service
-  ansible.builtin.include_tasks: configure-docker/configure-systemd.yml
   when: _docker_systemd_used | bool
+  ansible.builtin.include_tasks: configure-docker/configure-systemd.yml
 
 - name: Configure non-systemd service
-  ansible.builtin.include_tasks: configure-docker/configure-non-systemd.yml
   when: not _docker_systemd_used | bool
+  ansible.builtin.include_tasks: configure-docker/configure-non-systemd.yml
 
 - name: Ensure /etc/docker directory exists
   become: true
@@ -30,6 +30,7 @@
     mode: 0755
 
 - name: Configure Docker daemon (file)
+  when: docker_daemon_config_file is defined
   become: true
   ansible.builtin.copy:
     src: "{{ docker_daemon_config_file }}"
@@ -38,9 +39,11 @@
     group: root
     mode: 0644
   register: _docker_config_file
-  when: docker_daemon_config_file is defined
 
 - name: Configure Docker daemon (variables)
+  when:
+    - docker_daemon_config_file is not defined
+    - docker_daemon_config is defined
   become: true
   ansible.builtin.copy:
     content: "{{ docker_daemon_config | to_nice_json }}"
@@ -49,11 +52,13 @@
     group: root
     mode: 0644
   register: _docker_config_var
-  when:
-    - docker_daemon_config_file is not defined
-    - docker_daemon_config is defined
 
 - name: Ensure Docker default user namespace is defined in subuid and subgid
+  when: (_docker_os_dist == "CentOS" or _docker_os_dist == "RedHat") and
+        ((docker_daemon_config is defined and
+        docker_daemon_config['userns-remap'] is defined and
+        docker_daemon_config['userns-remap'] == 'default') or
+        docker_bug_usermod | bool)
   become: true
   ansible.builtin.lineinfile:
     path: "{{ item }}"
@@ -62,11 +67,6 @@
   loop:
     - /etc/subuid
     - /etc/subgid
-  when: (_docker_os_dist == "CentOS" or _docker_os_dist == "RedHat") and
-        ((docker_daemon_config is defined and
-        docker_daemon_config['userns-remap'] is defined and
-        docker_daemon_config['userns-remap'] == 'default') or
-        docker_bug_usermod | bool)
 
 - name: Ensure Docker users are added to the docker group
   become: true
@@ -90,13 +90,13 @@
       until: _pkg_result is succeeded
 
     - name: Ensure thin-provisioning-tools is installed
+      when: (_docker_os_dist == "Ubuntu" or (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7))
       become: true
       ansible.builtin.package:
         name: thin-provisioning-tools
         state: present
       register: _pkg_result
       until: _pkg_result is succeeded
-      when: (_docker_os_dist == "Ubuntu" or (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7))
 
 - name: Enable Docker service
   become: true
@@ -107,8 +107,6 @@
   register: _docker_service
 
 - name: Docker daemon restart is required
-  ansible.builtin.set_fact:
-    _docker_restart_required: true
   when: (
          _docker_service.status is defined
          and _docker_service.status.SubState is defined
@@ -117,18 +115,20 @@
           _docker_config_file is changed
           or _docker_config_var is changed
         )
+  ansible.builtin.set_fact:
+    _docker_restart_required: true
 
 - name: Install and configure Docker plugins
-  ansible.builtin.include_tasks: configure-docker/configure-docker-plugins.yml
   when: docker_plugins | length > 0
+  ansible.builtin.include_tasks: configure-docker/configure-docker-plugins.yml
 
 - name: Trigger restart of Docker daemon
+  when: _docker_restart_required | bool
   become: yes
   ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: restarted
-  when: _docker_restart_required | bool
 
 - name: Ensure Docker daemon is running
   become: yes

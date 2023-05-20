@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [5.0.0](../../releases/tag/5.0.0) - 2023-05-20
+
+### Changed
+
+- Docker Compose V1 is EOL and this role will no longer support that in general.
+- Changed name of `docker_compose_no_pip` to `docker_compose_pip`, default set to `false`.
+- `docker_compose` is `true` and `docker_compose_pip` is `false`, it will only create symbolic links (`docker-compose`) for backward compatibility. Docker compose CLI plugin is installed by default now.
+
+### Removed
+
+- Removed variables `docker_compose_no_pip_detect_version` and `docker_compose_no_pip_version`
+- Removed Debian 8 bug tweaks.
+
+### Internal
+
+- Updated Vagrantfile for testing to works with AlmaLinux 9 as controller.
+- Investigate impact of Docker Compose V2 ([#147](../../issues/147))
+
 ## [4.0.0](../../releases/tag/4.0.0) - 2022-12-05
 
 ### Changed

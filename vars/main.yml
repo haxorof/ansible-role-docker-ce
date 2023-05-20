@@ -36,6 +36,8 @@ docker_packages:
   - docker-ce-cli
   - docker-ce
   - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
 
 docker_os_pkg_version_separator:
   RedHat: "-"
@@ -107,3 +109,7 @@ docker_predefined_packages_pip:
     stack:
       - jsondiff
       - pyyaml
+
+docker_cli_plugins_dir:
+  RedHat: /usr/libexec/docker/cli-plugins
+  Debian: /usr/libexec/docker/cli-plugins

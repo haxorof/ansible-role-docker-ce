@@ -18,6 +18,6 @@
     docker_envs: "{{ _docker_service_envs }}"
 
 - name: Docker daemon restart is required
+  when: _docker_non_systemd_envs is changed
   ansible.builtin.set_fact:
     _docker_restart_required: true
-  when: _docker_non_systemd_envs is changed

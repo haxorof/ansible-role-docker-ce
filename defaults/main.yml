@@ -132,18 +132,12 @@ docker_do_checks: yes
 ################################################################################
 # Ensures dependencies are installed so that most of the 'docker' Ansible modules will work.
 docker_sdk: false
-# Ensures dependencies are installed so that 'docker_service' Ansible module will work.
+# Ensures docker-compose is installed or available in common paths (docker-compose-plugin installed by default).
 docker_compose: false
-# Ensures that docker-compose is installed without pip, meaning 'docker_service' will NOT work.
+# NOT RECOMMENDED to set this to true unless really necessary - Python package not updated since 2021.
+# Ensures dependencies are installed so that 'docker_service' Ansible module will work.
 # Important! This only has any affect when 'docker_compose' is set to true.
-docker_compose_no_pip: false
-# Uses GitHub API to lookup latest version of docker compose
-# Important! GitHub API has a rate limit and if that is exceeded value from variable
-# docker_compose_no_pip_version will be used instead.
-docker_compose_no_pip_detect_version: true
-# Docker compose version to use if no automatic lookup is used
-# Available versions: https://github.com/docker/compose/releases
-docker_compose_no_pip_version: 1.29.2
+docker_compose_pip: false
 # Ensures dependencies are installed so that 'docker_stack' Ansible module will work.
 docker_stack: false
 # Additional PiP packages to install after Docker is configured and started.

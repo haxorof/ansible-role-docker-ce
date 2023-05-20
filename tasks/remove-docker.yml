@@ -9,6 +9,8 @@
   ignore_errors: yes
 
 - name: Ensure Docker CE is removed (CentOS/Fedora/RedHat)
+  when: _docker_os_dist != "Ubuntu" and
+        _docker_os_dist != "Debian"
   become: yes
   ansible.builtin.package:
     name: "{{ item }}"
@@ -16,10 +18,10 @@
   loop: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
-  when: _docker_os_dist != "Ubuntu" and
-        _docker_os_dist != "Debian"
 
 - name: Ensure Docker CE is removed (Ubuntu/Debian)
+  when: _docker_os_dist == "Ubuntu" or
+        _docker_os_dist == "Debian"
   become: yes
   ansible.builtin.apt:
     name: "{{ item }}"
@@ -28,8 +30,6 @@
   loop: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
-  when: _docker_os_dist == "Ubuntu" or
-        _docker_os_dist == "Debian"
 
 - name: Remove network interface docker0
   become: yes
@@ -48,37 +48,37 @@
     - skip_ansible_lint
 
 - name: Clean yum cache (CentOS/RedHat 7)
+  when: (_docker_os_dist == "CentOS" and _docker_os_dist_major_version | int == 7) or
+        (_docker_os_dist == "RedHat" and _docker_os_dist_major_version | int == 7)
   become: yes
   ansible.builtin.command: yum clean all --enablerepo=\*
   changed_when: no
-  when: (_docker_os_dist == "CentOS" and _docker_os_dist_major_version | int == 7) or
-        (_docker_os_dist == "RedHat" and _docker_os_dist_major_version | int == 7)
 
 - name: Clean dnf cache (CentOS/Fedora/RedHat)
-  become: yes
-  ansible.builtin.command: dnf clean all --enablerepo=\*
-  changed_when: no
   when: _docker_os_dist == "Fedora" or
         (_docker_os_dist == "RedHat" and _docker_os_dist_major_version | int > 7) or
         (_docker_os_dist == "CentOS" and _docker_os_dist_major_version | int > 7)
+  become: yes
+  ansible.builtin.command: dnf clean all --enablerepo=\*
+  changed_when: no
 
 - name: Clean apt cache
+  when: _docker_os_dist == "Ubuntu" or
+        _docker_os_dist == "Debian"
   become: yes
   ansible.builtin.command: apt-get clean
   changed_when: no
-  when: _docker_os_dist == "Ubuntu" or
-        _docker_os_dist == "Debian"
   tags:
     - skip_ansible_lint
 
 - name: Remove repository docker specific repo file
+  when: _docker_os_dist != "Ubuntu" and
+        _docker_os_dist != "Debian"
   become: yes
   ansible.builtin.yum_repository:
     name: docker-ce
     file: docker-ce
     state: absent
-  when: _docker_os_dist != "Ubuntu" and
-        _docker_os_dist != "Debian"
 
 - name: Ensure Docker CE and configuration files are removed
   become: yes
@@ -100,6 +100,7 @@
     - /etc/apt/sources.list.d/docker-ce.list
 
 - name: Ensure additional files and data directories are removed
+  when: docker_remove_all | bool
   become: yes
   ansible.builtin.file:
     path: "{{ item }}"
@@ -119,9 +120,11 @@
     - /var/lib/yum/repos/x86_64/7/docker-ce-test-debuginfo
     - /var/lib/yum/repos/x86_64/7/docker-ce-test-source
     - "{{ docker_remove_additional }}"
-  when: docker_remove_all | bool
 
 - name: Find Docker related diretories in package cache (CentOS/Fedora/RHEL)
+  when: _docker_os_dist == "Fedora" or
+        _docker_os_dist == "CentOS" or
+        _docker_os_dist == "RedHat"
   become: yes
   ansible.builtin.find:
     paths: "{{ (_docker_os_dist_major_version | int > 7) | ternary('/var/cache/dnf', '/var/cache/yum') }}"
@@ -129,28 +132,25 @@
     recurse: yes
     patterns: "docker-ce*"
   register: _remove_cache_dirs
-  when: _docker_os_dist == "Fedora" or
-        _docker_os_dist == "CentOS" or
-        _docker_os_dist == "RedHat"
 
 - name: Remove dangeling files/directories in package cache
-  become: yes
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: absent
-  loop: "{{ _remove_cache_dirs.files }}"
   when:
     - _remove_cache_dirs.files is defined
     - _docker_os_dist == "Fedora" or
       _docker_os_dist == "CentOS" or
       _docker_os_dist == "RedHat"
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ _remove_cache_dirs.files }}"
 
 - name: Update repository cache
+  when: docker_network_access | bool
   become: true
   ansible.builtin.shell: "{{ docker_cmd_update_repo_cache[_docker_os_dist_file_varity] }}"
   changed_when: false
   register: _result
   until: _result is succeeded
-  when: docker_network_access | bool
   tags:
     - skip_ansible_lint

@@ -5,34 +5,34 @@
   check_mode: no
 
 - name: Ensure fs.may_detach_mounts is set to avoid 'Device or resource busy' (CentOS/RedHat)
+  when:
+    - docker_enable_mount_flag_fix | bool
+    - _may_detach_mounts.stat.exists
   become: true
   ansible.posix.sysctl:
     name: fs.may_detach_mounts
     value: "1"
     sysctl_file: /etc/sysctl.d/99-docker.conf
     reload: yes
-  when:
-    - docker_enable_mount_flag_fix | bool
-    - _may_detach_mounts.stat.exists
 
 - name: Stat /etc/sysctl.d/99-docker.conf (CentOS/RedHat)
+  when:
+    - not docker_enable_mount_flag_fix | bool
   ansible.builtin.stat:
     path: /etc/sysctl.d/99-docker.conf
   register: _sysctl_docker
   check_mode: no
-  when:
-    - not docker_enable_mount_flag_fix | bool
 
 - name: Unset fs.may_detach_mounts (CentOS/RedHat)
+  when:
+    - not docker_enable_mount_flag_fix | bool
+    - _sysctl_docker.stat.exists
   become: true
   ansible.posix.sysctl:
     name: fs.may_detach_mounts
     value: "0"
     sysctl_file: /etc/sysctl.d/99-docker.conf
     reload: yes
-  when:
-    - not docker_enable_mount_flag_fix | bool
-    - _sysctl_docker.stat.exists
 
 # Keep for compatibility reasons of this role. Now everything is in the same file.
 - name: Remove systemd drop-in for Docker Mount Flags slave configuration (CentOS/RedHat)
@@ -43,16 +43,16 @@
   register: _docker_old_mountflag_fix
 
 - name: Docker daemon restart is required
+  when: _docker_old_mountflag_fix is changed
   ansible.builtin.set_fact:
     _docker_restart_required: true
-  when: _docker_old_mountflag_fix is changed
 
 - name: Set MountFlags option to "slave" to prevent "device busy" errors on CentOS/RedHat 7.3 kernels (CentOS/RedHat)
+  when:
+    - docker_enable_mount_flag_fix | bool
   ansible.builtin.set_fact:
     _docker_systemd_service_config_tweaks: "{{ _docker_systemd_service_config_tweaks + \
       _systemd_service_config_tweaks }}"
   vars:
     _systemd_service_config_tweaks:
       - 'MountFlags=slave'
-  when:
-    - docker_enable_mount_flag_fix | bool

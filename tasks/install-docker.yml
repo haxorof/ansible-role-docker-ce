@@ -1,44 +1,44 @@
 ---
 - name: Set version string
+  when: docker_version | length > 0
   ansible.builtin.set_fact:
     _docker_version_string: "{{ docker_os_pkg_version_separator[_docker_os_dist_file_varity] }}{{ docker_version }}"
-  when: docker_version | length > 0
 
 - name: Set packages state to latest
+  when: docker_latest_version | bool and docker_version | length == 0
   ansible.builtin.set_fact:
     _docker_pkg_state: "latest"
-  when: docker_latest_version | bool and docker_version | length == 0
 
 - name: Filter out packages to match older Docker CE versions
-  ansible.builtin.set_fact:
-    _docker_packages:
-      - docker-ce
   when:
     - docker_version | length > 0
     - docker_version is match('17.') or docker_version is match('18.03') or docker_version is match('18.06')
-
-- name: Ensure some kind of compatibility for no longer officially supported distributions since Docker CE 18.09
   ansible.builtin.set_fact:
     _docker_packages:
       - docker-ce
+
+- name: Ensure some kind of compatibility for no longer officially supported distributions since Docker CE 18.09
   when:
     - _docker_packages is not defined
     - (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int < 9) or
       (_docker_os_dist == "Fedora" and _docker_os_dist_major_version | int < 27) or
       (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 16) or
       (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 17)
-
-- name: Do workaround to handle CentOS/RHEL 8 installation issues
   ansible.builtin.set_fact:
     _docker_packages:
-      - "{{ docker_x_redhat_centos_8_containerd_rpm }}"
-      - docker-ce-cli
       - docker-ce
+
+- name: Do workaround to handle CentOS/RHEL 8 installation issues
   when:
     - _docker_packages is not defined
     - docker_x_redhat_centos_8_workaround | bool
     - _docker_os_dist == "CentOS" or _docker_os_dist == "RedHat"
     - _docker_os_dist_major_version | int > 7
+  ansible.builtin.set_fact:
+    _docker_packages:
+      - "{{ docker_x_redhat_centos_8_containerd_rpm }}"
+      - docker-ce-cli
+      - docker-ce
 
 - name: Ensure Docker CE is installed
   become: true
@@ -51,6 +51,6 @@
   until: _docker_pkg_result is succeeded
 
 - name: Docker daemon restart is required
+  when: _docker_pkg_result is changed
   ansible.builtin.set_fact:
     _docker_restart_required: true
-  when: _docker_pkg_result is changed

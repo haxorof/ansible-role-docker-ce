@@ -42,6 +42,9 @@
     _updated_item: "{ 'authorization-plugins': {{ _authz_plugins | list }} }"
 
 - name: Update Docker daemon (variables)
+  when:
+    - docker_daemon_config_file is not defined
+    - docker_daemon_config is defined
   become: yes
   ansible.builtin.copy:
     content: "{{ _docker_daemon_config | to_nice_json }}"
@@ -50,11 +53,8 @@
     group: root
     mode: 0644
   register: _docker_config_var_plugin
-  when:
-    - docker_daemon_config_file is not defined
-    - docker_daemon_config is defined
 
 - name: Docker daemon restart is required
+  when: _docker_config_var_plugin is changed
   ansible.builtin.set_fact:
     _docker_restart_required: true
-  when: _docker_config_var_plugin is changed
