@@ -29,7 +29,6 @@ galaxy_info:
       - bionic
       - focal
       - jammy
-      - lunar
 
   galaxy_tags:
     - docker
