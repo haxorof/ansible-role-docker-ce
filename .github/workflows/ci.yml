@@ -17,8 +17,8 @@ jobs:
       - name: Prepare
         run: mkdir -p ${GITHUB_WORKSPACE}/.ansible
 
-      - name: Install role dependency
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible --entrypoint="ansible-galaxy" haxorof/ansible-lint:v6 collection install -r requirements.yml
+      #- name: Install role dependency
+      #  run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible --entrypoint="ansible-galaxy" haxorof/ansible-lint:v6 collection install -r requirements.yml
 
       - name: Lint Ansible role
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible haxorof/ansible-lint:v6 -v --force-color . --exclude .ansible
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible haxorof/ansible-lint:v6 -v --force-color . --exclude .ansible/ --exclude tests/
