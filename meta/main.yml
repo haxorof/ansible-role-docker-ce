@@ -3,15 +3,15 @@ galaxy_info:
   namespace: haxorof
   author: Bjorn Oscarsson
   company: none
-  description: "Installs and configures Docker Community Edition (CE)"
+  description: "Installs and configures Docker Community Edition (CE) on AlmaLinux/Rocky/CentOS/Fedora/RHEL/Ubuntu/Debian/Mint/Raspbian"
   min_ansible_version: "2.12"
   license: MIT
   platforms:
   - name: Fedora
     versions:
-      - "34"
-      - "35"
       - "36"
+      - "37"
+      - "38"
 
   - name: EL
     versions:
@@ -29,6 +29,7 @@ galaxy_info:
       - bionic
       - focal
       - jammy
+      - lunar
 
   galaxy_tags:
     - docker
