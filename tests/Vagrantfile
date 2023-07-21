@@ -95,7 +95,7 @@ if File.exist?(testcase_file)
       machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
       machine.vbguest.auto_update = false
       machine.vbguest.no_remote = true
-      machine.vbguest.installer = VagrantVbguest::Installers::RedHat
+      machine.vbguest.installer = "VagrantVbguest::Installers::RedHat"
       machine.vbguest.installer_hooks[:before_install] = ["dnf install -y kernel-devel kernel-headers"]
       # machine.vbguest.installer_hooks[:before_install] = ["dnf upgrade -y && dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)"]
       machine.vbguest.installer_arguments = ['--nox11']

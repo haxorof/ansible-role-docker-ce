@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- Changed order of installing additional pip packages ([#166](../../issues/166))
+
 ## [5.0.0](../../releases/tag/5.0.0) - 2023-05-20
 
 ### Changed
