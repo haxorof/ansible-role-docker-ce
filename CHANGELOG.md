@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+### Fixed
+
+- docker_version does not work as expected ([#168](../../issues/168))
+
 ## [5.0.1](../../releases/tag/5.0.1) - 2023-07-30
 
 ### Fixed
