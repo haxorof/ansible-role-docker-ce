@@ -2,15 +2,18 @@
 
 **IMPORTANT!** Even if this role does not list support for some distribution versions it might still work.
 
-[![Ansible Role](https://img.shields.io/ansible/role/12110)]([https://galaxy.ansible.com/haxorof/docker_ce/](https://galaxy.ansible.com/ui/standalone/roles/haxorof/docker_ce/))
 [![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce)](https://github.com/haxorof/ansible-role-docker-ce)
-[![Downloads](https://img.shields.io/ansible/role/d/12110)]([https://galaxy.ansible.com/haxorof/docker_ce/](https://galaxy.ansible.com/ui/standalone/roles/haxorof/docker_ce/))
+[![Ansible Role](https://img.shields.io/ansible/role/d/haxorof/docker_ce)]([https://galaxy.ansible.com/haxorof/docker_ce/](https://galaxy.ansible.com/ui/standalone/roles/haxorof/docker_ce/))
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
 [![Build Status](https://github.com/haxorof/ansible-role-docker-ce/workflows/CI/badge.svg?branch=master)](https://github.com/haxorof/ansible-role-docker-ce/actions?query=workflow%3ACI)
 
 This Ansible role installs and configures Docker CE (Community Edition) on several different Linux distributions. The goal is to let the
 user of this role to just care about how Docker shall be installed and configured and hide the differences that exists in the
 different distributions.
+
+```text
+ansible-galaxy role install haxorof.docker_ce
+```
 
 ## Features
 
