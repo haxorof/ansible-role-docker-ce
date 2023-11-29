@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [5.0.3](../../releases/tag/5.0.2) - 2023-11-29
+
 ### Fixed
 
 - Interpolation to determine channel does not work in ansible-core 2.16 ([#169](../../issues/169))
