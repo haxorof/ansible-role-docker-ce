@@ -7,6 +7,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: ansible-galaxy version
+        run: ansible-galaxy --version
+
       - name: Import role
         run: ansible-galaxy role import --api-key ${ANSIBLE_GALAXY_API_KEY} ${GITHUB_REPOSITORY%/*} ${GITHUB_REPOSITORY#*/}
         env:
