@@ -45,6 +45,9 @@
   ansible.builtin.package:
     name: "{{ (item is search('docker-ce')) | ternary((item + _docker_version_string | default('')), item) }}"
     state: "{{ _docker_pkg_state | default('present') }}"
+    allow_unauthenticated: "{{ allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    disable_gpg_check: "{{ disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
+
   loop: "{{ _docker_packages | default(docker_packages) }}"
   register: _docker_pkg_result
   retries: 6

@@ -183,3 +183,6 @@ docker_remove_all: false
 # Additional files or directories to be remove if for example non-standard locations
 # was previously configured for data storage etc.
 docker_remove_additional: []
+# It bypasses GPG keys checking for package manager
+allow_unauthenticated: no
+disable_gpg_check: no

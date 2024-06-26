@@ -8,6 +8,8 @@
   ansible.builtin.package:
     name: auditd
     state: present
+    allow_unauthenticated: "{{ allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    disable_gpg_check: "{{ disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
   register: _pkg_result
   until: _pkg_result is succeeded
 

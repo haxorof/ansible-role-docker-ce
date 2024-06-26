@@ -5,6 +5,7 @@
     msg: "Distribution {{ _docker_os_dist }} is not supported by this role!"
   vars:
     _supported_distributions:
+      - CloudLinux
       - AlmaLinux
       - CentOS
       - Debian

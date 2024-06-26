@@ -15,6 +15,7 @@
         yum:
           name: "{{ item }}"
           update_cache: yes
+          disable_gpg_check: "{{ disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
         loop:
           - kata-runtime
           - kata-proxy

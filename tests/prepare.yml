@@ -36,6 +36,8 @@
       package:
         name: git
         state: present
+        allow_unauthenticated: "{{ allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+        disable_gpg_check: "{{ disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
       when: docker_bench_security is defined
 
     - name: Ensure Docker Bench Security is cloned

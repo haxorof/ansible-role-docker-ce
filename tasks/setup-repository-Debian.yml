@@ -7,6 +7,7 @@
       become: true
       ansible.builtin.apt:
         update_cache: yes
+        allow_unauthenticated: "{{ allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
       changed_when: false
       register: _pkg_result
       until: _pkg_result is succeeded
@@ -27,6 +28,8 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
+    allow_unauthenticated: "{{ allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    disable_gpg_check: "{{ disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
   loop: "{{ docker_repository_related_packages[_docker_os_dist_file_varity] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
