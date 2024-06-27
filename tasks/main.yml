@@ -29,6 +29,7 @@
   when:
     - _docker_os_dist == "CentOS"
     - _docker_os_dist_release == "Stream"
+    - _docker_os_dist == "Amazon"
   ansible.builtin.set_fact:
     _docker_os_dist_file_varity: "RedHat"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
