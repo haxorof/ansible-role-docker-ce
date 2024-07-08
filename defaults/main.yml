@@ -36,6 +36,10 @@ docker_users: []
 #     args: opa-args="-policy-file /opa/policies/authz.rego"
 docker_plugins: []
 
+# Bypass package manager GPG key verification
+docker_allow_unauthenticated: no
+docker_disable_gpg_check: no
+
 # Setup Docker CE apt/dnf/yum repos or assume it has already been done
 docker_setup_repos: true
 # Repositories required to be enabled or disabled on RHEL
@@ -183,6 +187,3 @@ docker_remove_all: false
 # Additional files or directories to be remove if for example non-standard locations
 # was previously configured for data storage etc.
 docker_remove_additional: []
-# It bypasses GPG keys checking for package manager
-docker_allow_unauthenticated: no
-docker_disable_gpg_check: no

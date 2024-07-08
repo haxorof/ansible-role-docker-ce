@@ -8,7 +8,7 @@
   gather_facts: no
   tasks:
     - name: OS release info
-      raw: cat /etc/os-release
+      ansible.builtin.raw: cat /etc/os-release
       check_mode: no
       changed_when: no
       register: _os_release_info
@@ -20,7 +20,7 @@
     # Ubuntu Trusty does not have a Python 3 which version is high enough for Ansible
     # Debian Buster fails with APT repository
     - name: Detect existing Python version to use (all)
-      raw: (type python3 2>/dev/null || type python2 2>/dev/null || type python 2>/dev/null || type /usr/libexec/platform-python 2>/dev/null) | cut -d' ' -f3
+      ansible.builtin.raw: (type python3 2>/dev/null || type python2 2>/dev/null || type python 2>/dev/null || type /usr/libexec/platform-python 2>/dev/null) | cut -d' ' -f3
       changed_when: no
       register: _distribution_interpreter
       when:
@@ -28,21 +28,21 @@
         - not _os_release_info.stdout is search('buster')
 
     - name: Set fact for Ansible interpreter
-      set_fact:
+      ansible.builtin.set_fact:
         ansible_python_interpreter: "{{ _distribution_interpreter.stdout_lines|join('') }}"
       when:
         - _distribution_interpreter is defined
         - _distribution_interpreter.stdout_lines is defined
 
     - name: Detect existing Python version to use (only 2)
-      raw: (type python2 2>/dev/null || type python 2>/dev/null) | cut -d' ' -f3
+      ansible.builtin.raw: (type python2 2>/dev/null || type python 2>/dev/null) | cut -d' ' -f3
       changed_when: no
       register: _distribution_interpreter
       when:
         - _os_release_info.stdout is search('Trusty') or _os_release_info.stdout is search('buster')
 
     - name: Set fact for Ansible interpreter
-      set_fact:
+      ansible.builtin.set_fact:
         ansible_python_interpreter: "{{ _distribution_interpreter.stdout_lines|join('') }}"
       when:
         - _distribution_interpreter is defined
@@ -50,5 +50,5 @@
 
     - name: Print Python interpreter
       become: yes
-      debug:
+      ansible.builtin.debug:
         var: ansible_python_interpreter

@@ -1,41 +1,30 @@
 # Regression tests are run using minimum supported Ansible version
 # https://docs.ansible.com/ansible/devel/reference_appendices/release_and_maintenance.html
-ansible_version: "5.10.0"
-#ansible_version: "7.0.0"
+ansible_version: "9.7.0"
+# Dropped support for Python 2.7 in 10 and later
+# ansible_version: "10.1.0"
 galaxy_role_name: haxorof.docker_ce
 role_dir: ansible-role-docker-ce
 
 boxes:
   - # AlmaLinux 8
-    box: almalinux/8
+    #box: almalinux/8
+    box: generic/alma8
     box_url: vagrantup
     storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
   - # AlmaLinux 9
-    box: almalinux/9
+    #box: almalinux/9
+    box: generic/alma9
     box_url: vagrantup
     storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: false
-  # Testing only supported releases: https://www.centosblog.com/centos-eol-dates/
+  # Testing only supported releases: https://endoflife.date/centos-stream
   # and supported by Docker CE
-  - # CentOS 7
-    box: generic/centos7
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
-  - # CentOS Stream 8
-    box: centos/stream8
-    box_url: vagrantup
-    storage_ctl: IDE
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
   - # CentOS Stream 9
     box: centos/stream9
     box_url: vagrantup
@@ -43,15 +32,8 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-    # Testing only supported releases: https://wiki.debian.org/LTS
+    # Testing only supported releases: https://endoflife.date/debian / https://wiki.debian.org/LTS
     # and supported by Docker CE
-  - # Buster
-    box: generic/debian10
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
   - # Bullseye
     box: generic/debian11
     box_url: vagrantup
@@ -59,36 +41,29 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-  # - # Bookworm
-  #   box: generic/debian12
-  #   box_url: vagrantup
-  #   storage_ctl: SATA Controller
-  #   storage_port: 1
-  #   vbguest_update: false
-  #   reboot: false
-  # Testing only supported releases: https://fedoraproject.org/wiki/End_of_life
+  - # Bookworm
+    box: generic/debian12
+    box_url: vagrantup
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
+  # Testing only supported releases: https://endoflife.date/fedora / https://fedoraproject.org/wiki/End_of_life
   # and supported by Docker CE
-  - # F36
-    box: generic/fedora36
+  - # F39
+    box: generic/fedora39
     box_url: vagrantup
     storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
-  - # F37
-    box: generic/fedora37
+  - # F40
+    box: generic/fedora40
     box_url: vagrantup
     storage_ctl: SATA Controller
     storage_port: 1
     vbguest_update: false
     reboot: true
-  # - # F38
-  #   box: generic/fedora38
-  #   box_url: vagrantup
-  #   storage_ctl: SATA Controller
-  #   storage_port: 1
-  #   vbguest_update: false
-  #   reboot: true
   - # Rocky Linux 8
     box: generic/rocky8
     box_url: vagrantup
@@ -103,15 +78,8 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-  # Testing only supported LTS releases: https://wiki.ubuntu.com/Releases
+  # Testing only supported LTS releases: https://endoflife.date/ubuntu / https://wiki.ubuntu.com/Releases
   # and supported by Docker CE
-  - # Bionic Beaver
-    box: generic/ubuntu1804
-    box_url: vagrantup
-    storage_ctl: SATA Controller
-    storage_port: 1
-    vbguest_update: false
-    reboot: false
   - # Focal Fossa
     box: generic/ubuntu2004
     box_url: vagrantup
@@ -126,14 +94,28 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-  # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
-  # - # RHEL 7
-  #   box: generic/rhel7
+  - # Noble Numbat
+    box: generic/ubuntu2404
+    box_url: vagrantup
+    storage_ctl: SATA Controller
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
+  # - # Amazon Linux 2023
+  #   box: gbailey/al2023
   #   box_url: vagrantup
-  #   storage_ctl: SATA Controller
+  #   storage_ctl: SATA
   #   storage_port: 1
   #   vbguest_update: false
-  #   reboot: true
+  #   reboot: false
+  # - # Amazon Linux 2 (Max ansible-core 2.16 (ansible < 10.0.0) on controller since it still supporting Python 2.7)
+  #   box: gbailey/amzn2
+  #   box_url: vagrantup
+  #   storage_ctl: SATA
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: false
+  # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
   # - # RHEL 8
   #   box: generic/rhel8
   #   box_url: vagrantup
@@ -148,3 +130,19 @@ boxes:
   #   storage_port: 1
   #   vbguest_update: false
   #   reboot: true
+
+  # Not support by this role
+  # - # Oracle Linux 7
+  #   box: generic/oracle7
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: false
+  # - # Oracle Linux 8
+  #   box: generic/oracle8
+  #   box_url: vagrantup
+  #   storage_ctl: SATA Controller
+  #   storage_port: 1
+  #   vbguest_update: false
+  #   reboot: false

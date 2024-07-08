@@ -26,7 +26,11 @@ ansible-galaxy role install haxorof.docker_ce
 
 ## Supported Distributions
 
+Note! Distributions below having only Python 2.7 only works with Ansible below version 10.0.0 (or below ansible-core 2.17).
+This is because support for Python 2.7 was dropped in Ansible 10.0.0 (ansible-core 2.17).
+
 - AlmaLinux
+- Amazon Linux
 - CentOS
 - CentOS Stream
 - Debian
@@ -45,7 +49,7 @@ See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/mast
 
 ## Ansible Compatibility
 
-- ansible `5.0.0` or later (ansible-core `2.12` or later)
+- ansible `9.0.0` or later (ansible-core `2.16` or later)
 
 For this role to support multiple Ansible versions it is not possible to avoid all Ansible deprecation warnings. Read Ansible documentation if you want to disable [deprecation warnings](http://docs.ansible.com/ansible/latest/reference_appendices/config.html#deprecation-warnings).
 

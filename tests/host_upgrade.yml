@@ -3,7 +3,7 @@
   tasks:
     - name: Upgrade all packages (RedHat)
       become: true
-      package:
+      ansible.builtin.package:
         name: "*"
         state: latest
         allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"

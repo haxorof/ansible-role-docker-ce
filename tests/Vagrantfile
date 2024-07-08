@@ -90,7 +90,7 @@ if File.exist?(testcase_file)
     end
 
     config.vm.define 'controller', primary: true do |machine|
-      machine.vm.box = "almalinux/9"
+      machine.vm.box = "generic/alma9"
       machine.vm.box_check_update = true
       machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
       machine.vbguest.auto_update = false
@@ -119,8 +119,8 @@ if File.exist?(testcase_file)
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
 
       machine.vm.provision "shell",
-      inline: "dnf -y install epel-release && dnf -y install curl gcc libffi-devel openssl-devel python3-devel python3-setuptools haveged && \
-        pip install ansible==#{vagrant_config['ansible_version']}"
+      inline: "dnf -y install epel-release && dnf -y install curl gcc libffi-devel openssl-devel python3-devel python3-setuptools python3.11-pip python3.11-devel python3.11-setuptools haveged && \
+        pip3.11 install ansible==#{vagrant_config['ansible_version']}"
 
       # Prepare
       machine.vm.provision "ansible_local" do |ansible|

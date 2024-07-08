@@ -25,16 +25,10 @@
     _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].major_version }}"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Reinterpret distribution facts for CentOS Stream 8
-  when:
-    - _docker_os_dist == "CentOS"
-    - _docker_os_dist_release == "Stream"
-  ansible.builtin.set_fact:
-    _docker_os_dist_file_varity: "RedHat"
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
-
-- name: Reinterpret distribution facts for Amazon Linux
-  when: _docker_os_dist == "Amazon"
+- name: Reinterpret distribution file varity to RedHat
+  when: >
+     (_docker_os_dist == "CentOS" and _docker_os_dist_release == "Stream") or
+     _docker_os_dist == "Amazon"
   ansible.builtin.set_fact:
     _docker_os_dist_file_varity: "RedHat"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
@@ -53,23 +47,30 @@
 - name: Check if /etc/os-release exists
   stat:
     path: /etc/os-release
-  register: _os_release
+  register: _docker_os_release_file_check
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: OS release info
-  when: _os_release.stat.exists
-  ansible.builtin.raw: cat /etc/os-release
-  check_mode: no
-  changed_when: no
-  register: _docker_os_release_info
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
+- name: Print /etc/os-release information and use it for reinterpretation
+  when: _docker_os_release_file_check.stat.exists
+  block:
+    - name: OS release info
+      ansible.builtin.raw: cat /etc/os-release
+      check_mode: no
+      changed_when: no
+      register: _docker_os_release_info
+      tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Print OS release information
-  when: _os_release.stat.exists
-  ansible.builtin.debug:
-    var: _docker_os_release_info
-    verbosity: 1
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
+    - name: Print OS release information
+      ansible.builtin.debug:
+        var: _docker_os_release_info
+        verbosity: 1
+      tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
+
+    - name: Reinterpret distribution facts for Raspbian
+      when: _docker_os_release_info.stdout is search('raspbian')
+      ansible.builtin.set_fact:
+        _docker_os_arch: "armhf"
+      tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print LSB information
   when:
@@ -79,12 +80,6 @@
     verbosity: 1
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Reinterpret distribution facts for Raspbian
-  when: _os_release.stat.exists and _docker_os_release_info.stdout is search('raspbian')
-  ansible.builtin.set_fact:
-    _docker_os_arch: "armhf"
-  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
-
 - name: Reset role variables
   ansible.builtin.set_fact:
     _docker_systemd_service_config_tweaks: []
@@ -92,10 +87,9 @@
     _docker_restart_required: false
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
-- name: Print interpreted distribution information
+- name: Print reinterpreted distribution information
   ansible.builtin.debug:
-    msg: "distribution={{ _docker_os_dist }}, release={{ _docker_os_dist_release }}, major_version={{ _docker_os_dist_major_version }}"
-    verbosity: 1
+    msg: "distribution={{ _docker_os_dist }}, release={{ _docker_os_dist_release }}, major_version={{ _docker_os_dist_major_version }}, file_variety={{ _docker_os_dist_file_varity }}"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Compatibility and distribution checks

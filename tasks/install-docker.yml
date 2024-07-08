@@ -28,10 +28,10 @@
     _docker_packages:
       - docker-ce
 
-- name: Ensure some kind of compatibility for no longer officially supported distributions since Docker CE 18.09
+- name: Handle Amazon Linux 2/2023 Docker package
   when:
     - _docker_packages is not defined
-    - (_docker_os_dist == "Amazon" and _docker_os_dist_major_version | int >= 2023)
+    - _docker_os_dist == "Amazon"
   ansible.builtin.set_fact:
     _docker_packages:
       - docker

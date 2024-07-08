@@ -11,29 +11,29 @@
 - hosts: test-host
   tasks:
     - name: Force all notified handlers to run at this point, not waiting for normal sync points
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
 
     - name: Print LSB information
-      debug:
+      ansible.builtin.debug:
         var: ansible_lsb
       when: ansible_lsb is defined
 
     - name: Print distribution
-      debug:
+      ansible.builtin.debug:
         msg: "{{ ansible_distribution}}, {{ ansible_distribution_release }}, {{ ansible_distribution_major_version }}"
 
     - name: Print Kernel version
-      debug:
+      ansible.builtin.debug:
         var: ansible_kernel
       when: ansible_kernel is defined
 
     - name: Print Ansible version
-      debug:
+      ansible.builtin.debug:
         var: ansible_version.full
 
     - name: Ensure git is installed
       become: true
-      package:
+      ansible.builtin.package:
         name: git
         state: present
         allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
@@ -41,7 +41,7 @@
       when: docker_bench_security is defined
 
     - name: Ensure Docker Bench Security is cloned
-      git:
+      ansible.builtin.git:
         repo: "https://github.com/docker/docker-bench-security.git"
         dest: /home/vagrant/docker-bench-security
         version: master
@@ -50,7 +50,7 @@
     # https://github.com/haxorof/ansible-role-docker-ce/issues/107
     - name: Turn off SELinux otherwise Docker fails to run hello-world when Docker is not configured with selinux
       become: yes
-      selinux:
+      ansible.posix.selinux:
         policy: targeted
         state: permissive
       when:
@@ -58,13 +58,13 @@
         - ansible_distribution_major_version | int == 28
 
     - name: Check that /etc/systemd/resolved.conf exists
-      stat:
+      ansible.builtin.stat:
         path: /etc/systemd/resolved.conf
       register: _resolved_exists
 
     - name: Turn off DNSSEC which can cause resolution problems during tests in Ubuntu
       become: yes
-      replace:
+      ansible.builtin.replace:
         path: /etc/systemd/resolved.conf
         regexp: '^DNSSEC=yes\s*$'
         replace: "DNSSEC=no"
@@ -73,7 +73,7 @@
 
     - name: Restart systemd-resolved
       become: yes
-      service:
+      ansible.builtin.service:
         name: systemd-resolved
         state: restarted
       when:
