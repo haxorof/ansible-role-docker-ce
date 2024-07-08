@@ -6,8 +6,6 @@
   vars:
     _supported_distributions:
       - Amazon
-      - OracleLinux
-      - CloudLinux
       - AlmaLinux
       - CentOS
       - Debian
