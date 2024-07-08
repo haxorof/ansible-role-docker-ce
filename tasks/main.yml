@@ -33,6 +33,12 @@
     _docker_os_dist_file_varity: "RedHat"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
+- name: Reinterpret distribution facts for Amazon Linux
+  when: _docker_os_dist == "Amazon"
+  ansible.builtin.set_fact:
+    _docker_os_dist_file_varity: "RedHat"
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
+
 - name: Reinterpret distribution facts for Debian 10 (Buster) due to bug
   when:
     - _docker_os_dist == "Debian"
@@ -44,7 +50,14 @@
     _docker_os_dist_major_version: 10
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
+- name: Check if /etc/os-release exists
+  stat:
+    path: /etc/os-release
+  register: _os_release
+  tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
+
 - name: OS release info
+  when: _os_release.stat.exists
   ansible.builtin.raw: cat /etc/os-release
   check_mode: no
   changed_when: no
@@ -52,6 +65,7 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Print OS release information
+  when: _os_release.stat.exists
   ansible.builtin.debug:
     var: _docker_os_release_info
     verbosity: 1
@@ -66,8 +80,7 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Raspbian
-  when:
-    - _docker_os_release_info.stdout is search('raspbian')
+  when: _os_release.stat.exists and _docker_os_release_info.stdout is search('raspbian')
   ansible.builtin.set_fact:
     _docker_os_arch: "armhf"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]

@@ -1,5 +1,6 @@
 ---
 - name: Include setup repository tasks for distribution variety {{ _docker_os_dist_file_varity }}
+  when: (_docker_os_dist == "Amazon" and _docker_os_dist_major_version | int < 2023) or _docker_os_dist != "Amazon"
   ansible.builtin.include_tasks: setup-repository-{{ _docker_os_dist_file_varity }}.yml
 
 - name: Update repository cache

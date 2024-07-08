@@ -90,6 +90,8 @@
   ansible.builtin.package:
     name: "epel-release"
     state: present
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
   register: _pkg_result
   until: _pkg_result is succeeded
 
@@ -99,6 +101,8 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
   loop: "{{ _docker_additional_packages_os }}"
   register: _pkg_result
   until: _pkg_result is succeeded

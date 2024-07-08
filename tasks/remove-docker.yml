@@ -15,6 +15,8 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: absent
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
   loop: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
@@ -27,6 +29,7 @@
     name: "{{ item }}"
     state: absent
     purge: yes
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
   loop: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
