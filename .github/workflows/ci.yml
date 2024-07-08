@@ -21,4 +21,4 @@ jobs:
         run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible --entrypoint="ansible-galaxy" haxorof/ansible-lint:v24-almalinux collection install -r requirements.yml
 
       - name: Lint Ansible role
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible haxorof/ansible-lint:v6 -v --force-color . --exclude .ansible/ --exclude tests/
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible haxorof/ansible-lint:v24-almalinux -v --force-color . --exclude .ansible/ --exclude tests/
