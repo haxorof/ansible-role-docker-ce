@@ -184,5 +184,5 @@ docker_remove_all: false
 # was previously configured for data storage etc.
 docker_remove_additional: []
 # It bypasses GPG keys checking for package manager
-allow_unauthenticated: no
-disable_gpg_check: no
+docker_allow_unauthenticated: no
+docker_disable_gpg_check: no
