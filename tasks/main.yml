@@ -45,7 +45,7 @@
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Check if /etc/os-release exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/os-release
   register: _docker_os_release_file_check
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
