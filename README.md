@@ -26,8 +26,7 @@ ansible-galaxy role install haxorof.docker_ce
 
 ## Supported Distributions
 
-*Note!* Distribution version below having only Python 2.7 only works with Ansible below version 10.0.0 (or below ansible-core 2.17).
-This is because support for Python 2.7 was dropped in Ansible 10.0.0 (ansible-core 2.17).
+*Note!* Some version(s) of distributions listed below only have Python 2.7 installed, these are only compatible with Ansible versions below 10.0.0 (or ansible-core versions below 2.17). This is because Python 2.7 support was dropped in Ansible 10.0.0 (ansible-core 2.17).
 
 - AlmaLinux<sup>1</sup>
 - Amazon Linux<sup>1</sup>
