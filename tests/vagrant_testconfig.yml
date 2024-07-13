@@ -101,20 +101,20 @@ boxes:
     storage_port: 1
     vbguest_update: false
     reboot: false
-  # - # Amazon Linux 2023
-  #   box: gbailey/al2023
-  #   box_url: vagrantup
-  #   storage_ctl: SATA
-  #   storage_port: 1
-  #   vbguest_update: false
-  #   reboot: false
+  - # Amazon Linux 2023
+    box: gbailey/al2023
+    box_url: vagrantup
+    storage_ctl: SATA
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
   # - # Amazon Linux 2 (Max ansible-core 2.16 (ansible < 10.0.0) on controller since it still supporting Python 2.7)
-  #   box: gbailey/amzn2
-  #   box_url: vagrantup
-  #   storage_ctl: SATA
-  #   storage_port: 1
-  #   vbguest_update: false
-  #   reboot: false
+    box: gbailey/amzn2
+    box_url: vagrantup
+    storage_ctl: SATA
+    storage_port: 1
+    vbguest_update: false
+    reboot: false
   # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
   # - # RHEL 8
   #   box: generic/rhel8
