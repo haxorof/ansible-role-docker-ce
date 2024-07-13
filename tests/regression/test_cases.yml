@@ -21,13 +21,6 @@ tests:
     #skip_boxes: rhel/8
     only_boxes: none
   -
-    id: t_devicemapper_config
-    name: Devicemapper configuration
-    prep_yml: prepare_storage.yml
-    test_yml: regression/test_config_devicemapper.yml
-    #skip_boxes: rhel/8
-    only_boxes: none
-  -
     id: t_auditd
     name: Auditd
     prep_yml: prepare.yml
