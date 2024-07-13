@@ -49,13 +49,6 @@ tests:
     skip_boxes: none
     only_boxes: none
   -
-    id: t_devicemapper_config_test
-    name: Devicemapper configuration (test channel)
-    prep_yml: prepare_storage.yml
-    test_yml: manual/test_config_devicemapper_test.yml
-    skip_boxes: none
-    only_boxes: none
-  -
     id: t_old_docker
     name: Old version of Docker
     prep_yml: prepare.yml
