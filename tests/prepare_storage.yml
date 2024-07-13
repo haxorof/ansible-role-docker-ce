@@ -11,8 +11,6 @@
       package:
         name: "{{ item }}"
         state: present
-        allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-        disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
       become: true
       loop:
         - parted
@@ -21,8 +19,6 @@
       package:
         name: e4fsprogs
         state: present
-        allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-        disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
       become: true
       when: ansible_distribution == "CentOS"
 
