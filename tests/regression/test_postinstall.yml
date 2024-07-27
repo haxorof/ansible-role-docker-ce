@@ -18,16 +18,6 @@
 
 - name: Test using PiP to install SDK, compose and stack
   hosts: test-host
-  pre_tasks:
-    - name: Remove previously installed docker-compose
-      become: true
-      file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - /usr/local/bin/docker-compose
-        - /usr/bin/docker-compose
-        - /usr/libexec/docker/cli-plugins/docker-compose
   tasks:
     - name: Install Docker SDK using PiP
       include_role:
@@ -36,8 +26,6 @@
         docker_users:
           - vagrant
         docker_sdk: true
-        docker_compose: true
-        docker_compose_pip: true
         docker_stack: true
 
 - name: Test docker modules
@@ -52,14 +40,14 @@
 
     - name: Test hello container
       become: no
-      docker_container:
+      community.docker.docker_container:
         name: hello
         image: hello-world
       ignore_errors: yes
 
     - name: Test hello service
       become: no
-      docker_compose:
+      community.docker.docker_compose_v2:
         project_name: hello
         definition:
           version: "3"
@@ -70,13 +58,13 @@
 
     - name: Test hello container with sudo
       become: yes
-      docker_container:
+      community.docker.docker_container:
         name: hello
         image: hello-world
 
     - name: Test hello service with sudo
       become: yes
-      docker_compose:
+      community.docker.docker_compose_v2:
         project_name: hello
         definition:
           version: "3"

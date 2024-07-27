@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added support for Amazon Linux [@palyla]
 - Added support to bypass package manager GPG key verification [@palyla]
 
+## Removed
+
+- Removed support for devicemapper since it was removed from Docker Engine v25.
+- Removed support to install Docker Compose via Pip.
+
 ## [5.1.0](../../releases/tag/5.1.0) - 2024-01-27
 
 ## Added
