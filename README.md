@@ -128,8 +128,7 @@ Following sub sections show different kind of examples to illustrate what this r
 
 ### On the road to CIS security compliant Docker engine installation
 
-This minimal example below show what kind of role configuration that is required to pass the [Docker bench](https://github.com/docker/docker-bench-security) checks.
-However this configuration setup devicemapper in a certain way which will create logical volumes for the containers. Simplest is to have at least 3 GB of free space available in the partition. Since Docker v17.06 it is possible to just set the storage option `dm.directlvm_device` to make Docker create the necessary volumes:
+This minimal example below show what kind of role configuration that is required to pass the [Docker bench](https://github.com/docker/docker-bench-security) checks:
 
 ```yaml
 - hosts: docker
@@ -191,8 +190,7 @@ Note! All distributions listed in test matrix below does not provided the latest
 |-------|------------------------|--------------------------------------------------------------------------------------|
 | s-1   | t_config               |                                                                                      |
 | s-2   | t_postinstall          |                                                                                      |
-| s-3   | t_devicemapper_config  |                                                                                      |
-| s-4   | t_auditd               |                                                                                      |
+| s-3   | t_auditd               |                                                                                      |
 
 ### Test Matrix
 
@@ -202,25 +200,25 @@ Note! All distributions listed in test matrix below does not provided the latest
 | :x: | At least one test failed |
 | :heavy_minus_sign: | No test done / Not yet tested |
 
-| #                  | s-1                | s-2                | s-3                | s-4                | updated    |
+| #                  | s-1                | s-2                | s-3                | updated    |
 |--------------------|--------------------|--------------------|--------------------|--------------------|------------|
-| almalinux/8        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| almalinux/9        | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2023-05-18 |
-| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| centos/stream8     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| centos/stream9     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/debian11   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/fedora36   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| generic/fedora37   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| generic/rocky8     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/rocky9     | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2023-05-18 |
-| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/ubuntu2004 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/ubuntu2204 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/rhel7      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/rhel8      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/rhel9      | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2022-08-12 |
+| almalinux/8        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| almalinux/9        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| centos/stream8     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| centos/stream9     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/debian11   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/fedora36   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| generic/fedora37   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
+| generic/rocky8     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/rocky9     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/ubuntu2004 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/ubuntu2204 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
+| generic/rhel7      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/rhel8      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
+| generic/rhel9      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-08-12 |
 
 ## License
 

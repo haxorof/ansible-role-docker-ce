@@ -11,13 +11,6 @@
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
       docker_predefined_packages_pip[_docker_os_dist_file_varity]['sdk'] }}"
 
-- name: Set facts to install Docker Compose
-  when:
-    - docker_compose | bool and docker_compose_pip | bool
-  ansible.builtin.set_fact:
-    _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[_docker_os_dist_file_varity]['compose'] }}"
-
 - name: Set facts to install Docker Stack dependencies ('docker_stack')
   when:
     - docker_stack | bool
@@ -227,7 +220,6 @@
 - name: Install docker compose downloaded from Github when Docker CLI plugin package is not available
   when:
     - docker_compose | bool
-    - not docker_compose_pip | bool
     - not 'docker-compose-plugin' in ansible_facts.packages
   block:
     # # Require Python library 'github3'
