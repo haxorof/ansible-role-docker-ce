@@ -46,17 +46,6 @@
   register: _pkg_result
   until: _pkg_result is succeeded
 
-- name: Add Docker APT key (alternative for older Ubuntu systems without SNI).
-  when:
-    - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 14) or
-      (_docker_os_dist == "Debian" and  _docker_os_dist_major_version | int == 7)
-  become: true
-  ansible.builtin.shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
-  changed_when: false
-  tags:
-    - skip_ansible_lint
-
 - name: Determine channels to be enabled and/or disabled
   ansible.builtin.set_fact:
     _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
