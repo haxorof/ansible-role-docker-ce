@@ -9,25 +9,6 @@
   ansible.builtin.set_fact:
     _docker_pkg_state: "latest"
 
-- name: Filter out packages to match older Docker CE versions
-  when:
-    - docker_version | length > 0
-    - docker_version is match('17.') or docker_version is match('18.03') or docker_version is match('18.06')
-  ansible.builtin.set_fact:
-    _docker_packages:
-      - docker-ce
-
-- name: Ensure some kind of compatibility for no longer officially supported distributions since Docker CE 18.09
-  when:
-    - _docker_packages is not defined
-    - (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int < 9) or
-      (_docker_os_dist == "Fedora" and _docker_os_dist_major_version | int < 27) or
-      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int < 16) or
-      (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int == 17)
-  ansible.builtin.set_fact:
-    _docker_packages:
-      - docker-ce
-
 - name: Handle Amazon Linux 2/2023 Docker package
   when:
     - _docker_packages is not defined
