@@ -76,6 +76,7 @@ docker_x_redhat_centos_8_containerd_rpm: https://download.docker.com/linux/cento
 docker_x_fix_centos_redhat_7_releasever: yes
 
 # Experimental - Linux Mint reinterpretation mapping
+# Mapping between Mint and Ubuntu release are found at: https://linuxmint.com/download_all.php
 docker_x_mint_ubuntu_mapping:
       18:
         release: "xenial"
@@ -89,6 +90,9 @@ docker_x_mint_ubuntu_mapping:
       21:
         release: "jammy"
         major_version: 22
+      22:
+        release: "noble"
+        major_version: 24
 
 # Change OS service manager. Can be used to work around issues related
 # to Ubuntu on WSL2 or similar.
