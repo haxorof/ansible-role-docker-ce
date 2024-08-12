@@ -259,7 +259,7 @@
         - _github_docker_compose.status == 200
         - _github_docker_compose.json is defined
 
-    - name: Install docker compose {{ _docker_compose_version }} (Linux)
+    - name: Install docker compose (Linux)
       when: _docker_compose_version is defined
       become: true
       ansible.builtin.get_url:
