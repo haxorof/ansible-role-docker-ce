@@ -14,23 +14,31 @@ source $SCRIPT_DIR/scripts/utils.sh.inc
 
 VagrantUp() {
   local _input=${1:-""}
-  Vagrant up $_input
+  if [[ "${SKIP_VAGRANT_CMD:-0}" == "0" ]]; then
+    Vagrant up $_input
+  fi
   return $?
 }
 
 VagrantHalt() {
-  Vagrant halt
+  if [[ "${SKIP_VAGRANT_CMD:-0}" == "0" ]]; then
+    Vagrant halt
+  fi
   return $?
 }
 
 VagrantProvision() {
-  Vagrant provision
+  if [[ "${SKIP_VAGRANT_CMD:-0}" == "0" ]]; then
+    Vagrant provision
+  fi
   return $?
 }
 
 VagrantDestroy() {
   local _id=${1:-""}
-  Vagrant destroy $_id -f
+  if [[ "${SKIP_VAGRANT_CMD:-0}" == "0" ]]; then
+    Vagrant destroy $_id -f
+  fi
   local _exitCode=$?
   if [[ "$_id" == "" ]]; then
     if [[ -f $VAGRANT_TESTCASE_FILE ]]; then

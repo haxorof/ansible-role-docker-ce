@@ -119,7 +119,7 @@ if File.exist?(testcase_file)
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
 
       machine.vm.provision "shell",
-      inline: "dnf -y install epel-release && dnf -y install curl gcc libffi-devel openssl-devel python3-devel python3-setuptools python3.11-pip python3.11-devel python3.11-setuptools haveged && \
+      inline: "dnf -y install epel-release && dnf -y install curl gcc libffi-devel openssl-devel python3-devel python3-setuptools python3.11-pip python3.11-devel python3.11-setuptools haveged sshpass && \
         pip3.11 install ansible==#{vagrant_config['ansible_version']}"
 
       # Prepare
