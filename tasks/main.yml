@@ -13,7 +13,6 @@
     _docker_os_dist_major_version: "{{ ansible_distribution_major_version }}"
     _docker_os_dist_file_varity: "{{ ansible_distribution_file_variety }}"
     _docker_os_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    _docker_os_dist_check: yes
     _docker_python3: "{{ ansible_python_version is version('3', '>=') }}"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
@@ -113,13 +112,6 @@
       when: not docker_network_access | bool
       ansible.builtin.debug:
         msg: "Tasks requiring network access will be skipped!"
-
-    - name: Remove Docker versions before Docker CE
-      when:
-        - docker_remove_pre_ce | bool
-        - docker_network_access | bool
-      ansible.builtin.include_tasks: remove-pre-docker-ce.yml
-      tags: ["install", "docker_install"]
 
     - name: Setup Docker package repositories
       when: docker_setup_repos | bool
