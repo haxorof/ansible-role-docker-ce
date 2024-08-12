@@ -9,14 +9,18 @@
     - docker_sdk | bool
   ansible.builtin.set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[_docker_os_dist_file_varity]['sdk'] }}"
+      (docker_predefined_packages_pip[_docker_os_dist_file_varity]['sdk'] | default([])) }}"
+    _docker_additional_packages_os: "{{ _docker_additional_packages_os + \
+      (docker_predefined_packages_os[_docker_os_dist_file_varity]['sdk'] | default([])) }}"
 
-- name: Set facts to install Docker Stack dependencies ('docker_stack')
+- name: Set facts to install Docker Stack dependencies
   when:
     - docker_stack | bool
   ansible.builtin.set_fact:
     _docker_additional_packages_pip: "{{ _docker_additional_packages_pip + \
-      docker_predefined_packages_pip[_docker_os_dist_file_varity]['stack'] }}"
+      (docker_predefined_packages_pip[_docker_os_dist_file_varity]['stack'] | default([])) }}"
+    _docker_additional_packages_os: "{{ _docker_additional_packages_os + \
+      (docker_predefined_packages_os[_docker_os_dist_file_varity]['stack'] | default([])) }}"
 
 - name: Set facts with additional package to be installed
   ansible.builtin.set_fact:
@@ -272,7 +276,6 @@
 - name: Create docker-compose symlinks for backward compatibility of this role
   when:
     - docker_compose | bool
-    - not docker_compose_pip | bool
   block:
     - name: Stat docker-compose
       ansible.builtin.stat:
