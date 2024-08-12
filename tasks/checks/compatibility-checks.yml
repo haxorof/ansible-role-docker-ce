@@ -12,3 +12,12 @@
       and `live-restore=true` (docker_daemon_config['live-restore']: true)
       triggers a bug (https://github.com/moby/moby/issues/35873). For now,
       don't use both.
+
+- name: Compatibility check - Fail if trying to install Docker SDK or Docker Stack in Amazon Linux
+  when:
+    - _docker_os_dist == "Amazon"
+    - (docker_sdk | bool) or (docker_stack | bool)
+  ansible.builtin.fail:
+    msg: >
+      Setting `docker_sdk` or `docker_stack` to true is not supported
+      by this role for Amazon Linux due to library dependency issues.
