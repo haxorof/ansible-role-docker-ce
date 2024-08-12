@@ -90,16 +90,16 @@ docker_python3_build_os_pkgs:
     - python3-devel
     - openssl-devel
 
-docker_predefined_packages_os: []
+docker_predefined_packages_os:
+  Debian:
+    sdk:
+      - python3-docker
+    stack:
+      - python3-jsondiff
+      - python3-yaml
 
 docker_predefined_packages_pip:
   RedHat:
-    sdk:
-      - docker{{'<5' if ansible_python_version is version('3', '<') }}
-    stack:
-      - jsondiff
-      - pyyaml
-  Debian:
     sdk:
       - docker{{'<5' if ansible_python_version is version('3', '<') }}
     stack:
