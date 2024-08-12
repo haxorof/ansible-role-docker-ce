@@ -11,11 +11,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added support for Amazon Linux [@palyla]
 - Added support to bypass package manager GPG key verification [@palyla]
+- Added Linux Mint 22 mapping
 
 ## Removed
 
 - Removed support for devicemapper since it was removed from Docker Engine v25.
 - Removed support to install Docker Compose via Pip.
+- Remove tasks which uninstalls Docker versions before Docker CE
+- Removed handling of old Ubuntu and Debian systems systems without SNI
+- Removed tasks to handle older Docker CE versions 17 and 18
+- Removed task related to compatibility for no longer officially supported distributions since Docker CE 18.09
 
 ## [5.1.0](../../releases/tag/5.1.0) - 2024-01-27
 

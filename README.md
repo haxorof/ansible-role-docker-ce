@@ -136,7 +136,7 @@ This minimal example below show what kind of role configuration that is required
     docker_plugins:
       - type: authz
         alias: opa-docker-authz
-        name: openpolicyagent/opa-docker-authz-v2:0.4
+        name: openpolicyagent/opa-docker-authz-v2:0.9
         args: opa-args="-policy-file /opa/policies/authz.rego"
     docker_enable_audit: yes
     docker_daemon_config:
@@ -182,8 +182,6 @@ Here is the latest test results of the automated test which is located in the te
 
 Note! All distributions listed in test matrix below does not provided the latest released Docker CE version.
 
-**Last run:** 2022-04-17 (Latest possible Docker CE release 20.10.14, Run with Ansible 4.10.0)
-
 ### Test Suites
 
 | Suite | ID                     | Comment                                                                              |
@@ -197,28 +195,27 @@ Note! All distributions listed in test matrix below does not provided the latest
 | Symbol | Definition |
 | --- | --- |
 | :heavy_check_mark: |  All tests passed |
-| :x: | At least one test failed |
+| :x: | At least one test failed / Not supported |
 | :heavy_minus_sign: | No test done / Not yet tested |
 
-| #                  | s-1                | s-2                | s-3                | updated    |
-|--------------------|--------------------|--------------------|--------------------|--------------------|------------|
-| almalinux/8        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| almalinux/9        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| centos/7           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| centos/stream8     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| centos/stream9     | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| generic/debian10   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/debian11   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/fedora36   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| generic/fedora37   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2023-05-18 |
-| generic/rocky8     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/rocky9     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/ubuntu1804 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/ubuntu2004 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/ubuntu2204 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2023-05-18 |
-| generic/rhel7      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/rhel8      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2021-06-19 |
-| generic/rhel9      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2022-08-12 |
+| #                 | s-1                | s-2                | s-3                | updated    |
+|-------------------|--------------------|--------------------|--------------------|------------|
+| AlmaLinux 8       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| AlmaLinux 9       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| Amazon Linux 2    | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2024-08-02 |
+| Amazon Linux 2023 | :heavy_check_mark: | :x:                | :heavy_check_mark: | 2024-08-02 |
+| CentOS Stream 9   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-08-02 |
+| Debian 11         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| Debian 12         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| Fedora 39         | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-08-02 |
+| Fedora 40         | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-08-02 |
+| Rocky Linux 8     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| Rocky Linux 9     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| Ubuntu 20.04      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| Ubuntu 22.04      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
+| Ubuntu 24.04      | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-08-02 |
+| RHEL 8            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-12 |
+| RHEL 9            | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-12 |
 
 ## License
 
