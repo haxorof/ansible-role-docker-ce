@@ -1,2 +1,2 @@
 controller ansible_connection=local
-test-host  ansible_ssh_host=192.168.56.21 ansible_user=vagrant
+test-host  ansible_ssh_host=192.168.56.21 ansible_user=vagrant ansible_ssh_pass=vagrant

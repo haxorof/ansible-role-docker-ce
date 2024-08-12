@@ -1,5 +1,5 @@
 ---
-- name: Test install of Docker compose not using PiP
+- name: Test install of Docker compose
   hosts: test-host
   vars:
     docker_compose: true
@@ -16,7 +16,7 @@
       shell: /usr/bin/docker-compose --version
       ignore_errors: yes
 
-- name: Test using PiP to install SDK, compose and stack
+- name: Test install Docker SDK and Docker Stack
   hosts: test-host
   tasks:
     - name: Install Docker SDK using PiP
@@ -50,7 +50,6 @@
       community.docker.docker_compose_v2:
         project_name: hello
         definition:
-          version: "3"
           services:
             hello:
               image: "hello-world"
@@ -67,7 +66,6 @@
       community.docker.docker_compose_v2:
         project_name: hello
         definition:
-          version: "3"
           services:
             hello:
               image: "hello-world"

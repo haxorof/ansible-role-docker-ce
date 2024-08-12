@@ -4,7 +4,7 @@ tests:
     name: Configurations
     prep_yml: prepare.yml
     test_yml: regression/test_config.yml
-    #skip_boxes: rhel/8
+    skip_boxes: none
     only_boxes: none
   # -
   #   id: t_channel
@@ -18,12 +18,13 @@ tests:
     name: Postinstall
     prep_yml: prepare.yml
     test_yml: regression/test_postinstall.yml
-    #skip_boxes: rhel/8
+    # gbailey is related to Amazon Linux boxes
+    skip_boxes: gbailey
     only_boxes: none
   -
     id: t_auditd
     name: Auditd
     prep_yml: prepare.yml
     test_yml: regression/test_auditd.yml
-    #skip_boxes: rhel/8
+    skip_boxes: none
     only_boxes: none
