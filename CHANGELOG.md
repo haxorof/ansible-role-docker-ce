@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## Fixed
+
+- Change repository URL for RHEL to use "rhel" instead of "centos"
+
 ## [6.0.0](../../releases/tag/6.0.0) - 2024-08-21
 
 ## Added

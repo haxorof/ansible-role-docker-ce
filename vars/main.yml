@@ -11,7 +11,8 @@ docker_repository_related_packages:
     - software-properties-common
 
 docker_repository_url:
-  RedHat: https://download.docker.com/linux/centos/docker-ce.repo
+  RedHat: https://download.docker.com/linux/rhel/docker-ce.repo
+  CentOS: https://download.docker.com/linux/centos/docker-ce.repo
   Fedora: https://download.docker.com/linux/fedora/docker-ce.repo
 
 docker_channels:
