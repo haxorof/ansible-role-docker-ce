@@ -26,6 +26,7 @@ docker_cmd_enable_disable_repo:
     || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
   Fedora: >
     dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
+    || dnf config-manager setopt docker-ce-{{item}}.enabled={{ (_item_enabled == true) | ternary('1', '0') }}
 
 docker_cmd_update_repo_cache:
   RedHat: type dnf && dnf makecache || yum makecache
