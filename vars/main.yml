@@ -21,7 +21,19 @@ docker_channels:
   - test
 
 docker_cmd_enable_disable_repo:
+  AlmaLinux: >
+    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
+    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
+  CentOS: >
+    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
+    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
+  Fedora: >
+    dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
+    || dnf config-manager setopt docker-ce-{{item}}.enabled={{ (_item_enabled == true) | ternary('1', '0') }}
   RedHat: >
+    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
+    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
+  Rocky: >
     type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
     || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
 
