@@ -16,20 +16,19 @@
     state: absent
     allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
     disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
-  loop: "{{ docker_packages }}"
+  loop: "{{ docker_packages + ['docker-ce-rootless-extras'] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
 
 - name: Ensure Docker CE is removed (Ubuntu/Debian)
-  when: _docker_os_dist == "Ubuntu" or
-        _docker_os_dist == "Debian"
+  when: _docker_os_dist_file_varity == "Debian"
   become: yes
   ansible.builtin.apt:
     name: "{{ item }}"
     state: absent
     purge: yes
     allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-  loop: "{{ docker_packages }}"
+  loop: "{{ docker_packages + ['docker-ce-rootless-extras'] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
 
