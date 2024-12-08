@@ -16,6 +16,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Improved handling between different package managers related to RedHat varity (e.g. yum, dnf, dnf5)
 
+## Deprecated
+
+- Support for Python 2
+- Support for RHEL 7 and CentOS 7
+- Support for ansible-core 2.16
+- Linux Mint 18 and 19 in experimental variable `docker_x_mint_ubuntu_mapping`
+
+## Internal
+
+- Commented out and removed config related to testing with additional disk.
+
 ## [6.0.1](../../releases/tag/6.0.1) - 2024-09-07
 
 ## Fixed

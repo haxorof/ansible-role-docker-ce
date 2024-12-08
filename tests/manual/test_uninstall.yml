@@ -6,7 +6,7 @@
   pre_tasks:
     - name: Find files and diretories with docker in it (Before)
       become: yes
-      shell: find / -name "docker*"
+      shell: find / -name 'docker*'
       register: _files
 
     - set_fact:
