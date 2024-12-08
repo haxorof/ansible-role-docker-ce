@@ -8,15 +8,14 @@
     state: stopped
   ignore_errors: yes
 
-- name: Ensure Docker CE is removed (CentOS/Fedora/RedHat)
-  when: _docker_os_dist != "Ubuntu" and
-        _docker_os_dist != "Debian"
+- name: Ensure Docker CE is removed (RHEL varity)
+  when: _docker_os_dist_file_varity == "RedHat"
   become: yes
   ansible.builtin.package:
     name: "{{ item }}"
     state: absent
     allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['yum', 'dnf', 'zypper'] else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
   loop: "{{ docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
@@ -50,33 +49,19 @@
   tags:
     - skip_ansible_lint
 
-- name: Clean yum cache (CentOS/RedHat 7)
-  when: (_docker_os_dist == "CentOS" and _docker_os_dist_major_version | int == 7) or
-        (_docker_os_dist == "RedHat" and _docker_os_dist_major_version | int == 7)
+- name: Clean YUM/DNF/APT cache
   become: yes
-  ansible.builtin.command: yum clean all --enablerepo=\*
+  ansible.builtin.command: "{{ _docker_clean_cache_cmd[ansible_pkg_mgr] }}"
   changed_when: no
-
-- name: Clean dnf cache (CentOS/Fedora/RedHat)
-  when: _docker_os_dist == "Fedora" or
-        (_docker_os_dist == "RedHat" and _docker_os_dist_major_version | int > 7) or
-        (_docker_os_dist == "CentOS" and _docker_os_dist_major_version | int > 7)
-  become: yes
-  ansible.builtin.command: dnf clean all --enablerepo=\*
-  changed_when: no
-
-- name: Clean apt cache
-  when: _docker_os_dist == "Ubuntu" or
-        _docker_os_dist == "Debian"
-  become: yes
-  ansible.builtin.command: apt-get clean
-  changed_when: no
-  tags:
-    - skip_ansible_lint
+  vars:
+    _docker_clean_cache_cmd:
+      apt: apt-get clean
+      dnf: dnf clean all --enablerepo=\*
+      dnf5: dnf clean all --enablerepo=\*
+      yum: yum clean all --enablerepo=\*
 
 - name: Remove repository docker specific repo file
-  when: _docker_os_dist != "Ubuntu" and
-        _docker_os_dist != "Debian"
+  when: _docker_os_dist_file_varity == "RedHat"
   become: yes
   ansible.builtin.yum_repository:
     name: docker-ce
@@ -109,6 +94,8 @@
     path: "{{ item }}"
     state: absent
   loop:
+    - /etc/firewalld/zones/docker.xml
+    - /etc/firewalld/policies/docker-forwarding.xml
     - /var/lib/docker
     - /var/lib/docker-engine
     - /usr/libexec/docker
@@ -124,10 +111,16 @@
     - /var/lib/yum/repos/x86_64/7/docker-ce-test-source
     - "{{ docker_remove_additional }}"
 
-- name: Find Docker related diretories in package cache (CentOS/Fedora/RHEL)
-  when: _docker_os_dist == "Fedora" or
-        _docker_os_dist == "CentOS" or
-        _docker_os_dist == "RedHat"
+- name: Reload firewalld config
+  become: yes
+  ansible.builtin.shell: firewall-cmd --reload
+  ignore_errors: yes
+  changed_when: no
+  tags:
+    - skip_ansible_lint
+
+- name: Find Docker related diretories in package cache (RHEL varity)
+  when: _docker_os_dist_file_varity == "RedHat"
   become: yes
   ansible.builtin.find:
     paths: "{{ (_docker_os_dist_major_version | int > 7) | ternary('/var/cache/dnf', '/var/cache/yum') }}"
@@ -137,11 +130,7 @@
   register: _remove_cache_dirs
 
 - name: Remove dangeling files/directories in package cache
-  when:
-    - _remove_cache_dirs.files is defined
-    - _docker_os_dist == "Fedora" or
-      _docker_os_dist == "CentOS" or
-      _docker_os_dist == "RedHat"
+  when: _docker_os_dist_file_varity == "RedHat"
   become: yes
   ansible.builtin.file:
     path: "{{ item.path }}"
