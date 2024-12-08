@@ -42,6 +42,8 @@ docker_disable_gpg_check: no
 
 # Setup Docker CE apt/dnf/yum repos or assume it has already been done
 docker_setup_repos: true
+# Install dependencies related to setup repos (if dependencies are already installed then nothing will be changed)
+docker_install_setup_repos_dependencies: yes
 # Repositories required to be enabled or disabled on RHEL
 #  id: <id of repo>
 #  state: enabled || disabled

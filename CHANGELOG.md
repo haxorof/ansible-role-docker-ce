@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Added
 
 - Support for DNF 5 in Fedora 41 and later [@wzzrd]
+- Added `docker_install_setup_repos_dependencies` for user to disable/enable any handing of dependencies related to repo setup.
+
+## Changed
+
+- Improved handling between different package managers related to RedHat varity (e.g. yum, dnf, dnf5)
 
 ## [6.0.1](../../releases/tag/6.0.1) - 2024-09-07
 

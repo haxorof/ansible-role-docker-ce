@@ -9,6 +9,6 @@
   vars:
     docker_network_access: false
     docker_daemon_config:
-      icc: false    
+      icc: false
   roles:
     - haxorof.docker_ce

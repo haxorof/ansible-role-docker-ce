@@ -1,8 +1,17 @@
 ---
 # vars file for ansible-role-docker-ce
-docker_repository_related_packages:
-  RedHat:
+docker_repository_related_rpm_packages:
+  yum:
     - yum-utils
+  dnf:
+    # Includes dnf config-manager
+    - dnf-plugins-core
+  dnf5:
+    # Includes dnf config-manager
+    - dnf5-plugins
+
+docker_repository_related_packages:
+  RedHat: "{{ docker_repository_related_rpm_packages[ansible_pkg_mgr] }}"
   Debian:
     - apt-transport-https
     - ca-certificates
@@ -10,7 +19,7 @@ docker_repository_related_packages:
     - gnupg2
     - software-properties-common
 
-docker_repository_url:
+docker_repository_url_rpm:
   RedHat: https://download.docker.com/linux/rhel/docker-ce.repo
   CentOS: https://download.docker.com/linux/centos/docker-ce.repo
   Fedora: https://download.docker.com/linux/fedora/docker-ce.repo
@@ -20,28 +29,18 @@ docker_channels:
   - nightly
   - test
 
-docker_cmd_enable_disable_repo:
-  AlmaLinux: >
-    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
-    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
-  Amazon: >
-    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
-    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
-  CentOS: >
-    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
-    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
-  Fedora: >
-    dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
-    || dnf config-manager setopt docker-ce-{{item}}.enabled={{ (_item_enabled == true) | ternary('1', '0') }}
-  RedHat: >
-    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
-    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
-  Rocky: >
-    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
-    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
+docker_cmd_enable_disable_rpm_repo:
+  yum: yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
+  dnf: dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
+  dnf5: dnf config-manager setopt docker-ce-{{ item }}.enabled={{ (_item_enabled == true) | ternary('1', '0') }}
+
+docker_cmd_update_rpm_repo_cache:
+  yum: yum makecache
+  dnf: dnf makecache
+  dnf5: dnf makecache
 
 docker_cmd_update_repo_cache:
-  RedHat: type dnf && dnf makecache || yum makecache
+  RedHat: "{{ docker_cmd_update_rpm_repo_cache[ansible_pkg_mgr] }}"
   Debian: apt-get update
 
 docker_envs_dir:
