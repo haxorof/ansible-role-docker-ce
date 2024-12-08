@@ -50,7 +50,7 @@ See changelog [here](https://github.com/haxorof/ansible-role-docker-ce/blob/mast
 
 ## Ansible Compatibility
 
-- ansible `9.0.0` or later (ansible-core `2.16` or later)
+- ansible `9.13.0` or later (ansible-core `2.16` or later)
 
 For this role to support multiple Ansible versions it is not possible to avoid all Ansible deprecation warnings. Read Ansible documentation if you want to disable [deprecation warnings](http://docs.ansible.com/ansible/latest/reference_appendices/config.html#deprecation-warnings).
 
@@ -207,8 +207,8 @@ Note! All distributions listed in test matrix below does not provided the latest
 | CentOS Stream 9   | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-08-02 |
 | Debian 11         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
 | Debian 12         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
-| Fedora 39         | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-08-02 |
 | Fedora 40         | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-08-02 |
+| Fedora 41         | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: | 2024-12-08 |
 | Rocky Linux 8     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
 | Rocky Linux 9     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
 | Ubuntu 20.04      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | 2024-08-02 |
