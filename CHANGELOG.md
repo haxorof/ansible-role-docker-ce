@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## Added
+
+- Support for DNF 5 in Fedora 41 and later [@wzzrd]
+
 ## [6.0.1](../../releases/tag/6.0.1) - 2024-09-07
 
 ## Fixed
