@@ -24,6 +24,9 @@ docker_cmd_enable_disable_repo:
   AlmaLinux: >
     type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
     || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
+  Amazon: >
+    type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
+    || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
   CentOS: >
     type dnf && dnf config-manager --set-{{ (_item_enabled == true) | ternary('enabled', 'disabled') }} docker-ce-{{ item }}
     || yum-config-manager --{{ (_item_enabled == true) | ternary('enable', 'disable') }} docker-ce-{{ item }}
