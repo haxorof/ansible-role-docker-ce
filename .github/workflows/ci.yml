@@ -14,11 +14,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare
-        run: mkdir -p ${GITHUB_WORKSPACE}/.ansible
-
-      - name: Install role dependency
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible --entrypoint="ansible-galaxy" haxorof/ansible-lint:v24-almalinux collection install -r requirements.yml
-
       - name: Lint Ansible role
-        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt -v ${GITHUB_WORKSPACE}/.ansible:/root/.ansible haxorof/ansible-lint:v24-almalinux -v --force-color . --exclude .ansible/ --exclude tests/
+        run: docker run --rm -v ${GITHUB_WORKSPACE}:/mnt haxorof/ansible-lint:v24-almalinux -v --force-color .
