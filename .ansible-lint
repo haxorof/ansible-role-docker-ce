@@ -5,3 +5,5 @@ warn_list:
   - 'args[module]'  # service 'use' reported as error but should be valid: https://ansible-lint.readthedocs.io/rules/args/
 skip_list:
   - yaml
+exclude_paths:
+  - tests/
