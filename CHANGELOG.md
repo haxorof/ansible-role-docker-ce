@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [6.1.1](../../releases/tag/6.1.1) - 2025-09-01
+
 ## Fixed
 
 - Docker removed nightly channel from repo-files ([#181](../../issues/181))
