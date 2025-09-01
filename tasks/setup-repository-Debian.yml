@@ -49,7 +49,6 @@
 
 - name: Determine channels to be enabled and/or disabled
   ansible.builtin.set_fact:
-    _docker_disable_channels: "{{ docker_channels | difference(_docker_merged_channels) }}"
     _docker_enable_channels: "{{ docker_channels | intersect(_docker_merged_channels) }}"
   vars:
     _docker_mandatory_channel: []

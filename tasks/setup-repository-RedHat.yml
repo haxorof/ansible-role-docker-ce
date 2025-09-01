@@ -69,6 +69,7 @@
   become: true
   ansible.builtin.shell: "{{ docker_cmd_enable_disable_rpm_repo[ansible_pkg_mgr] }}"
   loop: "{{ _docker_disable_channels }}"
+  ignore_errors: true
   changed_when: false
   vars:
     _item_enabled: false

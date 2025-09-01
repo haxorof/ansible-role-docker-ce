@@ -26,7 +26,6 @@ docker_repository_url_rpm:
 
 docker_channels:
   - stable
-  - nightly
   - test
 
 docker_cmd_enable_disable_rpm_repo:
