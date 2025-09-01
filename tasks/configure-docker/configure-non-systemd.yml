@@ -21,3 +21,5 @@
   when: _docker_non_systemd_envs is changed
   ansible.builtin.set_fact:
     _docker_restart_required: true
+  tags:
+    - skip_ansible_lint

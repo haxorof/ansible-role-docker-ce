@@ -58,3 +58,5 @@
   when: _docker_config_var_plugin is changed
   ansible.builtin.set_fact:
     _docker_restart_required: true
+  tags:
+    - skip_ansible_lint

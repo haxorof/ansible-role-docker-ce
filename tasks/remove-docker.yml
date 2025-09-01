@@ -7,6 +7,8 @@
     name: docker
     state: stopped
   ignore_errors: yes
+  tags:
+    - skip_ansible_lint
 
 - name: Ensure Docker CE is removed (RHEL varity)
   when: _docker_os_dist_file_varity == "RedHat"

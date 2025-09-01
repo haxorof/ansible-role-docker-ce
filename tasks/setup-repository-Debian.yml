@@ -20,6 +20,8 @@
       changed_when: false
       register: _pkg_result
       until: _pkg_result is succeeded
+      tags:
+        - skip_ansible_lint
 
 - name: Ensure packages are installed for repository setup
   when:

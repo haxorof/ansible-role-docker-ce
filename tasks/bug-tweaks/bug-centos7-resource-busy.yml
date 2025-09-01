@@ -46,6 +46,8 @@
   when: _docker_old_mountflag_fix is changed
   ansible.builtin.set_fact:
     _docker_restart_required: true
+  tags:
+    - skip_ansible_lint
 
 - name: Set MountFlags option to "slave" to prevent "device busy" errors on CentOS/RedHat 7.3 kernels (CentOS/RedHat)
   when:

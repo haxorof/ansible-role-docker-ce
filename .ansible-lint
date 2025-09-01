@@ -7,3 +7,4 @@ skip_list:
   - yaml
 exclude_paths:
   - tests/
+  - .ansible/
