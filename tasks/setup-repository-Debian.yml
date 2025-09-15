@@ -40,12 +40,24 @@
 - name: Add Docker official GPG key
   when:
     - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 14) or
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 14 and _docker_os_dist_major_version | int < 25) or
       (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7)
   become: true
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/{{ _docker_os_dist | lower }}/gpg
     state: present
+  register: _pkg_result
+  until: _pkg_result is succeeded
+
+- name: Download Docker GPG key
+  when:
+    - docker_network_access | bool
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 24)
+  become: true
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/{{ _docker_os_dist | lower }}/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: 'u=rw,g=r,o=r'
   register: _pkg_result
   until: _pkg_result is succeeded
 
