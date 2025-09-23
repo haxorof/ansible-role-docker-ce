@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [6.2.0](../../releases/tag/6.2.0) - 2025-09-23
+
+## Added
+
+- Added support for Ubuntu 25
+
 ## [6.1.1](../../releases/tag/6.1.1) - 2025-09-01
 
 ## Fixed
