@@ -2,7 +2,7 @@
   ansible.builtin.stat:
     path: /proc/sys/fs/may_detach_mounts
   register: _may_detach_mounts
-  check_mode: no
+  check_mode: false
 
 - name: Ensure fs.may_detach_mounts is set to avoid 'Device or resource busy' (CentOS/RedHat)
   when:
@@ -13,7 +13,7 @@
     name: fs.may_detach_mounts
     value: "1"
     sysctl_file: /etc/sysctl.d/99-docker.conf
-    reload: yes
+    reload: true
 
 - name: Stat /etc/sysctl.d/99-docker.conf (CentOS/RedHat)
   when:
@@ -21,7 +21,7 @@
   ansible.builtin.stat:
     path: /etc/sysctl.d/99-docker.conf
   register: _sysctl_docker
-  check_mode: no
+  check_mode: false
 
 - name: Unset fs.may_detach_mounts (CentOS/RedHat)
   when:
@@ -32,7 +32,7 @@
     name: fs.may_detach_mounts
     value: "0"
     sysctl_file: /etc/sysctl.d/99-docker.conf
-    reload: yes
+    reload: true
 
 # Keep for compatibility reasons of this role. Now everything is in the same file.
 - name: Remove systemd drop-in for Docker Mount Flags slave configuration (CentOS/RedHat)

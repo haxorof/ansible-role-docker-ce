@@ -5,7 +5,7 @@
     - haxorof.docker_ce
   pre_tasks:
     - name: Find files and diretories with docker in it (Before)
-      become: yes
+      become: true
       shell: find / -name 'docker*'
       register: _files
 
@@ -25,7 +25,7 @@
     - haxorof.docker_ce
   tasks:
     - name: Find files and diretories with docker in it (After)
-      become: yes
+      become: true
       shell: find / -name "docker*"
       register: _files
 

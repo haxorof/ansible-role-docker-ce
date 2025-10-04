@@ -11,14 +11,14 @@
     - name: Enable user namespaces (Debian based)
       block:
         - name: Enable user namespaces in GRUB (Debian based)
-          become: yes
+          become: true
           lineinfile:
             path: /etc/default/grub
             regexp: '^GRUB_CMDLINE_LINUX='
             line: GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0 namespace.unpriv_enable=1 user_namespace.enable=1"
 
         - name: Update GRUB (Debian based)
-          become: yes
+          become: true
           command: update-grub
       when: ansible_distribution_file_variety == "Debian"
 
@@ -28,24 +28,24 @@
           include_role:
             name: jtyr.grub_cmdline
           vars:
-            ansible_become: yes
+            ansible_become: true
             grub_cmdline_add_args:
               - namespace.unpriv_enable=1
               - user_namespace.enable=1
       when: ansible_distribution_file_variety == "RedHat"
 
     - name: Set user.max_user_namespaces
-      become: yes
+      become: true
       sysctl:
         name: user.max_user_namespaces
         value: '15000'
-        sysctl_set: yes
+        sysctl_set: true
         state: present
-        reload: yes
+        reload: true
       register: _sysctl_usrns
 
     - name: Reboot immediately
-      become: yes
+      become: true
       reboot:
       when: _sysctl_usrns is changed
 
@@ -61,13 +61,13 @@
   hosts: test-host
   pre_tasks:
     - name: Ensure /etc/docker/policies directory is present
-      become: yes
+      become: true
       file:
         path: /etc/docker/policies
         state: directory
 
     - name: OPA policy file
-      become: yes
+      become: true
       copy:
         dest: /etc/docker/policies/authz.rego
         content: |
@@ -82,7 +82,7 @@
             alias: opa-docker-authz
             name: openpolicyagent/opa-docker-authz-v2:0.8
             args: opa-args="-policy-file /opa/policies/authz.rego"
-        docker_enable_audit: yes
+        docker_enable_audit: true
         docker_users:
           - vagrant
         docker_daemon_config:

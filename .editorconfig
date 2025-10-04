@@ -7,3 +7,6 @@ indent_size = 2
 
 [*.{yaml,yml}]
 insert_final_newline = true
+
+[.ansible-lint]
+insert_final_newline = true

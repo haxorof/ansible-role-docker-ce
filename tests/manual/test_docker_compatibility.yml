@@ -13,6 +13,6 @@
         docker_version: "{{ docker_versions[ansible_distribution] }}"
 
     - name: Run hello-world
-      become: yes
+      become: true
       shell: docker run --rm hello-world
       changed_when: false

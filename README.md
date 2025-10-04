@@ -110,13 +110,13 @@ Following sub sections show different kind of examples to illustrate what this r
     - haxorof.docker_ce
   post_tasks:
     - name: Test hello container
-      become: yes
+      become: true
       docker_container:
         name: hello
         image: hello-world
 
     - name: Test hello service
-      become: yes
+      become: true
       docker_service:
         project_name: hello
         definition:
@@ -138,7 +138,7 @@ This minimal example below show what kind of role configuration that is required
         alias: opa-docker-authz
         name: openpolicyagent/opa-docker-authz-v2:0.9
         args: opa-args="-policy-file /opa/policies/authz.rego"
-    docker_enable_audit: yes
+    docker_enable_audit: true
     docker_daemon_config:
       icc: false
       log-driver: journald
@@ -162,16 +162,16 @@ Because the configuration above requires Linux user namespaces to be enabled the
         grub_cmdline_add_args:
           - namespace.unpriv_enable=1
           - user_namespace.enable=1
-      become: yes
+      become: true
   tasks:
     - name: set user.max_user_namespaces
       sysctl:
         name: user.max_user_namespaces
         value: 15000
-        sysctl_set: yes
+        sysctl_set: true
         state: present
-        reload: yes
-      become: yes
+        reload: true
+      become: true
 ```
 
 For a more complete working example on CentOS 7 have a look [here](https://github.com/haxorof/ansible-role-docker-ce/blob/master/tests/experimental/cis).

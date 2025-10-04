@@ -1,7 +1,7 @@
 ---
 - name: Install Python on host
   hosts: test-host
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Wait for connection
       wait_for:
@@ -19,37 +19,37 @@
       until: _distribution is succeeded
       retries: 10
       delay: 10
-      changed_when: no
+      changed_when: false
 
     - name: Print distribution information
-      become: yes
+      become: true
       debug:
         var: _distribution
 
     - name: Install Python (Debian or Ubuntu)
-      become: yes
+      become: true
       raw: type python3 || type python2 || type python || (apt-get update && apt-get -y install python-minimal)
-      changed_when: no
+      changed_when: false
       when:
         - _distribution.stdout_lines|join('') is search("Debian") or _distribution.stdout_lines|join('') is search("Ubuntu")
 
     - name: Install Python (CentOS 7 or RHEL 7)
-      become: yes
+      become: true
       raw: type python3 || type python2 || type python || (yum -y install python)
-      changed_when: no
+      changed_when: false
       when:
         - _distribution.stdout_lines|join('') is search("centos:7") or _distribution.stdout_lines|join('') is search("platform:el7")
 
     - name: Install Python (CentOS 8 or RHEL 8)
-      become: yes
+      become: true
       raw: type python3 || type python2 || type python || (dnf -y install python3)
-      changed_when: no
+      changed_when: false
       when:
         - _distribution.stdout_lines|join('') is search("centos:8") or _distribution.stdout_lines|join('') is search("platform:el8")
 
     - name: Install Python (Fedora)
-      become: yes
+      become: true
       raw: type python3|| type python2 || type python || (dnf -y install python)
-      changed_when: no
+      changed_when: false
       when:
         - _distribution.stdout_lines|join('') is search("Fedora")

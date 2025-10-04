@@ -15,7 +15,7 @@
 
 - name: Copy Docker audit rules
   when: docker_enable_audit | bool
-  become: yes
+  become: true
   ansible.builtin.copy:
     src: files/etc/audit/rules.d/docker.rules
     dest: /etc/audit/rules.d/docker.rules
@@ -26,7 +26,7 @@
 
 - name: Ensure Docker audit rules are removed
   when: not docker_enable_audit | bool
-  become: yes
+  become: true
   ansible.builtin.file:
     path: /etc/audit/rules.d/docker.rules
     state: absent

@@ -54,8 +54,8 @@
   block:
     - name: OS release info
       ansible.builtin.raw: cat /etc/os-release
-      check_mode: no
-      changed_when: no
+      check_mode: false
+      changed_when: false
       register: _docker_os_release_info
       tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 

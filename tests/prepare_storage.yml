@@ -8,7 +8,7 @@
     docker_mount_point: "{{ docker_mount_point_override|default('/var/lib/docker') }}"
   tasks:
     - name: Ensure dependencies are installed (All)
-      package:
+      ansible.builtin.package:
         name: "{{ item }}"
         state: present
       become: true
@@ -16,14 +16,14 @@
         - parted
 
     - name: Ensure dependencies are installed (CentOS)
-      package:
+      ansible.builtin.package:
         name: e4fsprogs
         state: present
       become: true
       when: ansible_distribution == "CentOS"
 
     - name: Create partition {{ lvm_device }}1
-      parted:
+      community.general.parted:
         device: "{{ lvm_device }}"
         number: 1
         flags: [ lvm ]
@@ -31,7 +31,7 @@
         state: present
       become: true
     - name: Create partition {{ lvm_device }}2
-      parted:
+      community.general.parted:
         device: "{{ lvm_device }}"
         number: 2
         flags: [ lvm ]
@@ -39,7 +39,7 @@
         state: present
       become: true
     - name: Ensure file system is EXT4 for {{ lvm_device }}1
-      filesystem:
+      community.general.filesystem:
         fstype: ext4
         dev: "{{ lvm_device }}1"
       become: true
@@ -49,7 +49,7 @@
         state: directory
       become: true
     - name: Ensure {{ docker_mount_point }} is mounted
-      mount:
+      ansible.posix.mount:
         path: "{{ docker_mount_point }}"
         src: "{{ lvm_device }}1"
         fstype: ext4

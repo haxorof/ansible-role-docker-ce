@@ -39,10 +39,10 @@
     url: "{{ docker_repository_url_rpm[_docker_os_dist] | default(docker_repository_url_rpm[_docker_os_dist_file_varity]) }}"
     dest: /etc/yum.repos.d/docker-ce.repo
     mode: 0644
-    force: yes
+    force: true
   register: _docker_repo
   until: _docker_repo is succeeded
-  changed_when: no
+  changed_when: false
 
 # https://github.com/haxorof/ansible-role-docker-ce/issues/126
 - name: Workaround issue with $releasever set to 7Server
@@ -53,13 +53,13 @@
   block:
     - name: Fetch $relesever value
       ansible.builtin.command: python -c 'import yum, json; yb = yum.YumBase(); print json.dumps(yb.conf.yumvar, indent=2)'
-      changed_when: no
-      check_mode: no
+      changed_when: false
+      check_mode: false
       register: _docker_releasever
 
     - name: Replace $releasever with '7' in /etc/yum.repos.d/docker-ce.repo
       when: _docker_releasever.stdout is search('7Server')
-      become: yes
+      become: true
       ansible.builtin.replace:
         path: /etc/yum.repos.d/docker-ce.repo
         regexp: \$releasever

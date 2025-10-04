@@ -5,12 +5,12 @@
 
 - name: Determine and set Python interpreter
   hosts: test-host
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: OS release info
       ansible.builtin.raw: cat /etc/os-release
-      check_mode: no
-      changed_when: no
+      check_mode: false
+      changed_when: false
       register: _os_release_info
 
     - name: Print OS release info
@@ -21,7 +21,7 @@
     # Debian Buster fails with APT repository
     - name: Detect existing Python version to use (all)
       ansible.builtin.raw: (type python3 2>/dev/null || type python2 2>/dev/null || type python 2>/dev/null || type /usr/libexec/platform-python 2>/dev/null) | cut -d' ' -f3
-      changed_when: no
+      changed_when: false
       register: _distribution_interpreter
       when:
         - not _os_release_info.stdout is search('Trusty')
@@ -36,7 +36,7 @@
 
     - name: Detect existing Python version to use (only 2)
       ansible.builtin.raw: (type python2 2>/dev/null || type python 2>/dev/null) | cut -d' ' -f3
-      changed_when: no
+      changed_when: false
       register: _distribution_interpreter
       when:
         - _os_release_info.stdout is search('Trusty') or _os_release_info.stdout is search('buster')
@@ -49,6 +49,6 @@
         - _distribution_interpreter.stdout_lines is defined
 
     - name: Print Python interpreter
-      become: yes
+      become: true
       ansible.builtin.debug:
         var: ansible_python_interpreter

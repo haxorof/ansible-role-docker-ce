@@ -45,7 +45,7 @@
   when: _docker_systemd_docker_dropin is changed
   become: true
   ansible.builtin.systemd:
-    daemon_reload: yes
+    daemon_reload: true
   tags:
     - skip_ansible_lint
 

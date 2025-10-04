@@ -14,7 +14,7 @@
         become: true
         yum:
           name: "{{ item }}"
-          update_cache: yes
+          update_cache: true
           disable_gpg_check: "{{ disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
         loop:
           - kata-runtime

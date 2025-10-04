@@ -34,5 +34,5 @@
           docker_remove_pre_ce: true
 
       - name: Tasks to verify basic Docker function
-        include_tasks: ../tasks_verify_docker.yml
+        ansible.builtin.include_tasks: ../tasks_verify_docker.yml
       when: ansible_distribution == "RedHat"

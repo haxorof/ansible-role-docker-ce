@@ -11,9 +11,9 @@
         docker_stack: true
   post_tasks:
     - name: Test docker-compose (shell)
-      become: no
+      become: false
       shell: docker-compose --version
-      ignore_errors: yes
+      ignore_errors: true
 
 - name: Verify Docker function
   import_playbook: ../verify_docker.yml

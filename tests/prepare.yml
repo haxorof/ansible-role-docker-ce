@@ -47,7 +47,7 @@
 
     # https://github.com/haxorof/ansible-role-docker-ce/issues/107
     - name: Turn off SELinux otherwise Docker fails to run hello-world when Docker is not configured with selinux
-      become: yes
+      become: true
       ansible.posix.selinux:
         policy: targeted
         state: permissive
@@ -61,7 +61,7 @@
       register: _resolved_exists
 
     - name: Turn off DNSSEC which can cause resolution problems during tests in Ubuntu
-      become: yes
+      become: true
       ansible.builtin.replace:
         path: /etc/systemd/resolved.conf
         regexp: '^DNSSEC=yes\s*$'
@@ -70,7 +70,7 @@
       when: _resolved_exists.stat.exists | bool
 
     - name: Restart systemd-resolved
-      become: yes
+      become: true
       ansible.builtin.service:
         name: systemd-resolved
         state: restarted
@@ -79,7 +79,7 @@
         - _resolved is changed
 
     - name: Delete Alvistack sources in APT if images is used
-      become: yes
+      become: true
       ansible.builtin.file:
         path: /etc/apt/sources.list.d/home-alvistack.sources
         state: absent

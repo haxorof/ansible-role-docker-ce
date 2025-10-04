@@ -6,7 +6,7 @@
   delegate_to: 127.0.0.1
 
 - name: Docker info
-  become: yes
+  become: true
   shell: docker info
   register: _docker_info
   changed_when: false
@@ -17,6 +17,6 @@
   when: _docker_info.stdout_lines is defined
 
 - name: Run hello-world
-  become: yes
+  become: true
   shell: docker run --rm hello-world
   changed_when: false

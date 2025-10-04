@@ -2,7 +2,7 @@
 # handlers file for ansible-role-docker-ce
 
 - name: Restart docker
-  become: yes
+  become: true
   ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
@@ -10,7 +10,7 @@
   tags: ["install", "configure"]
 
 - name: Reload docker
-  become: yes
+  become: true
   ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
@@ -19,6 +19,6 @@
 
 # Workaround because systemd cannot be used: https://github.com/ansible/ansible/issues/22171
 - name: Restart auditd
-  become: yes
+  become: true
   ansible.builtin.command: service auditd restart
   tags: ["install", "configure", "skip_ansible_lint"]

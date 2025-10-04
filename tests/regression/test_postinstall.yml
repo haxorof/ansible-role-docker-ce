@@ -7,14 +7,14 @@
     - haxorof.docker_ce
   post_tasks:
     - name: Test docker-compose (shell)
-      become: no
+      become: false
       shell: /usr/bin/docker-compose --version
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Test docker-compose with sudo (shell)
-      become: yes
+      become: true
       shell: /usr/bin/docker-compose --version
-      ignore_errors: yes
+      ignore_errors: true
 
 - name: Test install Docker SDK and Docker Stack
   hosts: test-host
@@ -39,30 +39,30 @@
       delegate_to: 127.0.0.1
 
     - name: Test hello container
-      become: no
+      become: false
       community.docker.docker_container:
         name: hello
         image: hello-world
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Test hello service
-      become: no
+      become: false
       community.docker.docker_compose_v2:
         project_name: hello
         definition:
           services:
             hello:
               image: "hello-world"
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Test hello container with sudo
-      become: yes
+      become: true
       community.docker.docker_container:
         name: hello
         image: hello-world
 
     - name: Test hello service with sudo
-      become: yes
+      become: true
       community.docker.docker_compose_v2:
         project_name: hello
         definition:

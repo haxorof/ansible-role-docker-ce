@@ -18,7 +18,7 @@
       become: true
       shell: "{{ _cmd }}"
       register: _docker_server_version_cmd
-      changed_when: no
+      changed_when: false
       vars:
         _cmd: !unsafe 'docker version --format="{{ .Server.Version }}"'
 
@@ -26,7 +26,7 @@
       become: true
       shell: "{{ _cmd }}"
       register: _docker_client_version_cmd
-      changed_when: no
+      changed_when: false
       vars:
         _cmd: !unsafe 'docker version --format="{{ .Client.Version }}"'
 
@@ -53,7 +53,7 @@
 #       become: true
 #       shell: "{{ _cmd }}"
 #       register: _docker_server_version_cmd
-#       changed_when: no
+#       changed_when: false
 #       vars:
 #         _cmd: !unsafe 'docker version --format="{{ .Server.Version }}"'
 
@@ -61,7 +61,7 @@
 #       become: true
 #       shell: "{{ _cmd }}"
 #       register: _docker_client_version_cmd
-#       changed_when: no
+#       changed_when: false
 #       vars:
 #         _cmd: !unsafe 'docker version --format="{{ .Client.Version }}"'
 

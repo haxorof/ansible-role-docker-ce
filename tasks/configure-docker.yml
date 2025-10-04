@@ -4,8 +4,8 @@
 - name: Determine usage of systemd
   become: true
   ansible.builtin.shell: "ps -p1 | grep systemd 1>/dev/null && echo systemd || echo upstart"
-  changed_when: no
-  check_mode: no
+  changed_when: false
+  check_mode: false
   register: _determine_systemd_usage
   tags:
     - skip_ansible_lint
@@ -81,7 +81,7 @@
   ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
-    enabled: yes
+    enabled: true
   register: _docker_service
 
 - name: Docker daemon restart is required
@@ -102,14 +102,14 @@
 
 - name: Trigger restart of Docker daemon
   when: _docker_restart_required | bool
-  become: yes
+  become: true
   ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: restarted
 
 - name: Ensure Docker daemon is running
-  become: yes
+  become: true
   ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker

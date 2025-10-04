@@ -37,13 +37,13 @@ docker_users: []
 docker_plugins: []
 
 # Bypass package manager GPG key verification
-docker_allow_unauthenticated: no
-docker_disable_gpg_check: no
+docker_allow_unauthenticated: false
+docker_disable_gpg_check: false
 
 # Setup Docker CE apt/dnf/yum repos or assume it has already been done
 docker_setup_repos: true
 # Install dependencies related to setup repos (if dependencies are already installed then nothing will be changed)
-docker_install_setup_repos_dependencies: yes
+docker_install_setup_repos_dependencies: true
 # Repositories required to be enabled or disabled on RHEL
 #  id: <id of repo>
 #  state: enabled || disabled
@@ -69,13 +69,13 @@ docker_network_access: true
 
 # Workaround for RHEL/CentOS 8
 # Reason: Fails to install because YUM cannot find a good candidate for the library containerd.
-docker_x_redhat_centos_8_workaround: no
+docker_x_redhat_centos_8_workaround: false
 # containerd RPM URL
 docker_x_redhat_centos_8_containerd_rpm: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.4.4-3.1.el7.x86_64.rpm
 
 # Workaround for - CentOS 7/RHEL 7 installations broken where $releasever is '7Server'
 # https://github.com/docker/for-linux/issues/1111
-docker_x_fix_centos_redhat_7_releasever: yes
+docker_x_fix_centos_redhat_7_releasever: true
 
 # Experimental - Linux Mint reinterpretation mapping
 # Mapping between Mint and Ubuntu release are found at: https://linuxmint.com/download_all.php
@@ -133,9 +133,9 @@ docker_enable_audit: false
 docker_bug_usermod: false
 # Set `MountFlags=slave`
 #  https://github.com/haxorof/ansible-role-docker-ce/issues/34
-docker_enable_mount_flag_fix: no
+docker_enable_mount_flag_fix: false
 # Do compatibility and distribution checks (can be disable for debugging etc if required)
-docker_do_checks: yes
+docker_do_checks: true
 
 ################################################################################
 # Postinstall related configuration

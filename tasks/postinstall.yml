@@ -41,7 +41,7 @@
       register: _docker_pip_cmd
       changed_when: false
       failed_when: false
-      check_mode: no
+      check_mode: false
       tags:
         - skip_ansible_lint
 
@@ -109,8 +109,8 @@
     - _docker_additional_packages_pip | length > 0
   become: "{{ docker_pip_sudo | bool }}"
   ansible.builtin.command: "{{ _docker_pip_or_pip3 }} --version"
-  changed_when: no
-  check_mode: no
+  changed_when: false
+  check_mode: false
   register: _pip_version
 
 - name: Check and set PiP for upgrade if necessary
@@ -189,9 +189,9 @@
 
     - name: Apply workaround for issue - No module named ssl_match_hostname (Python 2.7)
       when: _docker_check_smh is changed
-      become: yes
+      become: true
       ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
-      check_mode: no
+      check_mode: false
       tags:
         - skip_ansible_lint
 
@@ -211,9 +211,9 @@
 
     - name: Apply workaround for issue - No module named shutil_get_terminal_size (Python 2.7)
       when: _docker_check_shutil is changed
-      become: yes
+      become: true
       ansible.builtin.command: cp -r /usr/local/lib/python2.7/dist-packages/backports/shutil_get_terminal_size/ /usr/lib/python2.7/dist-packages/backports
-      check_mode: no
+      check_mode: false
       tags:
         - skip_ansible_lint
 
@@ -248,7 +248,7 @@
       register: _github_docker_compose
       until: _github_docker_compose.status == 200 or _github_docker_compose.status == 403
       retries: 10
-      check_mode: no
+      check_mode: false
 
     - name: Set detected docker compose version
       ansible.builtin.set_fact:
@@ -281,7 +281,7 @@
       ansible.builtin.stat:
         path: "{{ docker_cli_plugins_dir[_docker_os_dist_file_varity] }}/docker-compose"
       register: _docker_compose_cli_file
-      check_mode: no
+      check_mode: false
 
     - name: Create symlink for docker-compose
       when: _docker_compose_cli_file.stat.exists
@@ -290,7 +290,7 @@
         src: "{{ _docker_compose_cli_file.stat.path }}"
         dest: /usr/local/bin/docker-compose
         state: link
-        force: yes
+        force: true
 
     - name: Create symlink for docker-compose to work with sudo in some distributions
       when: _docker_compose_cli_file.stat.exists
@@ -299,4 +299,4 @@
         src: "{{ _docker_compose_cli_file.stat.path }}"
         dest: /usr/bin/docker-compose
         state: link
-        force: yes
+        force: true

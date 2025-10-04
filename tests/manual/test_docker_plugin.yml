@@ -6,7 +6,7 @@
         alias: opa-docker-authz
         name: openpolicyagent/opa-docker-authz-v2:0.8
         args: opa-args="-policy-file /opa/policies/authz.rego"
-    docker_enable_audit: yes
+    docker_enable_audit: true
     docker_daemon_config:
       icc: false
       log-driver: journald

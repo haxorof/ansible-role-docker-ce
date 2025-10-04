@@ -6,7 +6,7 @@
         - docker_network_access | bool
       become: true
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
       changed_when: false
       register: _pkg_result

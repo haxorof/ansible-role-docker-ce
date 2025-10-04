@@ -3,4 +3,4 @@
   hosts: test-host
   tasks:
     - name: Tasks to verify basic Docker function
-      include_tasks: tasks_verify_docker.yml
+      ansible.builtin.include_tasks: tasks_verify_docker.yml

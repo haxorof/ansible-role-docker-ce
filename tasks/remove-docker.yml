@@ -1,18 +1,18 @@
 # Best effort to remove Docker CE and related configuration
 
 - name: Stop Docker service
-  become: yes
+  become: true
   ansible.builtin.service:
     use: "{{ docker_x_service_mgr }}"
     name: docker
     state: stopped
-  ignore_errors: yes
+  ignore_errors: true
   tags:
     - skip_ansible_lint
 
 - name: Ensure Docker CE is removed (RHEL varity)
   when: _docker_os_dist_file_varity == "RedHat"
-  become: yes
+  become: true
   ansible.builtin.package:
     name: "{{ item }}"
     state: absent
@@ -24,36 +24,36 @@
 
 - name: Ensure Docker CE is removed (Ubuntu/Debian)
   when: _docker_os_dist_file_varity == "Debian"
-  become: yes
+  become: true
   ansible.builtin.apt:
     name: "{{ item }}"
     state: absent
-    purge: yes
+    purge: true
     allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
   loop: "{{ ['docker-ce-rootless-extras'] + docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
 
 - name: Remove network interface docker0
-  become: yes
+  become: true
   ansible.builtin.command: ip link del docker0
-  ignore_errors: yes
-  changed_when: no
+  ignore_errors: true
+  changed_when: false
   tags:
     - skip_ansible_lint
 
 - name: Remove dockerd from alternatives configuration
-  become: yes
+  become: true
   ansible.builtin.shell: alternatives --remove dockerd /usr/bin/dockerd-ce
-  ignore_errors: yes
-  changed_when: no
+  ignore_errors: true
+  changed_when: false
   tags:
     - skip_ansible_lint
 
 - name: Clean YUM/DNF/APT cache
-  become: yes
+  become: true
   ansible.builtin.command: "{{ _docker_clean_cache_cmd[ansible_pkg_mgr] }}"
-  changed_when: no
+  changed_when: false
   vars:
     _docker_clean_cache_cmd:
       apt: apt-get clean
@@ -63,14 +63,14 @@
 
 - name: Remove repository docker specific repo file
   when: _docker_os_dist_file_varity == "RedHat"
-  become: yes
+  become: true
   ansible.builtin.yum_repository:
     name: docker-ce
     file: docker-ce
     state: absent
 
 - name: Ensure Docker CE and configuration files are removed
-  become: yes
+  become: true
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent
@@ -90,7 +90,7 @@
 
 - name: Ensure additional files and data directories are removed
   when: docker_remove_all | bool
-  become: yes
+  become: true
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent
@@ -113,26 +113,26 @@
     - "{{ docker_remove_additional }}"
 
 - name: Reload firewalld config
-  become: yes
+  become: true
   ansible.builtin.shell: firewall-cmd --reload
-  ignore_errors: yes
-  changed_when: no
+  ignore_errors: true
+  changed_when: false
   tags:
     - skip_ansible_lint
 
 - name: Find Docker related diretories in package cache (RHEL varity)
   when: _docker_os_dist_file_varity == "RedHat"
-  become: yes
+  become: true
   ansible.builtin.find:
     paths: "{{ (_docker_os_dist_major_version | int > 7) | ternary('/var/cache/dnf', '/var/cache/yum') }}"
     file_type: directory
-    recurse: yes
+    recurse: true
     patterns: "docker-ce*"
   register: _remove_cache_dirs
 
 - name: Remove dangeling files/directories in package cache
   when: _docker_os_dist_file_varity == "RedHat"
-  become: yes
+  become: true
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
