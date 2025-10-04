@@ -77,3 +77,9 @@
       when:
         - _resolved is defined
         - _resolved is changed
+
+    - name: Delete Alvistack sources in APT if images is used
+      become: yes
+      ansible.builtin.file:
+        path: /etc/apt/sources.list.d/home-alvistack.sources
+        state: absent

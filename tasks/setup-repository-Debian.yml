@@ -37,11 +37,27 @@
   register: _pkg_result
   until: _pkg_result is succeeded
 
-- name: Add Docker official GPG key
+- name: Ensure packages are installed for repository setup (only for specific releases)
+  when:
+    - docker_network_access | bool
+    - docker_install_setup_repos_dependencies | bool
+    - (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int < 13) or
+      _docker_os_dist != "Debian"
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
+  loop: "{{ docker_repository_related_packages_addons[_docker_os_dist_file_varity] }}"
+  register: _pkg_result
+  until: _pkg_result is succeeded
+
+- name: Add Docker official GPG key (Ubuntu < 25 and Debian < 13)
   when:
     - docker_network_access | bool
     - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 14 and _docker_os_dist_major_version | int < 25) or
-      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7)
+      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7 and  _docker_os_dist_major_version | int < 13)
   become: true
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/{{ _docker_os_dist | lower }}/gpg
@@ -49,10 +65,11 @@
   register: _pkg_result
   until: _pkg_result is succeeded
 
-- name: Download Docker GPG key
+- name: Download Docker GPG key (Ubuntu > 24 and Debian > 12)
   when:
     - docker_network_access | bool
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 24)
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 24) or
+      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 12)
   become: true
   ansible.builtin.get_url:
     url: https://download.docker.com/linux/{{ _docker_os_dist | lower }}/gpg
@@ -68,11 +85,11 @@
     _docker_mandatory_channel: []
     _docker_merged_channels: "{{ _docker_mandatory_channel + [docker_channel] }}"
 
-- name: Add Docker CE repository with correct channels (Ubuntu/Debian)
+- name: Add Docker CE repository with correct channels (Ubuntu < 25 and Debian < 13)
   become: true
   when:
     - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 14 and _docker_os_dist_major_version | int < 25) or
-      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7)
+      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 7 and  _docker_os_dist_major_version | int < 13)
   ansible.builtin.copy:
     content: >
       deb [arch={{ _docker_os_arch | lower }}] https://download.docker.com/linux/{{ _docker_os_dist | lower }}
@@ -82,10 +99,11 @@
     group: root
     mode: '0644'
 
-- name: Add Docker CE repository with correct channels (Ubuntu > 24)
+- name: Add Docker CE repository with correct channels (Ubuntu > 24 and Debian > 12)
   become: true
   when:
-    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 24)
+    - (_docker_os_dist == "Ubuntu" and _docker_os_dist_major_version | int > 24) or
+      (_docker_os_dist == "Debian" and _docker_os_dist_major_version | int > 12)
   ansible.builtin.copy:
     content: >
       deb [arch={{ _docker_os_arch | lower }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ _docker_os_dist | lower }}

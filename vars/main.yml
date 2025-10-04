@@ -17,6 +17,9 @@ docker_repository_related_packages:
     - ca-certificates
     - curl
     - gnupg2
+
+docker_repository_related_packages_addons:
+  Debian:
     - software-properties-common
 
 docker_repository_url_rpm:

@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## Fixed
+
+- Failed to remove packages in Fedora when `docker_remove` and `docker_remove_all` are set to `true` due to package dependency.
+- software-properties-common not available on debian 13 ([#183](../../issues/183))
+
 ## [6.2.0](../../releases/tag/6.2.0) - 2025-09-23
 
 ## Added
 
-- Added support for Ubuntu 25
+- Added support for Ubuntu 25 [@HRGCompany] ([#182](../../issues/182))
 
 ## [6.1.1](../../releases/tag/6.1.1) - 2025-09-01
 

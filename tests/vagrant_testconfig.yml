@@ -36,38 +36,42 @@ boxes:
   #   reboot: false
   # Testing only supported releases: https://endoflife.date/fedora / https://fedoraproject.org/wiki/End_of_life
   # and supported by Docker CE
-  # Unfortunately no new and working Fedora Vagrant boxes available
-  # - # F37
-  #   box: generic/fedora37
-  #   box_url: vagrantup
-  #   vbguest_update: false
-  #   reboot: true
-    # Testing only supported releases: https://endoflife.date/debian / https://wiki.debian.org/LTS
-    # and supported by Docker CE
+  - # F37
+    box: alvistack/fedora-37
+    box_url: vagrantup
+    vbguest_update: false
+    reboot: false
+  # Testing only supported releases: https://endoflife.date/debian / https://wiki.debian.org/LTS
+  # and supported by Docker CE
   - # Bullseye
-    box: generic/debian11
+    box: alvistack/debian-11
     box_url: vagrantup
     vbguest_update: false
     reboot: false
   - # Bookworm
-    box: generic/debian12
+    box: alvistack/debian-12
+    box_url: vagrantup
+    vbguest_update: false
+    reboot: false
+  - # Trixie
+    box: alvistack/debian-13
     box_url: vagrantup
     vbguest_update: false
     reboot: false
   # Testing only supported LTS releases: https://endoflife.date/ubuntu / https://wiki.ubuntu.com/Releases
   # and supported by Docker CE
   - # Focal Fossa
-    box: generic/ubuntu2004
+    box: alvistack/ubuntu-20.04
     box_url: vagrantup
     vbguest_update: false
     reboot: false
   - # Jammy Jellyfish
-    box: generic/ubuntu2204
+    box: alvistack/ubuntu-22.04
     box_url: vagrantup
     vbguest_update: false
     reboot: false
   - # Noble Numbat
-    box: gutehall/ubuntu24-04
+    box: alvistack/ubuntu-24.04
     box_url: vagrantup
     vbguest_update: false
     reboot: false
@@ -82,25 +86,18 @@ boxes:
     vbguest_update: false
     reboot: false
   # Testing only supported releases: https://access.redhat.com/support/policy/updates/errata
+  - # RHEL 7
+    box: alvistack/rhel-7
+    box_url: vagrantup
+    vbguest_update: false
+    reboot: true
   - # RHEL 8
-    box: generic/rhel8
+    box: alvistack/rhel-8
     box_url: vagrantup
     vbguest_update: false
     reboot: true
   - # RHEL 9
-    box: generic/rhel9
+    box: alvistack/rhel-9
     box_url: vagrantup
     vbguest_update: false
     reboot: true
-
-  # Not support by this role
-  # - # Oracle Linux 7
-  #   box: generic/oracle7
-  #   box_url: vagrantup
-  #   vbguest_update: false
-  #   reboot: false
-  # - # Oracle Linux 8
-  #   box: generic/oracle8
-  #   box_url: vagrantup
-  #   vbguest_update: false
-  #   reboot: false

@@ -7,28 +7,38 @@ galaxy_info:
   min_ansible_version: "2.16"
   license: MIT
   platforms:
-  - name: Fedora
-    versions:
-      - "36"
-      - "37"
-      - "38"
+    - name: Amazon Linux
+      versions:
+        - "2"
+        - "2023"
 
-  - name: EL
-    versions:
-      - "7"
-      - "8"
-      - "9"
+    - name: Fedora
+      versions:
+        - "36"
+        - "37"
+        - "38"
 
-  - name: Debian
-    versions:
-      - buster
-      - bullseye
+    - name: EL
+      versions:
+        - "7"
+        - "8"
+        - "9"
 
-  - name: Ubuntu
-    versions:
-      - bionic
-      - focal
-      - jammy
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+        - trixie
+
+    - name: Rocky
+      versions:
+        - all
+
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+        - noble
 
   galaxy_tags:
     - docker
