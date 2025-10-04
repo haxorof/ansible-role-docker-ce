@@ -11,3 +11,6 @@
 /tests/vagrant_testcase.yml
 /tests/yaml.sh
 /tests/yamlparser.sh.inc
+/.env
+/.env-linux
+/.ansible

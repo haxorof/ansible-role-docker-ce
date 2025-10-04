@@ -8,3 +8,5 @@ skip_list:
 exclude_paths:
   - tests/
   - .ansible/
+  - .env/
+  - .env-linux/

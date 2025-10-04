@@ -4,3 +4,6 @@ end_of_line = lf
 [*.{py,yaml,yml,sh,json}]
 indent_style = space
 indent_size = 2
+
+[*.{yaml,yml}]
+insert_final_newline = true
