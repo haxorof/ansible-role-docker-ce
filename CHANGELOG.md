@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [6.2.1](../../releases/tag/6.2.1) - 2025-10-04
+
 ## Fixed
 
 - Failed to remove packages in Fedora when `docker_remove` and `docker_remove_all` are set to `true` due to package dependency.
