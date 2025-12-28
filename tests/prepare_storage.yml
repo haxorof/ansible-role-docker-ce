@@ -20,7 +20,7 @@
         name: e4fsprogs
         state: present
       become: true
-      when: ansible_distribution == "CentOS"
+      when: ansible_facts['distribution'] == "CentOS"
 
     - name: Create partition {{ lvm_device }}1
       community.general.parted:

@@ -35,4 +35,4 @@
 
       - name: Tasks to verify basic Docker function
         ansible.builtin.include_tasks: ../tasks_verify_docker.yml
-      when: ansible_distribution == "RedHat"
+      when: ansible_facts['distribution'] == "RedHat"

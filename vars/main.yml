@@ -11,7 +11,7 @@ docker_repository_related_rpm_packages:
     - dnf5-plugins
 
 docker_repository_related_packages:
-  RedHat: "{{ (ansible_pkg_mgr in ['yum', 'dnf', 'dnf5']) | ansible.builtin.ternary(docker_repository_related_rpm_packages[ansible_pkg_mgr], []) }}"
+  RedHat: "{{ (ansible_facts['pkg_mgr'] in ['yum', 'dnf', 'dnf5']) | ansible.builtin.ternary(docker_repository_related_rpm_packages[ansible_facts['pkg_mgr']], []) }}"
   Debian:
     - apt-transport-https
     - ca-certificates
@@ -42,7 +42,7 @@ docker_cmd_update_rpm_repo_cache:
   dnf5: dnf makecache
 
 docker_cmd_update_repo_cache:
-  RedHat: "{{ (ansible_pkg_mgr in ['yum', 'dnf', 'dnf5']) | ansible.builtin.ternary(docker_cmd_update_rpm_repo_cache[ansible_pkg_mgr], []) }}"
+  RedHat: "{{ (ansible_facts['pkg_mgr'] in ['yum', 'dnf', 'dnf5']) | ansible.builtin.ternary(docker_cmd_update_rpm_repo_cache[ansible_facts['pkg_mgr']], []) }}"
   Debian: apt-get update
 
 docker_envs_dir:

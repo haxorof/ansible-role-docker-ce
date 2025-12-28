@@ -16,8 +16,8 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
-    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_facts['pkg_mgr'] == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_facts['pkg_mgr'] in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
   loop: "{{ docker_repository_related_packages[_docker_os_dist_file_varity] }}"
   register: _pkg_result
   until: _pkg_result is succeeded
@@ -67,7 +67,7 @@
 
 - name: Disable Docker CE repository channels
   become: true
-  ansible.builtin.shell: "{{ docker_cmd_enable_disable_rpm_repo[ansible_pkg_mgr] }}"
+  ansible.builtin.shell: "{{ docker_cmd_enable_disable_rpm_repo[ansible_facts['pkg_mgr']] }}"
   loop: "{{ _docker_disable_channels }}"
   ignore_errors: true
   changed_when: false
@@ -78,7 +78,7 @@
 
 - name: Enable Docker CE repository channels
   become: true
-  ansible.builtin.shell: "{{ docker_cmd_enable_disable_rpm_repo[ansible_pkg_mgr] }}"
+  ansible.builtin.shell: "{{ docker_cmd_enable_disable_rpm_repo[ansible_facts['pkg_mgr']] }}"
   loop: "{{ _docker_enable_channels }}"
   changed_when: false
   vars:

@@ -1,6 +1,6 @@
 ---
 - name: Collect distribution facts if not already done
-  when: not ansible_distribution_major_version is defined
+  when: not ansible_facts['distribution_major_version'] is defined
   ansible.builtin.setup:
     gather_subset:
       - min
@@ -8,20 +8,20 @@
 
 - name: Set distribution and python facts
   ansible.builtin.set_fact:
-    _docker_os_dist: "{{ ansible_distribution }}"
-    _docker_os_dist_release: "{{ ansible_distribution_release }}"
-    _docker_os_dist_major_version: "{{ ansible_distribution_major_version }}"
-    _docker_os_dist_file_varity: "{{ ansible_distribution_file_variety }}"
-    _docker_os_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-    _docker_python3: "{{ ansible_python_version is version('3', '>=') }}"
+    _docker_os_dist: "{{ ansible_facts['distribution'] }}"
+    _docker_os_dist_release: "{{ ansible_facts['distribution_release'] }}"
+    _docker_os_dist_major_version: "{{ ansible_facts['distribution_major_version'] }}"
+    _docker_os_dist_file_varity: "{{ ansible_facts['distribution_file_variety'] }}"
+    _docker_os_arch: "{{ 'arm64' if ansible_facts['architecture'] == 'aarch64' else 'amd64' }}"
+    _docker_python3: "{{ ansible_facts['python_version'] is version('3', '>=') }}"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution facts for Linux Mint
   when: _docker_os_dist == "Linux Mint"
   ansible.builtin.set_fact:
     _docker_os_dist: "Ubuntu"
-    _docker_os_dist_release: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].release }}"
-    _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_distribution_major_version | int].major_version }}"
+    _docker_os_dist_release: "{{ docker_x_mint_ubuntu_mapping[ansible_facts['distribution_major_version'] | int].release }}"
+    _docker_os_dist_major_version: "{{ docker_x_mint_ubuntu_mapping[ansible_facts['distribution_major_version'] | int].major_version }}"
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 
 - name: Reinterpret distribution file varity to RedHat
@@ -35,8 +35,8 @@
 - name: Reinterpret distribution facts for Debian 10 (Buster) due to bug
   when:
     - _docker_os_dist == "Debian"
-    - _docker_os_dist_release == "buster" or (ansible_lsb is defined
-      and ansible_lsb.codename is defined and ansible_lsb.codename == "buster")
+    - _docker_os_dist_release == "buster" or (ansible_facts['lsb'] is defined
+      and ansible_facts['lsb'].codename is defined and ansible_facts['lsb'].codename == "buster")
   ansible.builtin.set_fact:
     _docker_os_dist: "Debian"
     _docker_os_dist_release: "buster"
@@ -73,9 +73,9 @@
 
 - name: Print LSB information
   when:
-    - ansible_lsb is defined
+    - ansible_facts['lsb'] is defined
   ansible.builtin.debug:
-    var: ansible_lsb
+    var: ansible_facts['lsb']
     verbosity: 1
   tags: ["install", "configure", "postinstall", "docker_install", "docker_configure", "docker_postinstall"]
 

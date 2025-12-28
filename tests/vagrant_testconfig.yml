@@ -1,32 +1,44 @@
 # Regression tests are run using minimum supported Ansible version
 # https://docs.ansible.com/ansible/devel/reference_appendices/release_and_maintenance.html
+
 ansible_version: "9.13.0"
+#controller_box: generic/alma9
+controller_box: almalinux/9
+controller_py3_install: true
+
 # Dropped support for Python 2.7 in 10 and later
-# ansible_version: "11.1.0"
+# ansible_version: "13.1.0"
+# controller_box: almalinux/10
+# controller_py3_install: false
+
 galaxy_role_name: haxorof.docker_ce
-role_dir: ansible-role-docker-ce
 
 boxes:
   - # AlmaLinux 8
-    box: generic/alma8
+    box: almalinux/8
     box_url: vagrantup
     vbguest_update: false
     reboot: false
   - # AlmaLinux 9
-    box: generic/alma9
+    box: almalinux/9
     box_url: vagrantup
     vbguest_update: false
     reboot: false
-  - # Rocky Linux 8
-    box: generic/rocky8
+  - # AlmaLinux 10
+    box: almalinux/10
     box_url: vagrantup
     vbguest_update: false
     reboot: false
-  - # Rocky Linux 9
-    box: generic/rocky9
-    box_url: vagrantup
-    vbguest_update: false
-    reboot: false
+  # - # Rocky Linux 8
+  #   box: generic/rocky8
+  #   box_url: vagrantup
+  #   vbguest_update: false
+  #   reboot: false
+  # - # Rocky Linux 9
+  #   box: generic/rocky9
+  #   box_url: vagrantup
+  #   vbguest_update: false
+  #   reboot: false
   # Testing only supported releases: https://endoflife.date/centos-stream
   # and supported by Docker CE
   # - # CentOS Stream 9

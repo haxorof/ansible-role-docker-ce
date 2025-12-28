@@ -16,8 +16,8 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: absent
-    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_facts['pkg_mgr'] == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_facts['pkg_mgr'] in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
   loop: "{{ ['docker-ce-rootless-extras', 'docker'] + docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
@@ -29,7 +29,7 @@
     name: "{{ item }}"
     state: absent
     purge: true
-    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_facts['pkg_mgr'] == 'apt' else omit }}"
   loop: "{{ ['docker-ce-rootless-extras'] + docker_packages }}"
   register: _pkg_result
   until: _pkg_result is succeeded
@@ -52,7 +52,7 @@
 
 - name: Clean YUM/DNF/APT cache
   become: true
-  ansible.builtin.command: "{{ _docker_clean_cache_cmd[ansible_pkg_mgr] }}"
+  ansible.builtin.command: "{{ _docker_clean_cache_cmd[ansible_facts['pkg_mgr']] }}"
   changed_when: false
   vars:
     _docker_clean_cache_cmd:

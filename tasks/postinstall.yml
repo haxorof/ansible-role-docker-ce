@@ -87,8 +87,8 @@
   ansible.builtin.package:
     name: "epel-release"
     state: present
-    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_facts['pkg_mgr'] == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_facts['pkg_mgr'] in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
   register: _pkg_result
   until: _pkg_result is succeeded
 
@@ -98,8 +98,8 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
-    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_pkg_mgr == 'apt' else omit }}"
-    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
+    allow_unauthenticated: "{{ docker_allow_unauthenticated if ansible_facts['pkg_mgr'] == 'apt' else omit }}"
+    disable_gpg_check: "{{ docker_disable_gpg_check if ansible_facts['pkg_mgr'] in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
   loop: "{{ _docker_additional_packages_os }}"
   register: _pkg_result
   until: _pkg_result is succeeded
@@ -264,10 +264,10 @@
       become: true
       ansible.builtin.get_url:
         url: "https://github.com/docker/compose/releases/download/\
-          v{{ _docker_compose_version }}/docker-compose-{{ ansible_system | lower }}-{{ ansible_architecture }}"
+          v{{ _docker_compose_version }}/docker-compose-{{ ansible_facts['system'] | lower }}-{{ ansible_facts['architecture'] }}"
         checksum: "sha256:https://github.com/docker/compose/releases/download/\
           v{{ _docker_compose_version }}/\
-          docker-compose-{{ ansible_system | lower }}-{{ ansible_architecture }}.sha256"
+          docker-compose-{{ ansible_facts['system'] | lower }}-{{ ansible_facts['architecture'] }}.sha256"
         dest: "{{ docker_cli_plugins_dir[_docker_os_dist_file_varity] }}/docker-compose"
         mode: 0755
       retries: 10

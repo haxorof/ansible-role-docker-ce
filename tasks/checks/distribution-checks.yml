@@ -15,7 +15,7 @@
       - Rocky
 
 - name: Fail if kernel version is lower than 3.10
-  when: ansible_kernel is version_compare("3.10", '<')
+  when: ansible_facts['kernel'] is version_compare("3.10", '<')
   ansible.builtin.fail:
     msg: "Kernel version 3.10 or later is required!"
 

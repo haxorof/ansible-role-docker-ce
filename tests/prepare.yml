@@ -15,17 +15,17 @@
 
     - name: Print LSB information
       ansible.builtin.debug:
-        var: ansible_lsb
-      when: ansible_lsb is defined
+        var: ansible_facts['lsb']
+      when: ansible_facts['lsb'] is defined
 
     - name: Print distribution
       ansible.builtin.debug:
-        msg: "{{ ansible_distribution}}, {{ ansible_distribution_release }}, {{ ansible_distribution_major_version }}"
+        msg: "{{ ansible_facts['distribution'] }}, {{ ansible_facts['distribution_release'] }}, {{ ansible_facts['distribution_major_version'] }}"
 
     - name: Print Kernel version
       ansible.builtin.debug:
-        var: ansible_kernel
-      when: ansible_kernel is defined
+        var: ansible_facts['kernel']
+      when: ansible_facts['kernel'] is defined
 
     - name: Print Ansible version
       ansible.builtin.debug:
@@ -52,8 +52,8 @@
         policy: targeted
         state: permissive
       when:
-        - ansible_distribution == "Fedora"
-        - ansible_distribution_major_version | int == 28
+        - ansible_facts['distribution'] == "Fedora"
+        - ansible_facts['distribution_major_version'] | int == 28
 
     - name: Check that /etc/systemd/resolved.conf exists
       ansible.builtin.stat:

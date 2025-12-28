@@ -15,7 +15,7 @@
         yum:
           name: "{{ item }}"
           update_cache: true
-          disable_gpg_check: "{{ disable_gpg_check if ansible_pkg_mgr in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
+          disable_gpg_check: "{{ disable_gpg_check if ansible_facts['pkg_mgr'] in ['rpm', 'yum', 'dnf', 'dnf5', 'zypper'] else omit }}"
         loop:
           - kata-runtime
           - kata-proxy
@@ -33,4 +33,4 @@
                 path: "/usr/bin/kata-runtime"
           docker_users:
             - vagrant
-      when: ansible_distribution == "CentOS"
+      when: ansible_facts['distribution'] == "CentOS"

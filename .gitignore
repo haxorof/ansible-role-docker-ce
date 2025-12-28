@@ -9,6 +9,7 @@
 /tests/test-dbg.sh
 /tests/unversioned
 /tests/vagrant_testcase.yml
+/tests/vagrant_ctlconf.yml
 /tests/yaml.sh
 /tests/yamlparser.sh.inc
 /.env

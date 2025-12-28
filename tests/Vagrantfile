@@ -5,9 +5,11 @@ require 'yaml'
 
 current_dir = File.dirname(File.expand_path(__FILE__))
 testcase_file = "#{current_dir}/vagrant_testcase.yml"
+ctlconf_file = "#{current_dir}/vagrant_ctlconf.yml"
 if File.exist?(testcase_file)
   vagrant_config = YAML.load_file("#{testcase_file}")
-  vagrant_devs = ["/dev/sda", "/dev/sdb", "/dev/sdc"]
+  vagrant_ctlconfig = YAML.load_file("#{ctlconf_file}")
+  #vagrant_devs = ["/dev/sda", "/dev/sdb", "/dev/sdc"]
   vagrant_box_url = vagrant_config['box_url']
   if vagrant_config['local_boxes'] or vagrant_config['box_url'] === "local"
     vagrant_url_local_base = ENV['VAGRANT_BOXES_URL'] ? ENV['VAGRANT_BOXES_URL'] : "file:///vagrant_boxes/"
@@ -28,7 +30,7 @@ if File.exist?(testcase_file)
       testmachine.vm.box_check_update = true
       testmachine.vagrant.plugins = ["vagrant-vbguest", "vagrant-registration"]
       testmachine.vbguest.no_remote = true
-      testmachine.vbguest.auto_update = vagrant_config['vbguest_update']
+      testmachine.vbguest.auto_update = vagrant_config['vbguest_update'] || false
       # Will trigger reboot if necessary (required for centos images at least)
       testmachine.vbguest.installer_options = { allow_kernel_upgrade: vagrant_config['vbguest_update'] }
       testmachine.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
@@ -90,7 +92,7 @@ if File.exist?(testcase_file)
     end
 
     config.vm.define 'controller', primary: true do |machine|
-      machine.vm.box = "generic/alma9"
+      machine.vm.box = vagrant_ctlconfig['controller_box']
       machine.vm.box_check_update = true
       machine.vagrant.plugins = ["vagrant-vbguest", "vagrant-host-shell"]
       machine.vbguest.auto_update = false
@@ -100,7 +102,8 @@ if File.exist?(testcase_file)
       # machine.vbguest.installer_hooks[:before_install] = ["dnf upgrade -y && dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)"]
       machine.vbguest.installer_arguments = ['--nox11']
       machine.vm.synced_folder ".", "/vagrant", :mount_options => ["rw"]
-      machine.vm.synced_folder "../", "/mnt/#{vagrant_config['role_dir']}", :mount_options => ["ro"]
+      #machine.vm.synced_folder "../", "/mnt/#{vagrant_ctlconfig['role_dir']}", :mount_options => ["ro"]
+      machine.vm.synced_folder "../", "/mnt", :mount_options => ["ro"]
       machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
       machine.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: true
       machine.vm.provider "virtualbox" do |vb|
@@ -109,9 +112,9 @@ if File.exist?(testcase_file)
 
       # Prepare Ansible roles directory
       machine.vm.provision "shell",
-        inline: "test -d /etc/ansible/roles/#{vagrant_config['galaxy_role_name']} || \
+        inline: "test -d /etc/ansible/roles/#{vagrant_ctlconfig['galaxy_role_name']} || \
           (mkdir -p /etc/ansible/roles && \
-          ln -s /mnt/#{vagrant_config['role_dir']} /etc/ansible/roles/#{vagrant_config['galaxy_role_name']})"
+          ln -s /mnt /etc/ansible/roles/#{vagrant_ctlconfig['galaxy_role_name']})"
 
       machine.vm.provision "shell",
         inline: "test -e /home/vagrant/.ssh/id_rsa || (mkdir -p /home/vagrant/.ssh && chmod 0700 /home/vagrant/.ssh && \
@@ -119,8 +122,27 @@ if File.exist?(testcase_file)
           chmod 0600 /home/vagrant/.ssh/id_rsa && chown -R vagrant:vagrant /home/vagrant/.ssh)"
 
       machine.vm.provision "shell",
-      inline: "dnf -y install epel-release && dnf -y update && dnf -y install curl gcc libffi-devel openssl-devel python3-devel python3-setuptools python3.11-pip python3.11-devel python3.11-setuptools haveged sshpass && \
-        pip3.11 install ansible==#{vagrant_config['ansible_version']}"
+      inline: "dnf -y install epel-release && dnf clean all && dnf makecache"
+
+      # machine.vm.provision "shell",
+      # inline: "dnf -y update"
+
+      machine.vm.provision "shell",
+      inline: "dnf -y install curl gcc libffi-devel openssl-devel haveged sshpass"
+
+      if vagrant_ctlconfig['controller_py3_install'] === true
+        machine.vm.provision "shell",
+        inline: "dnf -y install python3.12-pip python3.12-devel python3.12-setuptools"
+
+        machine.vm.provision "shell",
+        inline: "pip3.12 install ansible==#{vagrant_ctlconfig['ansible_version']}"
+      else
+        machine.vm.provision "shell",
+        inline: "dnf -y install python3-devel python3-setuptools"
+
+        machine.vm.provision "shell",
+        inline: "pip3 install ansible==#{vagrant_ctlconfig['ansible_version']}"
+      end
 
       # Prepare
       machine.vm.provision "ansible_local" do |ansible|
@@ -130,13 +152,13 @@ if File.exist?(testcase_file)
         ansible.galaxy_roles_path = '/var/tmp/roles'
         # To avoid installing roles multiple times when running regession testing
         ansible.galaxy_command = "test -d /var/tmp/roles || sudo /usr/local/bin/ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
-        ansible.playbook = vagrant_config['prep_yml']
+        ansible.playbook = vagrant_ctlconfig['prep_yml'] || "prepare.yml"
         ansible.limit = "test-host"
         ansible.inventory_path = "hosts"
         ansible.config_file = "/vagrant/ansible.cfg"
         ansible.raw_arguments = ["#{ENV['ANSIBLE_ARG_0']}"]
         # ansible.extra_vars = {
-        #   lvm_device: "#{vagrant_devs[vagrant_config['storage_port']]}"
+        #   lvm_device: "#{vagrant_devs[vagrant_ctlconfig['storage_port']]}"
         # }
       end
 

@@ -4,7 +4,7 @@
     - name: Install latest Docker CE
       include_role:
         name: haxorof.docker_ce
-      when: ansible_distribution == "CentOS"
+      when: ansible_facts['distribution'] == "CentOS"
 
 - hosts: test-host
   tasks:
@@ -13,7 +13,7 @@
         name: haxorof.docker_ce
       vars:
         docker_version: 18.09.8-3.el7
-      when: ansible_distribution == "CentOS"
+      when: ansible_facts['distribution'] == "CentOS"
 
 - name: Verify that Docker CE Engine and CLI is 18.09.8
   hosts: test-host
@@ -43,4 +43,4 @@
         - fail:
             msg: "Expected Docker CLI 18.09.8 (Actual: {{ _docker_client_version_cmd.stdout }})"
           when: not _docker_client_version_cmd.stdout is search("18.09.8")
-      when: ansible_distribution == "CentOS"
+      when: ansible_facts['distribution'] == "CentOS"

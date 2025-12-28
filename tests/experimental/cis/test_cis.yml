@@ -20,7 +20,7 @@
         - name: Update GRUB (Debian based)
           become: true
           command: update-grub
-      when: ansible_distribution_file_variety == "Debian"
+      when: ansible_facts['distribution_file_variety'] == "Debian"
 
     - name: Enable user namespaces (RHEL based)
       block:
@@ -32,7 +32,7 @@
             grub_cmdline_add_args:
               - namespace.unpriv_enable=1
               - user_namespace.enable=1
-      when: ansible_distribution_file_variety == "RedHat"
+      when: ansible_facts['distribution_file_variety'] == "RedHat"
 
     - name: Set user.max_user_namespaces
       become: true

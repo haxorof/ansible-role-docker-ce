@@ -6,11 +6,11 @@
       Debian: 18.03.1~ce-0~debian
       CentOS: 18.09.8-3.el7
   tasks:
-    - name: Install Docker CE for {{ ansible_distribution }}
+    - name: Install Docker CE for {{ ansible_facts['distribution'] }}
       include_role:
         name: haxorof.docker_ce
       vars:
-        docker_version: "{{ docker_versions[ansible_distribution] }}"
+        docker_version: "{{ docker_versions[ansible_facts['distribution']] }}"
 
     - name: Run hello-world
       become: true
