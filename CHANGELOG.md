@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](../../releases/tag/X.Y.Z)
 
+## [6.2.2](../../releases/tag/6.2.2) - 2025-12-28
+
 ## Fixed
 
 - INJECT_FACTS_AS_VARS deprecation warning in ansible-core 2.20 ([#185](../../issues/185))
