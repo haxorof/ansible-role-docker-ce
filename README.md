@@ -5,7 +5,6 @@
 [![GitHub tag](https://img.shields.io/github/tag/haxorof/ansible-role-docker-ce)](https://github.com/haxorof/ansible-role-docker-ce)
 [![Ansible Role](https://img.shields.io/ansible/role/d/haxorof/docker_ce)](https://galaxy.ansible.com/ui/standalone/roles/haxorof/docker_ce/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/haxorof/ansible-role-docker-ce/blob/master/LICENSE)
-query=workflow%3ACI)
 
 This Ansible role installs and configures Docker CE (Community Edition) on several different Linux distributions. The goal is to let the
 user of this role to just care about how Docker shall be installed and configured and hide the differences that exists in the
